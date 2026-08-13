@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { estimateServer, type Workload } from "@/lib/selector";
+import { Action, Badge, Card } from "@/components/ui";
 
 const initial: Workload = {
   application: "nextjs",
@@ -47,11 +48,11 @@ export function VpsSelector() {
       {/* Form Input Section */}
       <form onSubmit={handleSubmit} aria-busy={isCalculating}>
         <fieldset disabled={isCalculating} className="m-0 min-w-0 border-0 p-0">
-          <jelly-card squish style={{ padding: "clamp(18px, 4vw, 28px)", width: "100%" }}>
+          <Card className="w-full p-[clamp(18px,4vw,28px)]">
             <div className="space-y-5">
             <div className="flex flex-col items-start gap-3 border-b border-[#343A46] pb-3.5 min-[420px]:flex-row min-[420px]:items-center min-[420px]:justify-between">
               <span className="font-bold text-white text-lg">Define Workload</span>
-              <jelly-badge variant="azure">VPS Calculator</jelly-badge>
+              <Badge variant="azure">VPS Calculator</Badge>
             </div>
 
             <div className="grid gap-5 sm:grid-cols-2">
@@ -123,11 +124,7 @@ export function VpsSelector() {
                 disabled={isCalculating}
                 className="block w-full cursor-pointer appearance-none rounded-xl border-0 bg-transparent p-0 text-inherit outline-none transition-opacity focus-visible:ring-2 focus-visible:ring-[#4DA6FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#181B1D] disabled:cursor-wait disabled:opacity-75"
               >
-                <jelly-button
-                  variant="azure"
-                  size="large"
-                  style={{ width: "100%" }}
-                >
+                <Action variant="azure" size="large" className="w-full">
                   <span className="flex items-center justify-center gap-2">
                     {isCalculating && (
                       <span
@@ -137,24 +134,32 @@ export function VpsSelector() {
                     )}
                     {isCalculating ? "Calculating…" : "Calculate VPS Starting Point →"}
                   </span>
-                </jelly-button>
+                </Action>
               </button>
             </div>
             </div>
-          </jelly-card>
+          </Card>
         </fieldset>
       </form>
 
       {/* Recommendation Results Section */}
-      <section aria-live="polite">
-        <jelly-card squish style={{ padding: "clamp(18px, 4vw, 28px)", width: "100%", height: "100%" }}>
-          <div className="space-y-5">
+      <section
+        className="relative"
+        aria-live="polite"
+        aria-busy={isCalculating}
+      >
+        <Card className="h-full w-full p-[clamp(18px,4vw,28px)]">
+          <div
+            className={`space-y-5 transition duration-200 ${
+              isCalculating ? "pointer-events-none opacity-35 blur-[1px]" : "opacity-100"
+            }`}
+          >
             <div className="flex flex-col items-start gap-3 border-b border-[#343A46] pb-3.5 min-[420px]:flex-row min-[420px]:items-center min-[420px]:justify-between">
               <div>
                 <span className="text-xs uppercase font-mono text-slate-400 font-semibold tracking-wider">Recommendation</span>
                 <h2 className="mt-1 text-xl font-bold text-white">Unmanaged KVM VPS</h2>
               </div>
-              <jelly-badge variant="mint">Optimal Baseline</jelly-badge>
+              <Badge variant="mint">Optimal Baseline</Badge>
             </div>
 
             <div className="grid grid-cols-1 gap-3 py-2 min-[420px]:grid-cols-3">
@@ -186,7 +191,24 @@ export function VpsSelector() {
               Note: This is a workload baseline estimate. Measure server metrics with monitoring after deploying your stack.
             </p>
           </div>
-        </jelly-card>
+        </Card>
+
+        {isCalculating && (
+          <div
+            className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl bg-[#111315]/70 backdrop-blur-sm"
+            role="status"
+          >
+            <div className="flex flex-col items-center gap-3 rounded-2xl border border-[#343A46] bg-[#181B1D] px-7 py-5 shadow-2xl">
+              <span
+                aria-hidden="true"
+                className="size-8 animate-spin rounded-full border-3 border-[#4DA6FF]/30 border-t-[#4DA6FF]"
+              />
+              <span className="text-sm font-semibold text-white">
+                Calculating recommendation…
+              </span>
+            </div>
+          </div>
+        )}
       </section>
     </div>
   );

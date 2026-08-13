@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { VpsSelector } from "@/components/vps-selector";
+import { Badge } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "VPS Selector | Veynor Tools",
@@ -11,7 +12,7 @@ export default function VpsSelectorPage() {
     <main className="relative min-h-screen py-14 lg:py-20 bg-[#0d1117]">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className="mx-auto mb-12 max-w-3xl text-center">
-          <jelly-badge>Sizing Tool</jelly-badge>
+          <Badge>Sizing Tool</Badge>
           <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-white sm:text-5xl leading-tight">
             How much VPS do you actually need?
           </h1>

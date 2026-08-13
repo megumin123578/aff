@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Action, Badge, Card, CheckboxIndicator, Chip, SwitchIndicator } from "@/components/ui";
 
 const guides = [
   {
@@ -21,13 +22,13 @@ const guides = [
 export default function Home() {
   return (
     <main className="relative">
-      {/* Jelly Hero Section */}
-      <section className="jelly-hero">
+      {/* Hero Section */}
+      <section className="hero">
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 lg:grid-cols-[1.1fr_.9fr] lg:px-8 relative z-10">
           <div>
             <div className="mb-6 flex flex-wrap items-center gap-2">
-              <jelly-badge variant="azure">Infrastructure without guesswork</jelly-badge>
-              <jelly-badge>Open Source Tools</jelly-badge>
+              <Badge variant="azure">Infrastructure without guesswork</Badge>
+              <Badge>Open Source Tools</Badge>
             </div>
 
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-6xl leading-[1.08] font-sans">
@@ -41,34 +42,34 @@ export default function Home() {
 
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link href="/tools/vps-selector">
-                <jelly-button variant="mint" size="large">
+                <Action variant="mint" size="large">
                   Size my VPS →
-                </jelly-button>
+                </Action>
               </Link>
               <a href="#guides">
-                <jelly-button size="large">
+                <Action size="large">
                   Browse field guides
-                </jelly-button>
+                </Action>
               </a>
             </div>
 
             <div className="mt-10 flex flex-wrap items-center gap-3">
-              <jelly-chip active>No Account Required</jelly-chip>
-              <jelly-chip>Open Workload Estimates</jelly-chip>
-              <jelly-chip>Real-world RAM/vCPU Formulas</jelly-chip>
+              <Chip active>No Account Required</Chip>
+              <Chip>Open Workload Estimates</Chip>
+              <Chip>Real-world RAM/vCPU Formulas</Chip>
             </div>
           </div>
 
-          {/* Workload Estimate Jelly Card */}
+          {/* Workload Estimate Card */}
           <div className="w-full">
-            <jelly-card squish style={{ padding: "28px", width: "100%" }}>
+            <Card className="w-full p-7">
               <div className="grid gap-6">
                 <div className="flex items-center justify-between border-b border-[#343A46] pb-4">
                   <div>
                     <h3 className="font-bold text-white text-lg">Workload Estimate</h3>
                     <p className="text-xs text-slate-400 mt-0.5">Next.js + PostgreSQL + Proxy</p>
                   </div>
-                  <jelly-badge variant="mint">balanced stack</jelly-badge>
+                  <Badge variant="mint">balanced stack</Badge>
                 </div>
 
                 <div className="grid grid-cols-3 gap-3">
@@ -83,19 +84,19 @@ export default function Home() {
                 <div className="space-y-3 pt-2">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-slate-300">Reverse proxy (Traefik / NGINX)</span>
-                    <jelly-switch checked label="Active"></jelly-switch>
+                    <SwitchIndicator />
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-slate-300">Application container (Next.js)</span>
-                    <jelly-switch checked label="Active"></jelly-switch>
+                    <SwitchIndicator />
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-slate-300">PostgreSQL database</span>
-                    <jelly-checkbox checked></jelly-checkbox>
+                    <CheckboxIndicator />
                   </div>
                 </div>
               </div>
-            </jelly-card>
+            </Card>
           </div>
         </div>
       </section>
@@ -105,16 +106,16 @@ export default function Home() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
           <div>
             <div className="mb-2">
-              <jelly-badge>Start with the evidence</jelly-badge>
+              <Badge>Start with the evidence</Badge>
             </div>
             <h2 className="text-3xl font-extrabold tracking-tight text-white">Field notes for small infrastructure</h2>
           </div>
-          <jelly-chip active>3 Field Guides Active</jelly-chip>
+          <Chip active>3 Field Guides Active</Chip>
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
           {guides.map((g, i) => (
-            <jelly-card squish key={g.title} style={{ padding: "24px", height: "100%" }}>
+            <Card key={g.title} className="h-full p-6">
               <div className="flex flex-col justify-between h-full">
                 <div>
                   <span className="font-mono text-xs font-semibold text-slate-400">0{i + 1} · {g.tag}</span>
@@ -122,12 +123,12 @@ export default function Home() {
                   <p className="mt-3 text-sm leading-relaxed text-slate-400">{g.copy}</p>
                 </div>
                 <div className="mt-6">
-                  <jelly-button size="small">
+                  <Action size="small">
                     Read guide series →
-                  </jelly-button>
+                  </Action>
                 </div>
               </div>
-            </jelly-card>
+            </Card>
           ))}
         </div>
       </section>
@@ -135,7 +136,7 @@ export default function Home() {
       {/* Method Section */}
       <section id="method" className="border-y border-[#343A46] bg-[#1E222A]">
         <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8">
-          <jelly-badge variant="azure">Our Method</jelly-badge>
+          <Badge variant="azure">Our Method</Badge>
           <h2 className="mt-3 max-w-3xl text-3xl font-extrabold tracking-tight text-white leading-snug">
             Benchmark the workload, document the bill, explain the trade-off.
           </h2>

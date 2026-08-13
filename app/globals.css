@@ -2,15 +2,6 @@
 
 :root {
   color-scheme: dark;
-  --jelly-bg: #181B1D;
-  --jelly-surface: #1E222A;
-  --jelly-surface-muted: #262B34;
-  --jelly-text: #F2F3F7;
-  --jelly-muted: #A9B1C2;
-  --jelly-border: #343A46;
-  --jelly-accent: #0077CC;
-  --jelly-accent-light: #4DA6FF;
-
   --display: "SF Pro Rounded", ui-rounded, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --body: system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: ui-monospace, "SF Mono", Menlo, monospace;
@@ -26,8 +17,8 @@ html {
 
 body {
   margin: 0;
-  background-color: var(--jelly-bg);
-  color: var(--jelly-text);
+  background-color: #181B1D;
+  color: #F2F3F7;
   font-family: var(--display);
   overflow-x: hidden;
 }
@@ -37,8 +28,7 @@ a {
   text-decoration: none;
 }
 
-/* ============================ Jelly Hero Styling ============================ */
-.jelly-hero {
+.hero {
   position: relative;
   box-sizing: border-box;
   min-height: 75vh;
@@ -48,21 +38,10 @@ a {
   align-items: center;
   overflow: hidden;
   color: #FFFFFF;
-  background-color: var(--jelly-bg, #181B1D);
-  border-bottom: 1px solid var(--jelly-border, #343A46);
+  background-color: #181B1D;
+  border-bottom: 1px solid #343A46;
 }
 
-/* Custom Element Web Components Fallbacks */
-jelly-button, jelly-card, jelly-badge, jelly-switch, jelly-checkbox, jelly-chip, jelly-input, jelly-select, jelly-slider, jelly-theme {
-  display: inline-block;
-}
-
-jelly-theme {
-  display: block;
-  min-height: 100dvh;
-  width: 100%;
-}
-
-.jelly-hero > * {
+.hero > * {
   width: 100%;
 }

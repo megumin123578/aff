@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Script from "next/script";
+import { Action, Badge } from "@/components/ui";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -10,12 +10,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" data-jelly-mode="dark" data-scroll-behavior="smooth">
-      <head>
-        <Script src="https://jelly-ui.com/package.js" type="module" strategy="beforeInteractive" />
-      </head>
+    <html lang="en" data-scroll-behavior="smooth">
       <body className="antialiased bg-[#181B1D] text-[#F2F3F7]">
-        <jelly-theme mode="dark">
+        <div className="min-h-dvh w-full">
           <header className="sticky top-0 z-50 border-b border-[#343A46] bg-[#181B1D]/85 backdrop-blur-xl">
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:px-8">
               <Link href="/" className="flex min-w-0 items-center gap-3">
@@ -25,9 +22,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 <span className="text-xl font-bold tracking-tight text-white">
                   Veynor
                 </span>
-                <jelly-badge variant="azure" className="hidden lg:inline-block">
+                <Badge variant="azure" className="hidden lg:inline-flex">
                   VPS Engine
-                </jelly-badge>
+                </Badge>
               </Link>
               <nav className="hidden items-center gap-6 text-sm font-medium text-slate-300 md:flex">
                 <Link href="/#guides" className="hover:text-white transition-colors">Guides</Link>
@@ -35,9 +32,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 <Link href="/tools/vps-selector" className="hover:text-white transition-colors">VPS Calculator</Link>
               </nav>
               <Link href="/tools/vps-selector" className="shrink-0">
-                <jelly-button variant="azure">
+                <Action variant="azure">
                   Size your VPS →
-                </jelly-button>
+                </Action>
               </Link>
             </div>
           </header>
@@ -54,7 +51,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               <p className="text-xs text-slate-500">© 2026 Veynor · Measurements before marketing.</p>
             </div>
           </footer>
-        </jelly-theme>
+        </div>
       </body>
     </html>
   );
