@@ -1,4 +1,4 @@
-import { Badge, Card, CheckboxIndicator, Chip, LinkButton, SwitchIndicator } from "@/components/ui";
+import { Badge, Card, Chip, LinkButton } from "@/components/ui";
 import { getPublishedArticles } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
@@ -46,42 +46,24 @@ export default async function Home() {
             </div>
           </div>
 
-          {/* Workload Estimate Card */}
+          {/* Recommendation preview */}
           <div className="w-full">
-            <Card className="w-full p-7">
-              <div className="grid gap-6">
-                <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-4">
-                  <div>
-                    <h3 className="font-bold text-white text-lg">Workload Estimate</h3>
-                    <p className="text-xs text-slate-400 mt-0.5">Next.js + PostgreSQL + Proxy</p>
-                  </div>
-                  <Badge variant="mint">balanced stack</Badge>
+            <Card className="overflow-hidden border-[#2d3541] bg-[#0d1119] p-0 shadow-[0_24px_60px_rgb(0_0_0_/_0.28)]">
+              <div className="flex items-center justify-between border-b border-[#28303b] px-4 py-4 sm:px-5">
+                <div className="flex items-center gap-2" aria-hidden="true">
+                  <span className="size-2.5 rounded-full bg-[#e06666]" />
+                  <span className="size-2.5 rounded-full bg-[#d7b657]" />
+                  <span className="size-2.5 rounded-full bg-[#58bc8c]" />
                 </div>
-
-                <div className="grid grid-cols-3 gap-3">
-                  {[["2", "vCPU"], ["4 GB", "RAM"], ["80 GB", "NVMe"]].map(([v, l]) => (
-                    <div key={l} className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-3 text-center">
-                      <p className="text-xl font-bold text-white">{v}</p>
-                      <p className="mt-1 text-[10px] uppercase font-mono tracking-wider text-slate-400">{l}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="space-y-3 pt-2">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-300">Reverse proxy (Traefik / NGINX)</span>
-                    <SwitchIndicator />
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-300">Application container (Next.js)</span>
-                    <SwitchIndicator />
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-300">PostgreSQL database</span>
-                    <CheckboxIndicator />
-                  </div>
-                </div>
+                <span className="font-mono text-[10px] tracking-wide text-[#6f9ed9] sm:text-xs">recommendation.json</span>
               </div>
+              <pre className="overflow-x-auto px-4 py-5 font-mono text-[11px] font-medium leading-[2.15] text-[#e7efff] sm:px-5 sm:py-6 sm:text-xs"><code>{`{
+  workload: 'docker + database',
+  target_region: 'eu-central',
+  minimum: { cpu: '2 vCPU', ram: '4 GB' },
+  recommended: { cpu: '4 vCPU', ram: '8 GB' },
+  monthly_range: '$4.50-$14.00'
+}`}</code></pre>
             </Card>
           </div>
         </div>
