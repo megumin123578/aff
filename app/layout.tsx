@@ -14,7 +14,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="bg-[var(--color-bg)] text-[var(--color-text)] antialiased">
         <div className="min-h-dvh w-full">
           <header className="sticky top-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-header)] backdrop-blur-xl">
-            <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:px-8">
+            <div className="flex h-16 w-full items-center justify-between px-5 lg:px-8">
               <Link href="/" className="flex min-w-0 items-center gap-3 rounded-lg">
                 <span className="text-xl font-bold tracking-tight text-white">
                   Neroviax
@@ -59,7 +59,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           {children}
 
           <footer className="border-t border-[var(--color-border)] bg-[var(--color-footer)] px-5 py-10 text-center text-sm text-slate-400">
-            <div className="mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex w-full flex-col items-center justify-between gap-4 sm:flex-row">
               <div className="flex items-center gap-2">
                 <span className="font-semibold text-white">Neroviax</span>
                 <span className="text-slate-600">·</span>

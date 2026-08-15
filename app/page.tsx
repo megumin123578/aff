@@ -9,7 +9,7 @@ export default async function Home() {
     <main className="relative">
       {/* Hero Section */}
       <section className="hero">
-        <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 lg:grid-cols-[1.1fr_.9fr] lg:px-8 relative z-10">
+        <div className="relative z-10 grid w-full items-center gap-12 px-5 lg:grid-cols-[1.1fr_.9fr] lg:px-8">
           <div>
             <div className="mb-6 flex flex-wrap items-center gap-2">
               <Badge variant="azure">Infrastructure without guesswork</Badge>
@@ -26,7 +26,12 @@ export default async function Home() {
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-4">
-              <LinkButton href="/tools/vps-selector" variant="mint" size="large">
+              <LinkButton
+                href="/tools/vps-selector"
+                variant="mint"
+                size="large"
+                className="border-[#12955d] bg-[#087a4b] text-white hover:bg-[#06633d]"
+              >
                 Size my VPS →
               </LinkButton>
               <LinkButton href="#guides" size="large">
@@ -83,7 +88,7 @@ export default async function Home() {
       </section>
 
       {/* Field Guides Section */}
-      <section id="guides" className="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+      <section id="guides" className="w-full px-5 py-20 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
           <div>
             <div className="mb-2">
@@ -119,7 +124,7 @@ export default async function Home() {
 
       {/* Method Section */}
       <section id="method" className="border-y border-[var(--color-border)] bg-[var(--color-surface)]">
-        <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+        <div className="w-full px-5 py-20 lg:px-8">
           <Badge variant="azure">Our Method</Badge>
           <h2 className="mt-3 max-w-3xl text-3xl font-extrabold tracking-tight text-white leading-snug">
             Benchmark the workload, document the bill, explain the trade-off.

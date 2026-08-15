@@ -14,7 +14,7 @@ export default async function ArticlesPage() {
   const articles = await getPublishedArticles();
   return (
     <main className="min-h-[70vh] bg-[var(--color-bg-deep)] px-5 py-16 lg:px-8">
-      <div className="mx-auto max-w-7xl">
+      <div className="w-full">
         <Badge variant="azure">Field guides</Badge>
         <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-white">Practical infrastructure notes</h1>
         <p className="mt-3 max-w-2xl text-slate-400">Reproducible guidance for sizing, deploying, and operating small server workloads.</p>

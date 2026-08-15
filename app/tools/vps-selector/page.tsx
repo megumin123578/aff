@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function VpsSelectorPage() {
   return (
     <main className="relative min-h-screen bg-[var(--color-bg-deep)] py-14 lg:py-20">
-      <div className="mx-auto max-w-7xl px-5 lg:px-8">
+      <div className="w-full px-5 lg:px-8">
         <div className="mx-auto mb-12 max-w-3xl text-center">
           <Badge>Sizing Tool</Badge>
           <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-white sm:text-5xl leading-tight">

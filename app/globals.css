@@ -14,11 +14,12 @@
   --color-border-hover: #69768b;
   --color-text: #f2f3f7;
   --color-muted: #a9b1c2;
-  --color-brand: #0077cc;
-  --color-brand-hover: #0786df;
-  --color-brand-light: #73baff;
-  --color-brand-soft: rgb(0 119 204 / 0.15);
-  --color-brand-border: #168de0;
+  /* Darker blue keeps white labels comfortably legible on action controls. */
+  --color-brand: #005a9c;
+  --color-brand-hover: #004b82;
+  --color-brand-light: #8dcbff;
+  --color-brand-soft: rgb(0 111 189 / 0.18);
+  --color-brand-border: #2b91dc;
   --color-focus: #4da6ff;
   --color-action: #3a4352;
   --color-action-hover: #465164;
