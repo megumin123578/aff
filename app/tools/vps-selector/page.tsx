@@ -3,13 +3,13 @@ import { VpsSelector } from "@/components/vps-selector";
 import { Badge } from "@/components/ui";
 
 export const metadata: Metadata = {
-  title: "VPS Selector | Veynor Tools",
+  title: "VPS Selector | Neroviax Tools",
   description: "Estimate a sensible VPS configuration from your real-world workload.",
 };
 
 export default function VpsSelectorPage() {
   return (
-    <main className="relative min-h-screen py-14 lg:py-20 bg-[#0d1117]">
+    <main className="relative min-h-screen bg-[var(--color-bg-deep)] py-14 lg:py-20">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className="mx-auto mb-12 max-w-3xl text-center">
           <Badge>Sizing Tool</Badge>
