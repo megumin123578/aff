@@ -7,7 +7,6 @@ import "./globals.css";
 
 const googleAdSenseAccount =
   process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT ?? "ca-pub-4003831741640664";
-const showGoogleAds = process.env.NODE_ENV === "production";
 
 export const metadata: Metadata = {
   title: "Neroviax — Practical VPS Infrastructure",
@@ -16,7 +15,7 @@ export const metadata: Metadata = {
     ...(process.env.AWIN_VERIFICATION
       ? { "awin-verification": process.env.AWIN_VERIFICATION }
       : {}),
-    ...(showGoogleAds
+    ...(googleAdSenseAccount
       ? { "google-adsense-account": googleAdSenseAccount }
       : {}),
   },
@@ -26,7 +25,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <head>
-        {showGoogleAds ? (
+        {googleAdSenseAccount ? (
           <script
             async
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${googleAdSenseAccount}`}
