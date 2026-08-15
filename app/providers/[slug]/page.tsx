@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Badge, Card, LinkButton } from "@/components/ui";
 import { getProvider, getProviders, getVpsPlans } from "@/lib/catalog";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import { absoluteUrl, jsonLd } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +12,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const provider = await getProvider(slug);
   if (!provider) return {};
-  return { title: `${provider.name} VPS Plans & Review | Neroviax`, description: provider.description, alternates: { canonical: `/providers/${provider.slug}` } };
+  return { title: `${provider.name} VPS Plans & Review`, description: provider.description, alternates: { canonical: `/providers/${provider.slug}` }, openGraph: { title: `${provider.name} VPS Plans & Review`, description: provider.description, url: `/providers/${provider.slug}` }, twitter: { card: "summary_large_image", title: `${provider.name} VPS Plans & Review`, description: provider.description } };
 }
 
 export default async function ProviderPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -19,7 +21,8 @@ export default async function ProviderPage({ params }: { params: Promise<{ slug:
   if (!provider) notFound();
   const alternatives = providers.filter((item) => provider.alternatives.includes(item.slug));
   return <main className="min-h-[70vh] bg-[var(--color-bg-deep)] px-5 py-14 lg:px-8"><div className="mx-auto max-w-6xl">
-    <Link href="/providers" className="text-sm text-slate-400 hover:text-white">← All providers</Link>
+    <Breadcrumbs items={[{ name: "Home", path: "/" }, { name: "Providers", path: "/providers" }, { name: provider.name, path: `/providers/${provider.slug}` }]} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd({ "@context": "https://schema.org", "@type": "Organization", name: provider.name, url: provider.websiteUrl, description: provider.description, sameAs: [provider.websiteUrl], mainEntityOfPage: absoluteUrl(`/providers/${provider.slug}`) })} />
     <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_320px]"><div><Badge variant="azure">Provider profile</Badge><h1 className="mt-4 text-4xl font-extrabold text-white sm:text-5xl">{provider.name}</h1><p className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-300">{provider.description}</p><div className="mt-7 flex flex-wrap gap-3"><LinkButton href="#plans" variant="azure">View {plans.length} plans</LinkButton><a href={provider.websiteUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center rounded-xl border border-[var(--color-border)] px-4 py-2.5 text-sm font-bold text-white">Official website ↗</a></div></div>
       <Card className="p-6"><h2 className="font-bold text-white">Provider facts</h2><dl className="mt-4 space-y-3 text-sm"><div><dt className="text-slate-500">Headquarters</dt><dd className="text-white">{provider.headquarters || "—"}</dd></div><div><dt className="text-slate-500">Founded</dt><dd className="text-white">{provider.foundedYear || "—"}</dd></div><div><dt className="text-slate-500">Locations</dt><dd className="text-white">{provider.locations.length}</dd></div></dl></Card>
     </div>

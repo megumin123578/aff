@@ -8,7 +8,8 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params; const plan = await getVpsPlan(slug); if (!plan) return {};
-  return { title: `${plan.providerName} ${plan.name} VPS Plan | Neroviax`, description: `${plan.cpu} vCPU, ${plan.ram} GB RAM, ${plan.storage} GB ${plan.storageType} for $${plan.priceMonthly}/month.`, alternates: { canonical: `/vps-plans/${plan.slug}` } };
+  const description = `${plan.cpu} vCPU, ${plan.ram} GB RAM, ${plan.storage} GB ${plan.storageType} for $${plan.priceMonthly}/month.`;
+  return { title: `${plan.providerName} ${plan.name} VPS Plan`, description, alternates: { canonical: `/vps-plans/${plan.slug}` }, openGraph: { title: `${plan.providerName} ${plan.name} VPS Plan`, description, url: `/vps-plans/${plan.slug}` }, twitter: { card: "summary_large_image", title: `${plan.providerName} ${plan.name} VPS Plan`, description } };
 }
 
 export default async function VpsPlanPage({ params }: { params: Promise<{ slug: string }> }) {

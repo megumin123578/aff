@@ -4,13 +4,23 @@ import Link from "next/link";
 import { LinkButton } from "@/components/ui";
 import { AnalyticsPageView } from "@/components/analytics-page-view";
 import "./globals.css";
+import { siteUrl } from "@/lib/seo";
 
 const googleAdSenseAccount =
   process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT ?? "ca-pub-4003831741640664";
 
 export const metadata: Metadata = {
-  title: "Neroviax — Practical VPS Infrastructure",
+  metadataBase: siteUrl,
+  title: { default: "Neroviax — Practical VPS Infrastructure", template: "%s | Neroviax" },
   description: "Practical VPS sizing, self-hosting, and homelab guidance for developers.",
+  openGraph: {
+    type: "website",
+    siteName: "Neroviax",
+    title: "Neroviax — Practical VPS Infrastructure",
+    description: "Practical VPS sizing, self-hosting, and homelab guidance for developers.",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Neroviax" }],
+  },
+  twitter: { card: "summary_large_image", images: ["/opengraph-image"] },
   other: {
     ...(process.env.AWIN_VERIFICATION
       ? { "awin-verification": process.env.AWIN_VERIFICATION }
@@ -98,6 +108,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 <span>Practical Infrastructure Tools</span>
               </div>
               <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-slate-500">
+                <Link href="/about" className="hover:text-slate-300">About</Link>
+                <Link href="/contact" className="hover:text-slate-300">Contact</Link>
+                <Link href="/methodology" className="hover:text-slate-300">Methodology</Link>
+                <Link href="/privacy" className="hover:text-slate-300">Privacy</Link>
+                <Link href="/terms" className="hover:text-slate-300">Terms</Link>
                 <Link href="/affiliate-disclosure" className="hover:text-slate-300">Affiliate disclosure</Link>
                 <span>© 2026 Neroviax · Measurements before marketing.</span>
               </div>

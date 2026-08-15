@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Badge, Card } from "@/components/ui";
 import { getProviders, getVpsPlans } from "@/lib/catalog";
+import { absoluteUrl, jsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "VPS Provider Directory | Neroviax",
+  title: "VPS Provider Directory",
   description: "Browse VPS providers, locations, use cases, strengths and available cloud plans.",
   alternates: { canonical: "/providers" },
 };
@@ -13,6 +14,7 @@ export const dynamic = "force-dynamic";
 export default async function ProvidersPage() {
   const [providers, plans] = await Promise.all([getProviders(), getVpsPlans()]);
   return <main className="min-h-[70vh] bg-[var(--color-bg-deep)] px-5 py-16 lg:px-8">
+    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd({ "@context": "https://schema.org", "@type": "ItemList", itemListElement: providers.map((provider, index) => ({ "@type": "ListItem", position: index + 1, name: provider.name, url: absoluteUrl(`/providers/${provider.slug}`) })) })} />
     <div className="w-full"><Badge variant="azure">Provider directory</Badge><h1 className="mt-4 text-4xl font-extrabold tracking-tight text-white">VPS providers, documented clearly</h1><p className="mt-3 max-w-2xl text-slate-400">Compare locations, practical strengths and every currently available plan in the Neroviax catalog.</p>
       <div className="mt-10 grid gap-6 md:grid-cols-2">{providers.map((provider) => {
         const providerPlans = plans.filter((plan) => plan.providerSlug === provider.slug);

@@ -23,6 +23,7 @@ export type CatalogProvider = {
   bestUseCases: string[];
   alternatives: string[];
   active: boolean;
+  lastUpdated: string;
   locations: CatalogLocation[];
 };
 
@@ -55,4 +56,3 @@ export type CatalogPlan = {
   lastUpdated: string;
   locations: CatalogLocation[];
 };
-

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Badge, Card } from "@/components/ui";
 
 export const metadata: Metadata = {
-  title: "Affiliate Disclosure | Neroviax",
+  title: "Affiliate Disclosure",
   description: "How Neroviax uses affiliate links while keeping infrastructure recommendations independent.",
 };
 

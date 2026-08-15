@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui";
 import { getVpsPlans } from "@/lib/catalog";
 
 export const metadata: Metadata = {
-  title: "VPS Selector | Neroviax Tools",
+  title: "VPS Selector",
   description: "Estimate a sensible VPS configuration from your real-world workload.",
 };
 

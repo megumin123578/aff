@@ -1,0 +1,4 @@
+import type { Metadata } from "next";
+import { TrustPage } from "@/components/trust-page";
+export const metadata: Metadata = { title: "About", description: "About Neroviax and its practical approach to VPS infrastructure.", alternates: { canonical: "/about" } };
+export default function Page() { return <TrustPage eyebrow="About Neroviax" title="Infrastructure decisions backed by evidence" intro="Neroviax helps developers choose, size and operate VPS infrastructure without relying on marketing claims." sections={[{ title: "What we publish", body: "We maintain normalized VPS plan data, workload sizing tools and practical guides for self-hosted software." }, { title: "Our principles", body: "Measurements before marketing. Assumptions should be visible, recommendations reproducible, and commercial relationships disclosed." }, { title: "Independence", body: "Affiliate commissions help support the site but do not enter our ranking formula." }]} />; }

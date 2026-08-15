@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Badge, Card } from "@/components/ui";
 import { getPublishedArticles } from "@/lib/content";
+import { absoluteUrl, jsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Infrastructure Guides | Neroviax",
+  title: "Infrastructure Guides",
   description: "Practical VPS, Docker, self-hosting, and server operations guides.",
+  alternates: { canonical: "/articles" },
 };
 
 export const dynamic = "force-dynamic";
@@ -14,6 +16,7 @@ export default async function ArticlesPage() {
   const articles = await getPublishedArticles();
   return (
     <main className="min-h-[70vh] bg-[var(--color-bg-deep)] px-5 py-16 lg:px-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd({ "@context": "https://schema.org", "@type": "ItemList", itemListElement: articles.map((article, index) => ({ "@type": "ListItem", position: index + 1, name: article.title, url: absoluteUrl(`/articles/${article.slug}`) })) })} />
       <div className="w-full">
         <Badge variant="azure">Field guides</Badge>
         <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-white">Practical infrastructure notes</h1>

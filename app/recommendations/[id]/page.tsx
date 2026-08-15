@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params; const result = await getSavedRecommendation(id); if (!result) return {};
-  return { title: `Saved VPS Recommendation ${id} | Neroviax`, description: `${result.recommended.cpu} vCPU, ${result.recommended.ram} GB RAM and ${result.recommended.storage} GB ${result.recommended.storageType}.`, alternates: { canonical: `/recommendations/${id}` }, robots: { index: false, follow: true } };
+  return { title: `Saved VPS Recommendation ${id}`, description: `${result.recommended.cpu} vCPU, ${result.recommended.ram} GB RAM and ${result.recommended.storage} GB ${result.recommended.storageType}.`, alternates: { canonical: `/recommendations/${id}` }, robots: { index: false, follow: true } };
 }
 
 function Configuration({ label, configuration, preferred = false }: { label: string; configuration: ServerConfiguration; preferred?: boolean }) {

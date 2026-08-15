@@ -1,0 +1,4 @@
+import type { Metadata } from "next";
+import { TrustPage } from "@/components/trust-page";
+export const metadata: Metadata = { title: "Contact", description: "Contact Neroviax about corrections, partnerships or privacy.", alternates: { canonical: "/contact" } };
+export default function Page() { return <TrustPage eyebrow="Contact" title="Get in touch" intro="Send corrections, data-source updates, partnership questions or privacy requests to contact@neroviax.com." sections={[{ title: "Catalog corrections", body: "Include the provider, plan URL, the field that changed and an official source. Pricing and availability corrections receive priority." }, { title: "Editorial and partnerships", body: "Sponsored placement cannot alter rankings or benchmark results. Any paid relationship must be disclosed." }, { title: "Response time", body: "We aim to review actionable messages within five business days." }]} />; }

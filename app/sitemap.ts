@@ -5,7 +5,7 @@ import { getProviders, getVpsPlans } from "@/lib/catalog";
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const base = (process.env.NEXT_PUBLIC_SITE_URL || "https://neroviax.com").replace(/\/$/, "");
   const [articles, providers, plans] = await Promise.all([getPublishedArticles(), getProviders(), getVpsPlans()]);
   return [
     { url: base },
@@ -15,8 +15,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/compare` },
     { url: `${base}/tools/vps-selector` },
     { url: `${base}/affiliate-disclosure` },
+    ...["about", "contact", "methodology", "privacy", "terms"].map((path) => ({ url: `${base}/${path}` })),
     ...articles.map((article) => ({ url: `${base}/articles/${article.slug}`, lastModified: article.updatedAt || article.publishedAt })),
-    ...providers.map((provider) => ({ url: `${base}/providers/${provider.slug}` })),
+    ...providers.map((provider) => ({ url: `${base}/providers/${provider.slug}`, lastModified: provider.lastUpdated })),
     ...plans.map((plan) => ({ url: `${base}/vps-plans/${plan.slug}`, lastModified: plan.lastUpdated })),
   ];
 }

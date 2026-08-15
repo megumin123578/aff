@@ -17,6 +17,7 @@ type ProviderRow = {
   best_use_cases: string[];
   alternatives: string[];
   active: boolean;
+  updated_at: string | Date;
   locations: CatalogLocation[] | null;
 };
 
@@ -53,7 +54,7 @@ type PlanRow = {
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const providerColumns = `p.slug, p.name, p.description, p.website_url, p.affiliate_link_id,
   p.headquarters, p.founded_year, p.features, p.pros, p.cons, p.best_use_cases,
-  p.alternatives, p.active,
+  p.alternatives, p.active, p.updated_at,
   COALESCE(jsonb_agg(jsonb_build_object('id', l.id, 'code', l.code, 'name', l.name,
     'country', l.country, 'region', l.region) ORDER BY l.region, l.country, l.name)
     FILTER (WHERE l.id IS NOT NULL), '[]'::jsonb) AS locations`;
@@ -83,7 +84,7 @@ function providerFromRow(row: ProviderRow): CatalogProvider {
     headquarters: row.headquarters, foundedYear: row.founded_year,
     features: row.features || [], pros: row.pros || [], cons: row.cons || [],
     bestUseCases: row.best_use_cases || [], alternatives: row.alternatives || [],
-    active: row.active, locations: row.locations || [],
+    active: row.active, lastUpdated: dateOnly(row.updated_at), locations: row.locations || [],
   };
 }
 

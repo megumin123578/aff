@@ -1,5 +1,9 @@
 import { Badge, Card, Chip, LinkButton } from "@/components/ui";
 import { getPublishedArticles } from "@/lib/content";
+import type { Metadata } from "next";
+import { absoluteUrl, jsonLd, organizationJsonLd } from "@/lib/seo";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export const dynamic = "force-dynamic";
 
@@ -7,6 +11,7 @@ export default async function Home() {
   const guides = (await getPublishedArticles()).slice(0, 3);
   return (
     <main className="relative">
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd({ "@context": "https://schema.org", "@graph": [organizationJsonLd, { "@type": "WebSite", "@id": absoluteUrl("/#website"), name: "Neroviax", url: absoluteUrl("/"), publisher: { "@id": absoluteUrl("/#organization") } }] })} />
       {/* Hero Section */}
       <section className="hero">
         <div className="relative z-10 grid w-full items-center gap-12 px-5 lg:grid-cols-[1.1fr_.9fr] lg:px-8">

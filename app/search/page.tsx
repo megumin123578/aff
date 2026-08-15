@@ -5,7 +5,7 @@ import { SearchEvent } from "@/components/search-event";
 import { TrackedLink } from "@/components/tracked-link";
 import { globalSearch } from "@/lib/search";
 
-export const metadata: Metadata = { title: "Search | Neroviax", description: "Search VPS providers, plans and infrastructure guides.", robots: { index: false, follow: true }, alternates: { canonical: "/search" } };
+export const metadata: Metadata = { title: "Search", description: "Search VPS providers, plans and infrastructure guides.", robots: { index: false, follow: true }, alternates: { canonical: "/search" } };
 export const dynamic = "force-dynamic";
 
 export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {

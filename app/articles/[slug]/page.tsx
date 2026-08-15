@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { ArticleContent } from "@/components/article-content";
 import { Badge } from "@/components/ui";
 import { getArticle } from "@/lib/content";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import { absoluteUrl, jsonLd, organizationJsonLd } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -12,9 +14,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const article = await getArticle(slug);
   if (!article) return {};
   return {
-    title: `${article.title} | Neroviax`,
+    title: article.title,
     description: article.description,
     alternates: { canonical: `/articles/${article.slug}` },
+    openGraph: { type: "article", title: article.title, description: article.description, url: `/articles/${article.slug}`, publishedTime: article.publishedAt, modifiedTime: article.updatedAt, images: article.coverImage ? [article.coverImage] : undefined },
+    twitter: { card: "summary_large_image", title: article.title, description: article.description, images: article.coverImage ? [article.coverImage] : undefined },
   };
 }
 
@@ -26,7 +30,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   return (
     <main className="min-h-[70vh] bg-[var(--color-bg-deep)] px-5 py-14 lg:px-8">
       <article className="mx-auto max-w-3xl">
-        <Link href="/articles" className="text-sm text-slate-400 hover:text-white">← All guides</Link>
+        <Breadcrumbs items={[{ name: "Home", path: "/" }, { name: "Guides", path: "/articles" }, { name: article.title, path: `/articles/${article.slug}` }]} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd({ "@context": "https://schema.org", "@type": "Article", headline: article.title, description: article.description, datePublished: article.publishedAt, dateModified: article.updatedAt, image: article.coverImage ? [absoluteUrl(article.coverImage)] : undefined, mainEntityOfPage: absoluteUrl(`/articles/${article.slug}`), author: organizationJsonLd, publisher: organizationJsonLd })} />
         <div className="mt-7"><Badge variant="azure">{article.category}</Badge></div>
         <h1 className="mt-5 text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">{article.title}</h1>
         <p className="mt-5 text-lg leading-relaxed text-slate-300">{article.description}</p>

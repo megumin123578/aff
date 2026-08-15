@@ -122,6 +122,7 @@ export async function saveProviderAction(formData: FormData) {
     features: list(formData, "features"), pros: list(formData, "pros"),
     cons: list(formData, "cons"), bestUseCases: list(formData, "bestUseCases"),
     alternatives: list(formData, "alternatives"), active: formData.get("active") === "on",
+    lastUpdated: text(formData, "lastUpdated") || new Date().toISOString().slice(0, 10),
     locations,
   };
   if (!provider.name || !provider.description) throw new Error("Provider name and description are required");

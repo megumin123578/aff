@@ -11,7 +11,7 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
   const query = await searchParams;
   const filtered = Object.values(query).some((value) => typeof value === "string" && value.length > 0);
   return {
-    title: "VPS Plan Database | Neroviax",
+    title: "VPS Plan Database",
     description: "Filter available VPS plans by price, CPU, RAM, storage, bandwidth, region and architecture.",
     alternates: { canonical: "/vps-plans" },
     robots: { index: !filtered, follow: true },

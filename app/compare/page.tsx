@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui";
 import { VpsComparison } from "@/components/vps-comparison";
 import { getVpsPlans } from "@/lib/catalog";
 
-export const metadata: Metadata = { title: "Compare VPS Plans | Neroviax", description: "Compare VPS pricing, CPU, RAM, storage, bandwidth, regions, network, backup and value side by side.", alternates: { canonical: "/compare" } };
+export const metadata: Metadata = { title: "Compare VPS Plans", description: "Compare VPS pricing, CPU, RAM, storage, bandwidth, regions, network, backup and value side by side.", alternates: { canonical: "/compare" } };
 export const dynamic = "force-dynamic";
 
 export default async function ComparePage({ searchParams }: { searchParams: Promise<{ plans?: string }> }) {
