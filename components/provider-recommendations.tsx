@@ -1,18 +1,23 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { Badge, Card } from "@/components/ui";
 import {
   matchProviderPlans,
-  PROVIDER_AFFILIATE_IDS,
+  criteriaForConfiguration,
   type MatchKind,
 } from "@/lib/providers";
-import type { ServerEstimate } from "@/lib/selector";
+import type { CatalogPlan } from "@/lib/catalog-types";
+import type { ServerEstimate, Workload } from "@/lib/selector";
+import { trackEvent } from "@/lib/client-analytics";
 
 type Props = {
   estimate: ServerEstimate;
   isLoading: boolean;
   resultVersion: number;
+  plans: CatalogPlan[];
+  workload: Workload;
 };
 
 const badgeVariant: Record<MatchKind, "default" | "azure" | "mint"> = {
@@ -35,8 +40,16 @@ function PlanSkeleton() {
   );
 }
 
-export function ProviderRecommendations({ estimate, isLoading, resultVersion }: Props) {
-  const matches = matchProviderPlans(estimate);
+export function ProviderRecommendations({ estimate, isLoading, resultVersion, plans, workload }: Props) {
+  const minimumMatches = matchProviderPlans(estimate.minimum, plans, criteriaForConfiguration(workload, estimate.minimum));
+  const recommendedMatches = matchProviderPlans(estimate.recommended, plans, criteriaForConfiguration(workload, estimate.recommended));
+  const usingMinimumFallback = recommendedMatches.length === 0 && minimumMatches.length > 0;
+  const matches = usingMinimumFallback ? minimumMatches : recommendedMatches;
+  const target = usingMinimumFallback ? estimate.minimum : estimate.recommended;
+  const verifiedAt = plans.map((plan) => plan.lastUpdated).sort().at(-1);
+  useEffect(() => {
+    if (!isLoading) trackEvent("recommendation_impression", { resultCount: matches.length, region: workload.region, budget: workload.budget });
+  }, [isLoading, matches.length, resultVersion, workload.budget, workload.region]);
 
   return (
     <section aria-labelledby="provider-recommendations-title" aria-busy={isLoading}>
@@ -47,10 +60,11 @@ export function ProviderRecommendations({ estimate, isLoading, resultVersion }: 
             VPS plans that fit your baseline
           </h2>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-400">
-            Every displayed plan meets or exceeds the calculated CPU, RAM and storage requirements.
+            {usingMinimumFallback ? "No recommended-tier plan fits, so these plans meet the minimum configuration." : "Plans meet the recommended resources, network, region, protection and budget requirements."}
           </p>
+          <p className="mt-2 text-xs text-slate-500">{minimumMatches.length} minimum-tier matches · {recommendedMatches.length} recommended-tier matches</p>
         </div>
-        <p className="text-xs text-slate-500">Catalog verified 14 Aug 2026</p>
+        <p className="text-xs text-slate-500">Catalog updated {verifiedAt || "—"}</p>
       </div>
 
       {isLoading ? (
@@ -63,7 +77,7 @@ export function ProviderRecommendations({ estimate, isLoading, resultVersion }: 
       ) : matches.length > 0 ? (
         <div className="grid gap-5 md:grid-cols-3">
           {matches.map(({ kind, label, reason, plan }) => (
-            <Card key={`${resultVersion}-${kind}-${plan.id}`} className="result-in flex h-full flex-col p-5">
+            <Card key={`${resultVersion}-${kind}-${plan.slug}`} className="result-in flex h-full flex-col p-5">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <Badge variant={badgeVariant[kind]}>{label}</Badge>
@@ -71,35 +85,46 @@ export function ProviderRecommendations({ estimate, isLoading, resultVersion }: 
                   <h3 className="mt-1 text-xl font-bold text-white">{plan.name}</h3>
                 </div>
                 <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-[var(--color-brand-soft)] text-sm font-extrabold text-[var(--color-brand-light)]">
-                  {plan.provider === "hetzner" ? "HZ" : "DO"}
+                  {plan.providerName.split(" ").map((word) => word[0]).join("").slice(0, 2)}
                 </span>
               </div>
 
               <p className="mt-3 min-h-10 text-xs leading-relaxed text-slate-400">{reason}</p>
 
               <div className="mt-5 flex items-end gap-1 border-y border-[var(--color-border)] py-4">
-                <span className="text-3xl font-extrabold text-white">${plan.priceMonthly}</span>
-                <span className="pb-1 text-xs text-slate-400">USD / month</span>
+                <span className="text-3xl font-extrabold text-white">${plan.priceMonthly * target.nodes}</span>
+                <span className="pb-1 text-xs text-slate-400">USD/mo · {target.nodes} node{target.nodes > 1 ? "s" : ""}</span>
               </div>
 
               <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
                 <div><dt className="text-xs text-slate-500">Compute</dt><dd className="mt-0.5 font-semibold text-white">{plan.cpu} vCPU</dd></div>
                 <div><dt className="text-xs text-slate-500">Memory</dt><dd className="mt-0.5 font-semibold text-white">{plan.ram} GB</dd></div>
-                <div><dt className="text-xs text-slate-500">Storage</dt><dd className="mt-0.5 font-semibold text-white">{plan.storage} GB</dd></div>
-                <div><dt className="text-xs text-slate-500">Transfer</dt><dd className="mt-0.5 font-semibold text-white">{plan.transfer}</dd></div>
+                <div><dt className="text-xs text-slate-500">Storage</dt><dd className="mt-0.5 font-semibold text-white">{plan.storage} GB {plan.storageType}</dd></div>
+                <div><dt className="text-xs text-slate-500">Transfer</dt><dd className="mt-0.5 font-semibold text-white">{plan.transferTb === null ? "Unmetered" : `${plan.transferTb} TB`}</dd></div>
               </dl>
 
-              <p className="mt-4 text-xs leading-relaxed text-slate-500">{plan.locations} · {plan.note}</p>
+              <p className="mt-4 text-xs leading-relaxed text-slate-500">
+                {plan.locations.map((location) => location.country).filter((value, index, values) => values.indexOf(value) === index).join(" / ")} · {plan.note}
+              </p>
+              <p className="mt-2 text-xs text-slate-500">First month: ${(plan.priceMonthly + plan.setupFee) * target.nodes} · SLA {plan.slaPercent ?? "not published"}%</p>
 
               <div className="mt-auto pt-5">
                 <a
-                  href={`/go/${PROVIDER_AFFILIATE_IDS[plan.provider]}?source=vps-selector&plan=${encodeURIComponent(plan.id)}&placement=${kind}`}
+                  href={plan.providerAffiliateLinkId
+                    ? `/go/${plan.providerAffiliateLinkId}?source=vps-selector&plan=${encodeURIComponent(plan.slug)}&placement=${kind}`
+                    : `/vps-plans/${plan.slug}`}
                   target="_blank"
                   rel="sponsored noopener noreferrer"
                   className="inline-flex w-full items-center justify-center rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-brand)] px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[var(--color-brand-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)]"
                 >
                   View {plan.name} →
                 </a>
+                <Link href={`/vps-plans/${plan.slug}`} className="mt-3 block text-center text-[11px] text-slate-400 underline decoration-slate-700 underline-offset-4 hover:text-white">
+                  Plan details
+                </Link>
+                <Link href={`/compare?plans=${plan.slug}`} className="mt-3 block text-center text-[11px] text-slate-400 underline decoration-slate-700 underline-offset-4 hover:text-white">
+                  Compare this plan
+                </Link>
                 <a href={plan.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-3 block text-center text-[11px] text-slate-500 underline decoration-slate-700 underline-offset-4 hover:text-slate-300">
                   Verify pricing source
                 </a>
@@ -111,7 +136,7 @@ export function ProviderRecommendations({ estimate, isLoading, resultVersion }: 
         <Card className="p-6 text-center">
           <h3 className="font-bold text-white">No catalog plan fits this workload yet</h3>
           <p className="mx-auto mt-2 max-w-xl text-sm leading-relaxed text-slate-400">
-            The estimate exceeds the plans currently verified by Neroviax. Consider a dedicated server or split the workload across multiple nodes.
+            No available plan meets every resource, transfer, region and ${workload.budget} monthly budget constraint. Try a higher budget or a broader region.
           </p>
         </Card>
       )}

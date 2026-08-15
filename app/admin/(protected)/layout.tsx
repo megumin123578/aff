@@ -17,6 +17,9 @@ export default async function ProtectedAdminLayout({ children }: { children: Rea
             <Link href="/admin" className="font-extrabold text-white">Neroviax Admin</Link>
             <nav className="flex items-center gap-3 text-sm text-slate-400">
               <Link href="/admin/articles" className="hover:text-white">Articles</Link>
+              <Link href="/admin/providers" className="hover:text-white">Providers</Link>
+              <Link href="/admin/vps-plans" className="hover:text-white">VPS plans</Link>
+              <Link href="/admin/analytics" className="hover:text-white">Analytics</Link>
               <Link href="/admin/affiliate-links" className="hover:text-white">Affiliate links</Link>
               <Link href="/" className="hover:text-white">View site</Link>
             </nav>

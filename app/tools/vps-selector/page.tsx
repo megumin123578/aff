@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 import { VpsSelector } from "@/components/vps-selector";
 import { Badge } from "@/components/ui";
+import { getVpsPlans } from "@/lib/catalog";
 
 export const metadata: Metadata = {
   title: "VPS Selector | Neroviax Tools",
   description: "Estimate a sensible VPS configuration from your real-world workload.",
 };
 
-export default function VpsSelectorPage() {
+export const dynamic = "force-dynamic";
+
+export default async function VpsSelectorPage() {
+  const plans = await getVpsPlans();
   return (
     <main className="relative min-h-screen bg-[var(--color-bg-deep)] py-14 lg:py-20">
       <div className="w-full px-5 lg:px-8">
@@ -16,12 +20,9 @@ export default function VpsSelectorPage() {
           <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-white sm:text-5xl leading-tight">
             How much VPS do you actually need?
           </h1>
-          <p className="mt-4 text-base leading-relaxed text-slate-300">
-            Turn your real workload requirements into a sensible starting server configuration—without account signups or artificial precision.
-          </p>
         </div>
 
-        <VpsSelector />
+        <VpsSelector plans={plans} />
       </div>
     </main>
   );

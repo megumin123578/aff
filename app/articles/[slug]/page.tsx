@@ -37,6 +37,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         <div className="mt-10 border-t border-[var(--color-border)] pt-8">
           <ArticleContent body={article.body} slug={article.slug} />
         </div>
+        <div className="mt-12 rounded-2xl border border-[var(--color-brand-border)] bg-[var(--color-brand-soft)] p-6"><h2 className="text-xl font-bold text-white">Turn this guide into a VPS baseline</h2><p className="mt-2 text-sm text-slate-300">Use the selector to estimate resources and find catalog plans that match your region and budget.</p><Link href={`/tools/vps-selector?source=guide&article=${article.slug}`} className="mt-5 inline-flex rounded-xl bg-[var(--color-brand)] px-5 py-3 text-sm font-bold text-white">Open VPS Selector →</Link></div>
       </article>
     </main>
   );

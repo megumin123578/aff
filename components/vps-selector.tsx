@@ -13,6 +13,8 @@ import {
 } from "@/lib/selector";
 import { Badge, Button, Card } from "@/components/ui";
 import { ProviderRecommendations } from "@/components/provider-recommendations";
+import type { CatalogPlan } from "@/lib/catalog-types";
+import { trackEvent } from "@/lib/client-analytics";
 
 const inputClass =
   "mt-2 w-full cursor-pointer rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3 text-sm text-white outline-none transition duration-200 hover:border-[var(--color-border-strong)] focus:border-[var(--color-brand-border)] focus:ring-2 focus:ring-[var(--color-brand-soft)]";
@@ -21,11 +23,13 @@ const labelClass = "block text-xs font-semibold uppercase tracking-wider text-sl
 const breakdownLabels = {
   application: "Application & traffic",
   database: "Database",
+  redis: "Redis / cache",
+  workers: "Workers & cron jobs",
   containers: "Container allocation",
   overhead: "OS & deployment overhead",
 };
 
-export function VpsSelector() {
+export function VpsSelector({ plans }: { plans: CatalogPlan[] }) {
   const [workload, setWorkload] = useState<Workload>(DEFAULT_WORKLOAD);
   const [calculatedWorkload, setCalculatedWorkload] = useState<Workload>(DEFAULT_WORKLOAD);
   const [result, setResult] = useState(() => estimateServer(DEFAULT_WORKLOAD));
@@ -33,7 +37,10 @@ export function VpsSelector() {
   const [isCalculating, setIsCalculating] = useState(false);
   const [resultVersion, setResultVersion] = useState(0);
   const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
+  const [saveState, setSaveState] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [savedUrl, setSavedUrl] = useState("");
   const calculationTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const started = useRef(false);
   const validation = validateWorkload(workload);
 
   useEffect(() => {
@@ -45,6 +52,7 @@ export function VpsSelector() {
         setCalculatedWorkload(sharedWorkload);
         setResult(estimateServer(sharedWorkload));
       }
+      if (params.get("source") === "guide") trackEvent("guide_to_selector", { source: "guide" });
     }, 0);
 
     return () => {
@@ -54,17 +62,29 @@ export function VpsSelector() {
   }, []);
 
   const update = <K extends keyof Workload>(key: K, value: Workload[K]) => {
+    if (!started.current) {
+      started.current = true;
+      trackEvent("selector_started", { firstField: key });
+    }
     setWorkload((current) => ({ ...current, [key]: value }));
     setSelectedPreset(null);
     setCopyState("idle");
+    setSaveState("idle");
+    setSavedUrl("");
   };
 
   const applyPreset = (id: PresetId) => {
     const preset = WORKLOAD_PRESETS.find((item) => item.id === id);
     if (!preset) return;
+    if (!started.current) {
+      started.current = true;
+      trackEvent("selector_started", { firstField: "preset", preset: id });
+    }
     setWorkload({ ...preset.workload });
     setSelectedPreset(id);
     setCopyState("idle");
+    setSaveState("idle");
+    setSavedUrl("");
   };
 
   const syncUrl = (value: Workload) => {
@@ -77,7 +97,10 @@ export function VpsSelector() {
     if (isCalculating || validation.errors.length > 0) return;
 
     setIsCalculating(true);
+    trackEvent("selector_completed", { application: workload.application, region: workload.region, budget: workload.budget, bandwidth: workload.bandwidth });
     setCopyState("idle");
+    setSaveState("idle");
+    setSavedUrl("");
     calculationTimer.current = setTimeout(() => {
       setResult(estimateServer(workload));
       setCalculatedWorkload(workload);
@@ -96,6 +119,8 @@ export function VpsSelector() {
     setSelectedPreset(null);
     setIsCalculating(false);
     setCopyState("idle");
+    setSaveState("idle");
+    setSavedUrl("");
     setResultVersion((current) => current + 1);
     calculationTimer.current = null;
     window.history.replaceState(null, "", window.location.pathname);
@@ -105,7 +130,9 @@ export function VpsSelector() {
     syncUrl(calculatedWorkload);
     const summary = [
       "Neroviax VPS estimate",
-      `${result.cpu} vCPU · ${result.ram} GB RAM · ${result.storage} GB NVMe`,
+      `Minimum: ${result.minimum.cpu} vCPU · ${result.minimum.ram} GB RAM · ${result.minimum.storage} GB storage`,
+      `Recommended: ${result.recommended.cpu} vCPU · ${result.recommended.ram} GB RAM · ${result.recommended.storage} GB storage · ${result.recommended.bandwidth} TB transfer`,
+      `${calculatedWorkload.region} region · $${calculatedWorkload.budget}/month budget`,
       window.location.href,
     ].join("\n");
 
@@ -117,8 +144,44 @@ export function VpsSelector() {
     }
   };
 
+  const savePermanentResult = async () => {
+    setSaveState("saving");
+    try {
+      const response = await fetch("/api/recommendations", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ query: workloadToSearchParams(calculatedWorkload).toString() }) });
+      if (!response.ok) throw new Error("Save failed");
+      const payload = await response.json() as { url: string };
+      setSavedUrl(payload.url);
+      setSaveState("saved");
+      trackEvent("recommendation_saved", { formulaVersion: result.formulaVersion });
+    } catch {
+      setSaveState("error");
+    }
+  };
+
   return (
     <div className="space-y-12">
+      <section aria-label="Workload presets">
+        {selectedPreset && <div className="mb-4 flex justify-end"><Badge variant="azure">Preset applied</Badge></div>}
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+          {WORKLOAD_PRESETS.map((preset) => (
+            <Button
+              key={preset.id}
+              type="button"
+              size="small"
+              variant={selectedPreset === preset.id ? "azure" : "default"}
+              className="min-h-16 flex-col gap-0.5 px-2"
+              onClick={() => applyPreset(preset.id)}
+              aria-pressed={selectedPreset === preset.id}
+              title={preset.description}
+              disabled={isCalculating}
+            >
+              <span>{preset.label}</span>
+              <span className="text-[9px] font-medium opacity-70">{preset.description}</span>
+            </Button>
+          ))}
+        </div>
+      </section>
+
       <div className="grid items-stretch gap-8 lg:grid-cols-2">
       <form className="h-full" onSubmit={handleSubmit} aria-busy={isCalculating} noValidate>
         <fieldset disabled={isCalculating} className="m-0 h-full min-w-0 border-0 p-0">
@@ -126,28 +189,6 @@ export function VpsSelector() {
             <div className="space-y-6">
               <div className="flex flex-col items-start gap-3 border-b border-[var(--color-border)] pb-3.5 min-[420px]:flex-row min-[420px]:items-center min-[420px]:justify-between">
                 <span className="text-lg font-bold text-white">Define Workload</span>
-                <Badge variant="azure">VPS Calculator</Badge>
-              </div>
-
-              <div>
-                <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-300">Start with a preset</p>
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
-                  {WORKLOAD_PRESETS.map((preset) => (
-                    <Button
-                      key={preset.id}
-                      type="button"
-                      size="small"
-                      variant={selectedPreset === preset.id ? "azure" : "default"}
-                      className="min-h-16 flex-col gap-0.5 px-2"
-                      onClick={() => applyPreset(preset.id)}
-                      aria-pressed={selectedPreset === preset.id}
-                      title={preset.description}
-                    >
-                      <span>{preset.label}</span>
-                      <span className="text-[9px] font-medium opacity-70">{preset.description}</span>
-                    </Button>
-                  ))}
-                </div>
               </div>
 
               <div className="grid gap-5 sm:grid-cols-2">
@@ -177,6 +218,18 @@ export function VpsSelector() {
                     <option value="growing">Growing (10k–100k visits)</option>
                     <option value="busy">Busy / Spiky (100k+ visits)</option>
                   </select>
+                </label>
+
+                <label className={labelClass}>
+                  Framework / Runtime
+                  <select className={`${inputClass} font-sans`} value={workload.runtime} onChange={(event) => update("runtime", event.target.value as Workload["runtime"])}>
+                    <option value="nodejs">Node.js</option><option value="php">PHP</option><option value="python">Python</option><option value="java">Java / JVM</option><option value="go">Go</option><option value="dotnet">.NET</option>
+                  </select>
+                </label>
+
+                <label className={labelClass}>
+                  Requests / Minute
+                  <input className={inputClass} type="number" min="0" max="1000000" step="100" value={workload.requestsPerMinute} onChange={(event) => update("requestsPerMinute", Number(event.target.value))} />
                 </label>
 
                 <label className={labelClass}>
@@ -232,15 +285,100 @@ export function VpsSelector() {
                   />
                 </label>
 
-                <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-3.5 text-sm font-medium text-slate-200 transition-colors hover:bg-[var(--color-surface-muted)] sm:col-span-2">
-                  <input
-                    type="checkbox"
-                    checked={workload.database}
-                    onChange={(event) => update("database", event.target.checked)}
-                    className="size-4 cursor-pointer rounded accent-[var(--color-brand)]"
-                  />
-                  <span>This VPS also runs a database (PostgreSQL / MySQL)</span>
+                <label className={labelClass}>
+                  Upload / File Storage (GB)
+                  <input className={inputClass} type="number" min="0" max="10000" step="10" value={workload.uploadsStorage} onChange={(event) => update("uploadsStorage", Number(event.target.value))} />
                 </label>
+
+                <label className={labelClass}>
+                  Database
+                  <select className={`${inputClass} font-sans`} value={workload.databaseType} onChange={(event) => { const value = event.target.value as Workload["databaseType"]; update("databaseType", value); setWorkload((current) => ({ ...current, database: value !== "none", databaseSize: value === "none" ? 0 : Math.max(current.databaseSize, 10) })); }}>
+                    <option value="none">No local database</option><option value="postgresql">PostgreSQL</option><option value="mysql">MySQL / MariaDB</option><option value="mongodb">MongoDB</option>
+                  </select>
+                </label>
+
+                <label className={labelClass}>
+                  Database Size (GB)
+                  <input className={inputClass} type="number" min="0" max="10000" step="5" disabled={workload.databaseType === "none"} value={workload.databaseType === "none" ? 0 : workload.databaseSize} onChange={(event) => update("databaseSize", Number(event.target.value))} />
+                </label>
+
+                <label className={labelClass}>
+                  Database Load
+                  <select className={`${inputClass} font-sans`} disabled={workload.databaseType === "none"} value={workload.databaseLoad} onChange={(event) => update("databaseLoad", event.target.value as Workload["databaseLoad"])}>
+                    <option value="light">Light</option><option value="moderate">Moderate</option><option value="heavy">Heavy</option>
+                  </select>
+                </label>
+
+                <label className={labelClass}>
+                  Background Workers
+                  <input className={inputClass} type="number" min="0" max="100" value={workload.workers} onChange={(event) => update("workers", Number(event.target.value))} />
+                </label>
+
+                <label className={labelClass}>
+                  Cron Jobs
+                  <input className={inputClass} type="number" min="0" max="1000" value={workload.cronJobs} onChange={(event) => update("cronJobs", Number(event.target.value))} />
+                </label>
+
+                <label className={labelClass}>
+                  Preferred Region
+                  <select
+                    className={`${inputClass} font-sans`}
+                    value={workload.region}
+                    onChange={(event) => update("region", event.target.value as Workload["region"])}
+                  >
+                    <option value="any">Any region</option>
+                    <option value="europe">Europe</option>
+                    <option value="north-america">North America</option>
+                    <option value="asia-pacific">Asia Pacific</option>
+                  </select>
+                </label>
+
+                <label className={labelClass}>
+                  Monthly Transfer (TB)
+                  <input
+                    className={inputClass}
+                    type="number"
+                    min="0.1"
+                    max="100"
+                    step="0.1"
+                    value={workload.bandwidth}
+                    aria-invalid={validation.errors.some((error) => error.startsWith("Bandwidth"))}
+                    onChange={(event) => update("bandwidth", Number(event.target.value))}
+                  />
+                </label>
+
+                <label className={labelClass}>
+                  Monthly Budget (USD)
+                  <input
+                    className={inputClass}
+                    type="number"
+                    min="1"
+                    max="10000"
+                    step="1"
+                    value={workload.budget}
+                    aria-invalid={validation.errors.some((error) => error.startsWith("Monthly budget"))}
+                    onChange={(event) => update("budget", Number(event.target.value))}
+                  />
+                </label>
+
+                <label className={labelClass}>
+                  Storage Type
+                  <select className={`${inputClass} font-sans`} value={workload.storageType} onChange={(event) => update("storageType", event.target.value as Workload["storageType"])}><option value="any">Any</option><option value="SSD">SSD</option><option value="NVMe">NVMe required</option></select>
+                </label>
+
+                <label className={labelClass}>
+                  CPU Architecture
+                  <select className={`${inputClass} font-sans`} value={workload.architecture} onChange={(event) => update("architecture", event.target.value as Workload["architecture"])}><option value="any">Any</option><option value="x86_64">x86_64</option><option value="arm64">ARM64</option></select>
+                </label>
+
+                <label className={labelClass}>
+                  Minimum SLA (%)
+                  <input className={inputClass} type="number" min="0" max="100" step="0.01" value={workload.minimumSla} onChange={(event) => update("minimumSla", Number(event.target.value))} />
+                </label>
+
+                <div className="grid gap-3 sm:col-span-2 sm:grid-cols-2">
+                  {[["docker", "Runs with Docker", workload.docker], ["redis", "Redis / cache", workload.redis], ["backupRequired", "Provider backup required", workload.backupRequired], ["ipv4Required", "IPv4 required", workload.ipv4Required], ["highAvailability", "High availability (2 nodes)", workload.highAvailability]].map(([key, label, checked]) => <label key={String(key)} className="flex cursor-pointer items-center gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-3.5 text-sm font-medium text-slate-200"><input type="checkbox" checked={Boolean(checked)} onChange={(event) => update(key as keyof Workload, event.target.checked as never)} className="size-4 accent-[var(--color-brand)]" />{String(label)}</label>)}
+                </div>
               </div>
 
               {(validation.errors.length > 0 || validation.warnings.length > 0) && (
@@ -275,31 +413,13 @@ export function VpsSelector() {
         <Card className="flex h-full w-full flex-col p-[clamp(18px,4vw,28px)]">
           <div className="flex flex-col items-start gap-3 border-b border-[var(--color-border)] pb-3.5 min-[420px]:flex-row min-[420px]:items-center min-[420px]:justify-between">
             <div>
-              <span className="font-mono text-xs font-semibold uppercase tracking-wider text-slate-400">Recommendation</span>
-              <h2 className="mt-1 text-xl font-bold text-white">Unmanaged KVM VPS</h2>
+              <h2 className="text-xl font-bold text-white">Recommended VPS Configuration</h2>
             </div>
-            <Badge variant="mint">Optimal Baseline</Badge>
           </div>
 
-          <div className="grid grid-cols-1 gap-3 py-6 min-[420px]:grid-cols-3">
-            {isCalculating
-              ? ["vCPU Cores", "RAM Memory", "NVMe Storage"].map((label) => (
-                  <div key={label} className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4 text-center" role="status">
-                    <span className="skeleton mx-auto block h-8 w-16 rounded-lg" />
-                    <span className="skeleton mx-auto mt-2 block h-2.5 w-20 rounded" />
-                    <span className="sr-only">Calculating {label}</span>
-                  </div>
-                ))
-              : [
-                  [result.cpu, "vCPU Cores"],
-                  [`${result.ram} GB`, "RAM Memory"],
-                  [`${result.storage} GB`, "NVMe Storage"],
-                ].map(([value, label]) => (
-                  <div key={`${resultVersion}-${label}`} className="result-in rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4 text-center">
-                    <p className="text-2xl font-bold text-white">{value}</p>
-                    <p className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">{label}</p>
-                  </div>
-                ))}
+          <div className="grid gap-4 py-6 sm:grid-cols-2">
+            {([['Minimum', result.minimum], ['Recommended', result.recommended]] as const).map(([label, configuration]) => <div key={`${resultVersion}-${label}`} className="result-in rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-5"><div className="flex items-center justify-between"><h3 className="font-bold text-white">{label}</h3>{label === 'Recommended' && <Badge variant="mint">Preferred</Badge>}</div><dl className="mt-4 grid grid-cols-2 gap-3 text-sm"><div><dt className="text-xs text-slate-500">Compute</dt><dd className="font-bold text-white">{configuration.cpu} vCPU</dd></div><div><dt className="text-xs text-slate-500">Memory</dt><dd className="font-bold text-white">{configuration.ram} GB</dd></div><div><dt className="text-xs text-slate-500">Storage</dt><dd className="font-bold text-white">{configuration.storage} GB {configuration.storageType}</dd></div><div><dt className="text-xs text-slate-500">Transfer</dt><dd className="font-bold text-white">{configuration.bandwidth} TB</dd></div><div><dt className="text-xs text-slate-500">Network</dt><dd className="font-bold text-white">{configuration.networkSpeedMbps} Mbps</dd></div><div><dt className="text-xs text-slate-500">Nodes</dt><dd className="font-bold text-white">{configuration.nodes}</dd></div></dl></div>)}
+            {isCalculating && <span className="sr-only">Calculating recommendation…</span>}
           </div>
 
           <div className={`space-y-5 transition-opacity ${isCalculating ? "opacity-40" : "opacity-100"}`}>
@@ -340,12 +460,16 @@ export function VpsSelector() {
             )}
           </div>
 
-          <div className="mt-auto flex flex-col gap-3 border-t border-[var(--color-border)] pt-5 sm:flex-row">
+          <div className="mt-auto grid gap-3 border-t border-[var(--color-border)] pt-5 sm:grid-cols-3">
             <Button type="button" className="flex-1" onClick={reset}>Reset</Button>
             <Button type="button" variant="mint" className="flex-1" onClick={copyResult} disabled={isCalculating}>
               {copyState === "copied" ? "Copied result ✓" : copyState === "error" ? "Copy failed" : "Copy result & link"}
             </Button>
+            <Button type="button" variant="azure" className="flex-1" onClick={savePermanentResult} disabled={isCalculating || saveState === "saving"}>
+              {saveState === "saving" ? "Saving…" : saveState === "saved" ? "Saved ✓" : saveState === "error" ? "Save failed" : "Save permalink"}
+            </Button>
           </div>
+          {savedUrl && <a href={savedUrl} className="mt-3 block text-center text-xs text-[var(--color-brand-light)] underline underline-offset-4">Open permanent recommendation →</a>}
 
           <p className="mt-4 text-xs leading-relaxed text-slate-500">
             Baseline estimate only. Verify CPU, memory and disk metrics with production monitoring after deployment.
@@ -358,6 +482,8 @@ export function VpsSelector() {
         estimate={result}
         isLoading={isCalculating}
         resultVersion={resultVersion}
+        plans={plans}
+        workload={calculatedWorkload}
       />
     </div>
   );

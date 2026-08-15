@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { Badge, LinkButton } from "@/components/ui";
+import { LinkButton } from "@/components/ui";
+import { AnalyticsPageView } from "@/components/analytics-page-view";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -12,24 +14,30 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <body className="bg-[var(--color-bg)] text-[var(--color-text)] antialiased">
+        <AnalyticsPageView />
         <div className="min-h-dvh w-full">
           <header className="sticky top-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-header)] backdrop-blur-xl">
             <div className="flex h-16 w-full items-center justify-between px-5 lg:px-8">
               <Link href="/" className="flex min-w-0 items-center gap-3 rounded-lg">
+                <Image src="/favicon.ico?v=20260815" alt="" width={30} height={30} priority unoptimized className="size-[30px] rounded-lg" />
                 <span className="text-xl font-bold tracking-tight text-white">
                   Neroviax
                 </span>
-                <Badge variant="azure" className="hidden lg:inline-flex">
-                  VPS Engine
-                </Badge>
               </Link>
               <nav aria-label="Primary navigation" className="hidden items-center gap-6 text-sm font-medium text-slate-300 md:flex">
+                <Link href="/providers" className="rounded-md transition-colors hover:text-white">Providers</Link>
+                <Link href="/vps-plans" className="rounded-md transition-colors hover:text-white">VPS Plans</Link>
+                <Link href="/compare" className="rounded-md transition-colors hover:text-white">Compare</Link>
                 <Link href="/articles" className="rounded-md transition-colors hover:text-white">Guides</Link>
                 <Link href="/#method" className="rounded-md transition-colors hover:text-white">Method</Link>
                 <Link href="/tools/vps-selector" className="rounded-md transition-colors hover:text-white">VPS Calculator</Link>
               </nav>
 
               <div className="flex items-center gap-2">
+                <form action="/search" method="get" className="hidden xl:block">
+                  <label className="sr-only" htmlFor="header-search">Search</label>
+                  <input id="header-search" name="q" minLength={2} placeholder="Search…" className="w-36 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2 text-xs text-white outline-none focus:w-48 focus:border-[var(--color-brand-border)]" />
+                </form>
                 <LinkButton href="/tools/vps-selector" variant="azure" className="hidden shrink-0 sm:inline-flex">
                   Size your VPS →
                 </LinkButton>
@@ -44,9 +52,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                     aria-label="Mobile navigation"
                     className="absolute right-0 top-12 w-64 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-2 shadow-[var(--shadow-card)]"
                   >
+                    <Link href="/providers" className="block rounded-xl px-4 py-3 text-sm font-medium text-slate-200 hover:bg-[var(--color-surface-muted)]">Providers</Link>
+                    <Link href="/vps-plans" className="block rounded-xl px-4 py-3 text-sm font-medium text-slate-200 hover:bg-[var(--color-surface-muted)]">VPS Plans</Link>
+                    <Link href="/compare" className="block rounded-xl px-4 py-3 text-sm font-medium text-slate-200 hover:bg-[var(--color-surface-muted)]">Compare</Link>
                     <Link href="/articles" className="block rounded-xl px-4 py-3 text-sm font-medium text-slate-200 hover:bg-[var(--color-surface-muted)]">Guides</Link>
                     <Link href="/#method" className="block rounded-xl px-4 py-3 text-sm font-medium text-slate-200 hover:bg-[var(--color-surface-muted)]">Method</Link>
                     <Link href="/tools/vps-selector" className="block rounded-xl px-4 py-3 text-sm font-medium text-slate-200 hover:bg-[var(--color-surface-muted)]">VPS Calculator</Link>
+                    <form action="/search" method="get" className="p-2"><input name="q" minLength={2} placeholder="Search providers, plans…" className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2 text-sm text-white" /></form>
                     <LinkButton href="/tools/vps-selector" variant="azure" className="mt-2 w-full sm:hidden">
                       Size your VPS →
                     </LinkButton>

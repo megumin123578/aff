@@ -1,14 +1,23 @@
 import Link from "next/link";
 import { Card } from "@/components/ui";
 import { getAffiliateClickCount, getAffiliateLinks, getAllArticles } from "@/lib/content";
+import { getProviders, getVpsPlans } from "@/lib/catalog";
+import { getAnalyticsEventCount } from "@/lib/analytics";
+import { getSavedRecommendationCount } from "@/lib/recommendations";
 
 export default async function AdminDashboardPage() {
-  const [articles, links, clicks] = await Promise.all([getAllArticles(), getAffiliateLinks(), getAffiliateClickCount()]);
+  const [articles, links, clicks, providers, plans, events, recommendations] = await Promise.all([
+    getAllArticles(), getAffiliateLinks(), getAffiliateClickCount(), getProviders(true), getVpsPlans({ includeUnavailable: true }), getAnalyticsEventCount(), getSavedRecommendationCount(),
+  ]);
   const stats = [
     [articles.length, "Articles", "/admin/articles"],
     [articles.filter((article) => article.status === "published").length, "Published", "/admin/articles"],
     [links.length, "Affiliate links", "/admin/affiliate-links"],
     [clicks, "Tracked clicks", "/admin/affiliate-links"],
+    [providers.length, "Providers", "/admin/providers"],
+    [plans.length, "VPS plans", "/admin/vps-plans"],
+    [events, "Analytics events", "/admin/analytics"],
+    [recommendations, "Saved recommendations", "/admin/analytics"],
   ] as const;
 
   return (
