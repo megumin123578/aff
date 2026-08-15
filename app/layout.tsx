@@ -5,14 +5,35 @@ import { LinkButton } from "@/components/ui";
 import { AnalyticsPageView } from "@/components/analytics-page-view";
 import "./globals.css";
 
+const googleAdSenseAccount =
+  process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT ?? "ca-pub-4003831741640664";
+const showGoogleAds = process.env.NODE_ENV === "production";
+
 export const metadata: Metadata = {
   title: "Neroviax — Practical VPS Infrastructure",
   description: "Practical VPS sizing, self-hosting, and homelab guidance for developers.",
+  other: {
+    ...(process.env.AWIN_VERIFICATION
+      ? { "awin-verification": process.env.AWIN_VERIFICATION }
+      : {}),
+    ...(showGoogleAds
+      ? { "google-adsense-account": googleAdSenseAccount }
+      : {}),
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
+      <head>
+        {showGoogleAds ? (
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${googleAdSenseAccount}`}
+            crossOrigin="anonymous"
+          />
+        ) : null}
+      </head>
       <body className="bg-[var(--color-bg)] text-[var(--color-text)] antialiased">
         <AnalyticsPageView />
         <div className="min-h-dvh w-full">

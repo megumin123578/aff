@@ -21,7 +21,6 @@ export default async function ProtectedAdminLayout({ children }: { children: Rea
               <Link href="/admin/vps-plans" className="hover:text-white">VPS plans</Link>
               <Link href="/admin/analytics" className="hover:text-white">Analytics</Link>
               <Link href="/admin/affiliate-links" className="hover:text-white">Affiliate links</Link>
-              <Link href="/" className="hover:text-white">View site</Link>
             </nav>
           </div>
           <div className="flex items-center gap-3 text-xs text-slate-500">
