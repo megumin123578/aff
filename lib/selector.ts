@@ -1,4 +1,4 @@
-export const RECOMMENDATION_FORMULA_VERSION = "2.0.0";
+export const RECOMMENDATION_FORMULA_VERSION = "2.1.0";
 
 export type Application = "nextjs" | "docker" | "wordpress" | "n8n" | "game";
 export type Runtime = "nodejs" | "php" | "python" | "java" | "go" | "dotnet";
@@ -81,7 +81,7 @@ export type ServerEstimate = {
 
 export const DEFAULT_WORKLOAD: Workload = {
   application: "nextjs", runtime: "nodejs", traffic: "starter", requestsPerMinute: 100,
-  containers: 3, docker: true, database: true, databaseType: "postgresql",
+  containers: 1, docker: false, database: true, databaseType: "postgresql",
   databaseSize: 10, databaseLoad: "light", redis: false, workers: 1, cronJobs: 0,
   storage: 40, uploadsStorage: 0, environment: "production", priority: "balanced",
   bandwidth: 1, region: "any", budget: 25, storageType: "any", architecture: "any",
@@ -90,9 +90,9 @@ export const DEFAULT_WORKLOAD: Workload = {
 
 export const WORKLOAD_PRESETS: Array<{ id: PresetId; label: string; description: string; workload: Workload }> = [
   { id: "blog", label: "Blog", description: "WordPress publication", workload: { ...DEFAULT_WORKLOAD, application: "wordpress", runtime: "php", traffic: "starter", requestsPerMinute: 150, containers: 2, databaseType: "mysql", databaseSize: 5, workers: 0, storage: 30, uploadsStorage: 20, priority: "economy", budget: 15 } },
-  { id: "saas", label: "SaaS", description: "App, workers and database", workload: { ...DEFAULT_WORKLOAD, traffic: "growing", requestsPerMinute: 1500, containers: 5, databaseSize: 30, databaseLoad: "moderate", redis: true, workers: 3, storage: 50, uploadsStorage: 10, bandwidth: 3, budget: 50, backupRequired: true } },
+  { id: "saas", label: "SaaS", description: "App, workers and database", workload: { ...DEFAULT_WORKLOAD, traffic: "growing", requestsPerMinute: 1500, containers: 5, docker: true, databaseSize: 30, databaseLoad: "moderate", redis: true, workers: 3, storage: 50, uploadsStorage: 10, bandwidth: 3, budget: 50, backupRequired: true } },
   { id: "ecommerce", label: "E-commerce", description: "Storefront with traffic spikes", workload: { ...DEFAULT_WORKLOAD, application: "wordpress", runtime: "php", traffic: "busy", requestsPerMinute: 5000, containers: 4, databaseType: "mysql", databaseSize: 80, databaseLoad: "heavy", redis: true, workers: 4, storage: 60, uploadsStorage: 60, priority: "performance", bandwidth: 5, budget: 100, storageType: "NVMe", backupRequired: true } },
-  { id: "automation", label: "Automation", description: "n8n and background jobs", workload: { ...DEFAULT_WORKLOAD, application: "n8n", traffic: "growing", requestsPerMinute: 500, containers: 4, databaseSize: 20, databaseLoad: "moderate", redis: true, workers: 6, cronJobs: 10, storage: 40, bandwidth: 2, budget: 40, backupRequired: true } },
+  { id: "automation", label: "Automation", description: "n8n and background jobs", workload: { ...DEFAULT_WORKLOAD, application: "n8n", traffic: "growing", requestsPerMinute: 500, containers: 4, docker: true, databaseSize: 20, databaseLoad: "moderate", redis: true, workers: 6, cronJobs: 10, storage: 40, bandwidth: 2, budget: 40, backupRequired: true } },
   { id: "game-server", label: "Game server", description: "Latency-sensitive server", workload: { ...DEFAULT_WORKLOAD, application: "game", runtime: "java", traffic: "growing", requestsPerMinute: 1000, containers: 2, database: false, databaseType: "none", databaseSize: 0, workers: 0, storage: 80, priority: "performance", bandwidth: 3, budget: 60, storageType: "NVMe", backupRequired: true } },
 ];
 
@@ -106,24 +106,24 @@ const databaseLoadFactor: Record<DatabaseLoad, number> = { light: 0.8, moderate:
 
 function round(value: number) { return Math.round(value * 10) / 10; }
 function nextTier(value: number, tiers: number[]) { return tiers.find((tier) => value <= tier) ?? tiers.at(-1)!; }
-function rpmRam(rpm: number) { return rpm <= 100 ? 0 : rpm <= 1000 ? 0.5 : rpm <= 5000 ? 1.5 : rpm <= 20000 ? 3 : 5; }
 function effectiveDatabase(input: Workload): DatabaseType { return input.database ? (input.databaseType === "none" ? "postgresql" : input.databaseType) : "none"; }
 
 export function validateWorkload(input: Workload) {
   const errors: string[] = [];
   const warnings: string[] = [];
   const ranges: Array<[number, number, number, string]> = [
-    [input.containers, 1, 100, "Containers"], [input.storage, 20, 4000, "Storage"],
+    [input.storage, 20, 4000, "Storage"],
     [input.bandwidth, 0.1, 100, "Bandwidth"], [input.budget, 1, 10000, "Monthly budget"],
     [input.requestsPerMinute, 0, 1000000, "Requests per minute"], [input.databaseSize, 0, 10000, "Database size"],
     [input.uploadsStorage, 0, 10000, "Upload storage"], [input.workers, 0, 100, "Workers"],
     [input.cronJobs, 0, 1000, "Cron jobs"], [input.minimumSla, 0, 100, "Minimum SLA"],
   ];
   for (const [value, minimum, maximum, label] of ranges) if (!Number.isFinite(value) || value < minimum || value > maximum) errors.push(`${label} must be between ${minimum} and ${maximum}.`);
-  if (input.containers > 30) warnings.push("More than 30 containers often benefits from multiple VPS nodes or an orchestrator.");
+  if (input.docker && (!Number.isFinite(input.containers) || input.containers < 1 || input.containers > 100)) errors.push("Containers must be between 1 and 100.");
+  if (input.docker && input.containers > 30) warnings.push("More than 30 containers often benefits from multiple VPS nodes or an orchestrator.");
   if (input.storage + input.databaseSize + input.uploadsStorage > 1000) warnings.push("Storage above 1 TB is often more economical with dedicated or object storage.");
   if (input.traffic === "busy" && input.priority === "economy") warnings.push("Economy mode leaves limited burst headroom for busy traffic.");
-  if (input.environment === "production" && input.containers > 20) warnings.push("A single production VPS becomes a failure domain at this container count.");
+  if (input.docker && input.environment === "production" && input.containers > 20) warnings.push("A single production VPS becomes a failure domain at this container count.");
   if (input.highAvailability) warnings.push("High availability requires at least two nodes and a load balancer; listed plan cost is per node.");
   return { errors, warnings };
 }
@@ -131,7 +131,7 @@ export function validateWorkload(input: Workload) {
 export function estimateServer(input: Workload): ServerEstimate {
   const databaseType = effectiveDatabase(input);
   const breakdown: RamBreakdown = {
-    application: round(applicationRam[input.application] + runtimeRam[input.runtime] + trafficRam[input.traffic] + rpmRam(input.requestsPerMinute)),
+    application: round(applicationRam[input.application] + runtimeRam[input.runtime] + trafficRam[input.traffic]),
     database: round(databaseRam[databaseType] * databaseLoadFactor[input.databaseLoad] + (databaseType === "none" ? 0 : Math.min(input.databaseSize / 100, 2) * 0.2)),
     redis: input.redis ? (input.traffic === "busy" ? 1 : 0.5) : 0,
     workers: round(input.workers * 0.3 + input.cronJobs * 0.03),
@@ -142,7 +142,7 @@ export function estimateServer(input: Workload): ServerEstimate {
   const minimumRam = nextTier(Math.max(2, rawRam * 0.85), [2, 4, 8, 16, 32, 64, 128]);
   const recommendedRam = nextTier(Math.max(minimumRam, rawRam * priorityHeadroom[input.priority]), [2, 4, 8, 16, 32, 64, 128]);
   const cpuBase = minimumRam <= 2 ? 1 : minimumRam <= 4 ? 2 : minimumRam <= 8 ? 4 : minimumRam <= 16 ? 6 : minimumRam <= 32 ? 8 : 16;
-  const cpuDemand = cpuBase + Math.floor(input.workers / 4) + (input.requestsPerMinute > 5000 ? 2 : input.requestsPerMinute > 1000 ? 1 : 0) + (input.application === "game" ? 1 : 0);
+  const cpuDemand = cpuBase + Math.floor(input.workers / 4) + (input.application === "game" ? 1 : 0);
   const minimumCpu = nextTier(cpuDemand, [1, 2, 4, 6, 8, 12, 16, 24, 32]);
   const recommendedCpu = nextTier(cpuDemand * (input.priority === "performance" ? 1.5 : 1.25), [1, 2, 4, 6, 8, 12, 16, 24, 32]);
   const requiredStorage = Math.max(20, input.storage + input.databaseSize + input.uploadsStorage);
@@ -156,8 +156,9 @@ export function estimateServer(input: Workload): ServerEstimate {
   const validation = validateWorkload(input);
   const warnings = [...validation.warnings];
   if (recommendedRam >= 64) warnings.push("This workload is approaching dedicated-server territory.");
+  const trafficDescription: Record<Traffic, string> = { starter: "up to 10k monthly visits", growing: "10k–100k monthly visits", busy: "100k+ or spiky monthly traffic" };
   const reasons = [
-    `${input.application} on ${input.runtime} is sized for ${input.requestsPerMinute.toLocaleString("en-US")} requests/minute.`,
+    `${input.application} on ${input.runtime} is sized for ${trafficDescription[input.traffic]}.`,
     databaseType === "none" ? "No local database memory or storage was reserved." : `${databaseType} ${input.databaseLoad} load includes ${input.databaseSize} GB of database storage.`,
     `${input.workers} workers, ${input.cronJobs} cron jobs${input.redis ? " and Redis cache" : ""} are included.`,
     `${input.environment} overhead plus ${input.priority} deployment headroom separates minimum from recommended capacity.`,

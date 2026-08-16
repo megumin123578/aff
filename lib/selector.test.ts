@@ -20,13 +20,13 @@ test("estimates the balanced production baseline", () => {
     { cpu: result.minimum.cpu, ram: result.minimum.ram, storage: result.minimum.storage },
     { cpu: 2, ram: 4, storage: 50 },
   );
-  assert.equal(result.rawRam, 4.5);
+  assert.equal(result.rawRam, 4.1);
   assert.deepEqual(result.breakdown, {
     application: 1.3,
     database: 1.2,
     redis: 0,
     workers: 0.3,
-    containers: 0.4,
+    containers: 0,
     overhead: 1.3,
   });
 });
@@ -51,14 +51,22 @@ test("adds performance headroom for a busy e-commerce preset", () => {
     { cpu: result.cpu, ram: result.ram, storage: result.storage },
     { cpu: 6, ram: 16, storage: 180 },
   );
-  assert.equal(result.rawRam, 7);
+  assert.equal(result.rawRam, 6.4);
+});
+
+test("uses the traffic profile without double-counting legacy RPM", () => {
+  const lowRpm = estimateServer({ ...DEFAULT_WORKLOAD, traffic: "growing", requestsPerMinute: 100 });
+  const highRpm = estimateServer({ ...DEFAULT_WORKLOAD, traffic: "growing", requestsPerMinute: 100000 });
+
+  assert.deepEqual(highRpm.recommended, lowRpm.recommended);
+  assert.equal(highRpm.rawRam, lowRpm.rawRam);
 });
 
 test("reports invalid and single-node risk inputs", () => {
-  const invalid = validateWorkload({ ...DEFAULT_WORKLOAD, containers: 0, storage: 5000 });
+  const invalid = validateWorkload({ ...DEFAULT_WORKLOAD, docker: true, containers: 0, storage: 5000 });
   assert.equal(invalid.errors.length, 2);
 
-  const risky = validateWorkload({ ...DEFAULT_WORKLOAD, containers: 31, priority: "economy", traffic: "busy" });
+  const risky = validateWorkload({ ...DEFAULT_WORKLOAD, docker: true, containers: 31, priority: "economy", traffic: "busy" });
   assert.equal(risky.errors.length, 0);
   assert.ok(risky.warnings.length >= 3);
 });
