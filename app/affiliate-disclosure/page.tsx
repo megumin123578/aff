@@ -5,6 +5,7 @@ import { Badge, Card } from "@/components/ui";
 export const metadata: Metadata = {
   title: "Affiliate Disclosure",
   description: "How Neroviax uses affiliate links while keeping infrastructure recommendations independent.",
+  alternates: { canonical: "/affiliate-disclosure" },
 };
 
 export default async function AffiliateDisclosurePage({ searchParams }: { searchParams: Promise<{ link?: string }> }) {

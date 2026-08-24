@@ -114,7 +114,7 @@ export function ProviderRecommendations({ estimate, isLoading, resultVersion, pl
                     ? `/go/${plan.providerAffiliateLinkId}?source=vps-selector&plan=${encodeURIComponent(plan.slug)}&placement=${kind}`
                     : `/vps-plans/${plan.slug}`}
                   target="_blank"
-                  rel="sponsored noopener noreferrer"
+                  rel="nofollow sponsored noopener noreferrer"
                   className="inline-flex w-full items-center justify-center rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-brand)] px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[var(--color-brand-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)]"
                 >
                   View {plan.name} →

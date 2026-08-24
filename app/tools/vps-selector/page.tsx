@@ -6,6 +6,7 @@ import { getVpsPlans } from "@/lib/catalog";
 export const metadata: Metadata = {
   title: "VPS Selector",
   description: "Estimate a sensible VPS configuration from your real-world workload.",
+  alternates: { canonical: "/tools/vps-selector" },
 };
 
 export const dynamic = "force-dynamic";

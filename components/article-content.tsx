@@ -32,7 +32,7 @@ export async function ArticleContent({ body, slug }: { body: string; slug: strin
             <p className="m-0 text-xs font-semibold uppercase tracking-wider text-[var(--color-brand-light)]">Recommended resource</p>
             <a
               href={`/go/${link.id}?source=article&article=${encodeURIComponent(slug)}`}
-              rel="sponsored"
+              rel="nofollow sponsored"
               className="mt-3 inline-flex rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-brand)] px-4 py-3 text-sm font-bold text-white no-underline hover:bg-[var(--color-brand-hover)]"
             >
               {part.label || link.label} →
