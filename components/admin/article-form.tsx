@@ -9,9 +9,9 @@ export function ArticleForm({ article, affiliateLinks }: { article?: Article; af
     <form action={saveArticleAction} className="space-y-6">
       <div className="grid gap-5 sm:grid-cols-2">
         <label className={labelClass}>Title<input required name="title" defaultValue={article?.title} className={fieldClass} /></label>
-        <label className={labelClass}>Slug<input required readOnly={Boolean(article)} name="slug" defaultValue={article?.slug} placeholder="docker-vps-sizing" className={`${fieldClass} read-only:cursor-not-allowed read-only:opacity-60`} /></label>
+        <label className={labelClass}>Slug<input required readOnly={Boolean(article)} name="slug" defaultValue={article?.slug} placeholder="mac-mini-m4-homelab-setup" className={`${fieldClass} read-only:cursor-not-allowed read-only:opacity-60`} /></label>
         <label className={`${labelClass} sm:col-span-2`}>Description<textarea required name="description" defaultValue={article?.description} rows={3} className={fieldClass} /></label>
-        <label className={labelClass}>Category<input name="category" defaultValue={article?.category || "Infrastructure"} className={fieldClass} /></label>
+        <label className={labelClass}>Category<input name="category" defaultValue={article?.category || "Desk Setup"} className={fieldClass} /></label>
         <label className={labelClass}>Tags, comma separated<input name="tags" defaultValue={article?.tags.join(", ")} className={fieldClass} /></label>
         <label className={labelClass}>Status<select name="status" defaultValue={article?.status || "draft"} className={fieldClass}><option value="draft">Draft</option><option value="published">Published</option></select></label>
         <label className={labelClass}>Published date<input type="date" name="publishedAt" defaultValue={article?.publishedAt} className={fieldClass} /></label>

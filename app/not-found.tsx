@@ -17,16 +17,13 @@ export default function NotFound() {
           <LinkButton href="/" variant="azure">
             Go to Home
           </LinkButton>
-          <LinkButton href="/vps-plans" variant="default">
-            Browse VPS Plans
-          </LinkButton>
           <LinkButton href="/articles" variant="default">
-            Infrastructure Guides
+            Read Blog & Reviews
           </LinkButton>
         </div>
 
         <div className="mt-10 border-t border-[var(--color-border)] pt-6 text-xs text-slate-500">
-          Looking for a specific provider or plan? Try searching from the header or{" "}
+          Looking for specific gear or advice? Try searching from the header or{" "}
           <Link href="/contact" className="text-slate-400 underline hover:text-white">
             contact us
           </Link>.

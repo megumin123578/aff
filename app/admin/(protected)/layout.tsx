@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import { logoutAdminAction } from "@/app/admin/actions";
+import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { getAdminSession } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
@@ -10,28 +9,12 @@ export default async function ProtectedAdminLayout({ children }: { children: Rea
   if (!session) redirect("/admin/login");
 
   return (
-    <main className="min-h-screen bg-[var(--color-bg-deep)]">
-      <div className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
-        <div className="flex w-full flex-col gap-4 px-5 py-4 sm:flex-row sm:items-center sm:justify-between lg:px-8">
-          <div className="flex flex-wrap items-center gap-4">
-            <Link href="/admin" className="font-extrabold text-white">Neroviax Admin</Link>
-            <nav className="flex items-center gap-3 text-sm text-slate-400">
-              <Link href="/admin/articles" className="hover:text-white">Articles</Link>
-              <Link href="/admin/providers" className="hover:text-white">Providers</Link>
-              <Link href="/admin/vps-plans" className="hover:text-white">VPS plans</Link>
-              <Link href="/admin/analytics" className="hover:text-white">Analytics</Link>
-              <Link href="/admin/affiliate-links" className="hover:text-white">Affiliate links</Link>
-            </nav>
-          </div>
-          <div className="flex items-center gap-3 text-xs text-slate-500">
-            <span>{session.username}</span>
-            <form action={logoutAdminAction}>
-              <button className="rounded-lg border border-[var(--color-border)] px-3 py-2 text-slate-300 hover:bg-[var(--color-surface-muted)]">Sign out</button>
-            </form>
-          </div>
-        </div>
+    <div className="min-h-screen bg-[var(--color-bg-deep)] md:flex">
+      <AdminSidebar username={session.username} />
+      <div className="flex-1 min-w-0 md:pl-60 lg:pl-64">
+        <main className="w-full px-5 py-8 lg:px-10 lg:py-10">{children}</main>
       </div>
-      <div className="w-full px-5 py-10 lg:px-8">{children}</div>
-    </main>
+    </div>
   );
 }
+

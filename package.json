@@ -8,7 +8,6 @@
     "db:migrate": "node --env-file-if-exists=.env scripts/migrate-postgres.mjs",
     "db:setup": "node --env-file-if-exists=.env scripts/setup-postgres.mjs",
     "db:check": "node --env-file-if-exists=.env scripts/check-postgres.mjs",
-    "catalog:sync": "node --env-file-if-exists=.env scripts/sync-catalog.mjs",
     "start": "pnpm db:setup && next start",
     "lint": "eslint .",
     "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test --test-isolation=none lib/*.test.ts",

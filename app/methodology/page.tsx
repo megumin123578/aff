@@ -1,4 +1,36 @@
 import type { Metadata } from "next";
 import { TrustPage } from "@/components/trust-page";
-export const metadata: Metadata = { title: "Methodology", description: "How Neroviax collects VPS data, benchmarks plans and calculates value.", alternates: { canonical: "/methodology" } };
-export default function Page() { return <TrustPage eyebrow="Methodology" title="How our VPS research works" intro="Our goal is to make every catalog field, estimate and recommendation understandable and verifiable." sections={[{ title: "Data collection and freshness", body: "Plan specifications and prices are collected from provider pricing pages and documentation, normalized to monthly figures, and linked back to the official source. Each plan displays its latest verification date." }, { title: "Value score", body: "Value ordering compares listed monthly cost against normalized CPU, RAM and storage capacity after minimum workload requirements are satisfied. It is a comparison aid—not a claim that all CPU generations or networks perform identically." }, { title: "Benchmarks", body: "Benchmarks use documented workload, region, image, test duration and repeated runs. We separate measured results from provider-published specifications and do not extrapolate an untested result as fact." }, { title: "Affiliate independence", body: "Affiliate availability and commission rates do not affect plan eligibility, scores or ranking. Commercial links are marked sponsored and users can verify offers at the official source." }, { title: "Price updates", body: "The last-reviewed date is shown on each plan. Provider prices can change between checks, so buyers should confirm currency, tax, setup fees, backup and egress costs before purchase." }]} />; }
+
+export const metadata: Metadata = {
+  title: "Methodology",
+  description: "How Neroviax tests tech hardware, benchmarks gear, and evaluates workspace tools.",
+  alternates: { canonical: "/methodology" },
+};
+
+export default function Page() {
+  return (
+    <TrustPage
+      eyebrow="Methodology"
+      title="How We Test & Review Tech Products"
+      intro="Our goal is to make every review, hardware teardown, and setup recommendation reproducible, honest, and verifiable."
+      sections={[
+        {
+          title: "Real-world workload testing",
+          body: "We do not just unbox and recite spec sheets. Hardware (monitors, keyboards, mini PCs, docks) is tested in real software engineering and creative workflows for extended periods.",
+        },
+        {
+          title: "Honest trade-off reporting",
+          body: "No gadget is perfect. Every review explicitly documents trade-offs (such as coil whine, software bloat, port limitations, thermal throttling, or loud switches) alongside benefits.",
+        },
+        {
+          title: "Pricing and deals tracking",
+          body: "We cross-reference prices across major platforms (Shopee, Lazada, Amazon, Direct) to point readers toward the most reliable vendors and verified discounts.",
+        },
+        {
+          title: "Affiliate independence",
+          body: "Outbound affiliate links help support our testing equipment, but brands have no say in our final ratings, scoring, or editorial decisions.",
+        },
+      ]}
+    />
+  );
+}

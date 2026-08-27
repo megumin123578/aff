@@ -1,4 +1,32 @@
 import type { Metadata } from "next";
 import { TrustPage } from "@/components/trust-page";
-export const metadata: Metadata = { title: "About", description: "About Neroviax and its practical approach to VPS infrastructure.", alternates: { canonical: "/about" } };
-export default function Page() { return <TrustPage eyebrow="About Neroviax" title="Infrastructure decisions backed by evidence" intro="Neroviax helps developers choose, size and operate VPS infrastructure without relying on marketing claims." sections={[{ title: "What we publish", body: "We maintain normalized VPS plan data, workload sizing tools and practical guides for self-hosted software." }, { title: "Our principles", body: "Measurements before marketing. Assumptions should be visible, recommendations reproducible, and commercial relationships disclosed." }, { title: "Independence", body: "Affiliate commissions help support the site but do not enter our ranking formula." }]} />; }
+
+export const metadata: Metadata = {
+  title: "About",
+  description: "About Neroviax and our honest approach to tech reviews, hardware benchmarks, and workspace setups.",
+  alternates: { canonical: "/about" },
+};
+
+export default function Page() {
+  return (
+    <TrustPage
+      eyebrow="About Neroviax"
+      title="Hardware & Tech Recommendations Backed by Real Testing"
+      intro="Neroviax provides in-depth hardware reviews, homelab experiments, and minimalist desk setup guides for developers and tech enthusiasts."
+      sections={[
+        {
+          title: "What we publish",
+          body: "We test and review monitors, mechanical keyboards, ergonomic accessories, Mini PCs, and developer tools with zero marketing fluff.",
+        },
+        {
+          title: "Our principles",
+          body: "Real-world testing over marketing claims. We evaluate products in daily 8+ hour workloads, document all trade-offs, and maintain transparent affiliate partnerships.",
+        },
+        {
+          title: "Editorial Independence",
+          body: "Affiliate commissions help support our testing and operating costs, but brands cannot pay to change our reviews or test results.",
+        },
+      ]}
+    />
+  );
+}

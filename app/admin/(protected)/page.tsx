@@ -1,33 +1,36 @@
 import Link from "next/link";
 import { Card } from "@/components/ui";
 import { getAffiliateClickCount, getAffiliateLinks, getAllArticles } from "@/lib/content";
-import { getProviders, getVpsPlans } from "@/lib/catalog";
 import { getAnalyticsEventCount } from "@/lib/analytics";
-import { getSavedRecommendationCount } from "@/lib/recommendations";
 
 export default async function AdminDashboardPage() {
-  const [articles, links, clicks, providers, plans, events, recommendations] = await Promise.all([
-    getAllArticles(), getAffiliateLinks(), getAffiliateClickCount(), getProviders(true), getVpsPlans({ includeUnavailable: true }), getAnalyticsEventCount(), getSavedRecommendationCount(),
+  const [articles, links, clicks, events] = await Promise.all([
+    getAllArticles(),
+    getAffiliateLinks(),
+    getAffiliateClickCount(),
+    getAnalyticsEventCount(),
   ]);
+
+  const publishedCount = articles.filter((article) => article.status === "published").length;
+  const draftCount = articles.length - publishedCount;
+
   const stats = [
-    [articles.length, "Articles", "/admin/articles"],
-    [articles.filter((article) => article.status === "published").length, "Published", "/admin/articles"],
-    [links.length, "Affiliate links", "/admin/affiliate-links"],
-    [clicks, "Tracked clicks", "/admin/affiliate-links"],
-    [providers.length, "Providers", "/admin/providers"],
-    [plans.length, "VPS plans", "/admin/vps-plans"],
-    [events, "Analytics events", "/admin/analytics"],
-    [recommendations, "Saved recommendations", "/admin/analytics"],
+    [articles.length, "Total Articles", "/admin/articles"],
+    [publishedCount, "Published Posts", "/admin/articles"],
+    [draftCount, "Drafts", "/admin/articles"],
+    [links.length, "Affiliate Links", "/admin/affiliate-links"],
+    [clicks, "Tracked Clicks", "/admin/affiliate-links"],
+    [events, "Analytics Events", "/admin/analytics"],
   ] as const;
 
   return (
     <div>
-      <h1 className="text-3xl font-extrabold text-white">Content dashboard</h1>
-      <p className="mt-2 text-sm text-slate-400">Manage Git-backed content without editing source files manually.</p>
-      <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <h1 className="text-3xl font-extrabold text-white">Content Dashboard</h1>
+      <p className="mt-2 text-sm text-slate-400">Manage articles, affiliate links, and monitor engagement metrics.</p>
+      <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {stats.map(([value, label, href]) => (
           <Link key={label} href={href}>
-            <Card className="p-6 transition hover:border-[var(--color-border-strong)]">
+            <Card className="p-6 transition hover:border-[var(--color-border-strong)] hover:bg-[#121722]">
               <p className="text-3xl font-extrabold text-white">{value}</p>
               <p className="mt-1 text-sm text-slate-400">{label}</p>
             </Card>
