@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArticleContent } from "@/components/article-content";
 import { Badge } from "@/components/ui";
 import { getArticle } from "@/lib/content";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { CommentSection } from "@/components/comment-section";
+import { getAuthSession } from "@/lib/admin-auth";
 import { absoluteUrl, jsonLd, organizationJsonLd } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
@@ -25,7 +25,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const article = await getArticle(slug);
+  const [article, session] = await Promise.all([
+    getArticle(slug),
+    getAuthSession(),
+  ]);
   if (!article) notFound();
 
   return (
@@ -58,7 +61,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         </div>
 
         {/* Comments Section */}
-        <CommentSection slug={article.slug} title={article.title} />
+        <CommentSection slug={article.slug} title={article.title} session={session} />
       </article>
     </main>
   );

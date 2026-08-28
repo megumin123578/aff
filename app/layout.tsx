@@ -2,9 +2,24 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { AnalyticsPageView } from "@/components/analytics-page-view";
-import { getAdminSession } from "@/lib/admin-auth";
+import { AvatarDisplay } from "@/components/avatar-display";
+import { UserAvatarDropdown } from "@/components/user-avatar-dropdown";
+import { getAuthSession } from "@/lib/admin-auth";
 import "./globals.css";
 import { siteUrl } from "@/lib/seo";
+
+const primaryNavigation = [
+  { href: "/forums", label: "Forums" },
+  { href: "/store", label: "Store" },
+  { href: "/podcasts", label: "Podcasts" },
+  { href: "/iphone", label: "iPhone" },
+  { href: "/mac", label: "Mac" },
+  { href: "/ipad", label: "iPad" },
+  { href: "/watch", label: "Watch" },
+  { href: "/vision", label: "Vision" },
+  { href: "/music-and-tv", label: "Music and TV" },
+  { href: "/guides", label: "Guides" },
+];
 
 const googleAdSenseAccount =
   process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT ?? "ca-pub-4003831741640664";
@@ -32,7 +47,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const session = await getAdminSession();
+  const session = await getAuthSession();
 
   return (
     <html lang="en" data-scroll-behavior="smooth">
@@ -48,45 +63,45 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <body className="bg-[var(--color-bg)] text-[var(--color-text)] antialiased">
         <AnalyticsPageView />
         <div className="min-h-dvh w-full">
-          <header className="sticky top-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-header)] backdrop-blur-xl">
-            <div className="flex h-16 w-full items-center justify-between px-5 lg:px-8">
-              <Link href="/" className="flex min-w-0 items-center gap-3 rounded-lg">
-                <Image src="/favicon.ico?v=20260815" alt="" width={30} height={30} priority unoptimized className="size-[30px] rounded-lg" />
+          <header className="sticky top-0 z-50 border-b border-white/[0.08] bg-[var(--color-header)]/95 shadow-[0_8px_30px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+            <div className="flex h-[4.5rem] w-full items-center gap-3 px-4 sm:px-5 lg:gap-5 lg:px-8">
+              <Link href="/" className="flex shrink-0 items-center gap-2.5 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-focus)]">
+                <Image src="/favicon.ico?v=20260815" alt="" width={32} height={32} priority unoptimized className="size-8 rounded-xl shadow-sm" />
                 <span className="text-xl font-bold tracking-tight text-white">
                   Neroviax
                 </span>
               </Link>
-              <nav aria-label="Primary navigation" className="hidden items-center gap-6 text-sm font-medium text-slate-300 md:flex">
-                <Link href="/articles" className="rounded-md transition-colors hover:text-white">Blog</Link>
-                <Link href="/articles?category=Desk%20Setup" className="rounded-md transition-colors hover:text-white">Desk Setup</Link>
-                <Link href="/articles?category=Homelab" className="rounded-md transition-colors hover:text-white">Mini PC & Homelab</Link>
-                <Link href="/articles?category=Keyboards" className="rounded-md transition-colors hover:text-white">Keyboards</Link>
-                <Link href="/affiliate-disclosure" className="rounded-md transition-colors hover:text-white">Disclosure</Link>
+              <nav aria-label="Primary navigation" className="ml-3 hidden min-w-0 flex-1 items-center gap-1 overflow-x-auto text-sm font-semibold text-slate-300 [scrollbar-width:none] md:flex lg:ml-5 lg:gap-2 xl:justify-center [&::-webkit-scrollbar]:hidden">
+                {primaryNavigation.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="relative whitespace-nowrap rounded-lg px-3 py-2 transition-all duration-200 after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:origin-center after:scale-x-0 after:rounded-full after:bg-[var(--color-brand-light)] after:transition-transform after:duration-200 hover:-translate-y-0.5 hover:bg-[var(--color-brand)] hover:text-white hover:shadow-[0_6px_18px_rgba(59,130,246,0.24)] hover:after:scale-x-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-focus)]"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
               </nav>
 
-              <div className="flex items-center gap-3">
+              <div className="ml-auto flex shrink-0 items-center gap-2 lg:gap-3">
                 <form action="/search" method="get" className="hidden xl:block">
                   <label className="sr-only" htmlFor="header-search">Search</label>
                   <input id="header-search" name="q" minLength={2} placeholder="Search gear, blog…" className="w-36 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2 text-xs text-white outline-none focus:w-48 focus:border-[var(--color-brand-border)]" />
                 </form>
 
-                {/* User Avatar Circle */}
                 <Link
-                  href={session ? "/admin" : "/admin/login"}
-                  title={session ? `Signed in as ${session.username} (Admin Dashboard)` : "Sign in / Admin"}
-                  aria-label={session ? `Signed in as ${session.username}` : "Sign in / Admin"}
-                  className="grid size-9 place-items-center rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] text-slate-300 shadow-sm transition hover:border-[var(--color-brand-border)] hover:bg-[var(--color-surface-muted)] hover:text-white"
+                  href="/submit-article"
+                  aria-label="Submit an article"
+                  className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-brand)] text-sm font-bold text-white transition hover:bg-[var(--color-brand-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] sm:h-auto sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
                 >
-                  {session ? (
-                    <span className="flex size-7 items-center justify-center rounded-full bg-[var(--color-brand)] text-xs font-bold text-white shadow-xs">
-                      {session.username.slice(0, 1).toUpperCase()}
-                    </span>
-                  ) : (
-                    <svg className="size-4.5 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                    </svg>
-                  )}
+                  <svg aria-hidden="true" className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                  <span className="hidden xl:inline">Submit Article</span>
                 </Link>
+
+                {/* User Avatar Dropdown */}
+                <UserAvatarDropdown session={session} />
 
                 <details className="group relative md:hidden">
                   <summary className="grid size-10 cursor-pointer list-none place-items-center rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] text-white [&::-webkit-details-marker]:hidden">
@@ -98,20 +113,43 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                     aria-label="Mobile navigation"
                     className="absolute right-0 top-12 w-64 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-2 shadow-[var(--shadow-card)]"
                   >
-                    <Link href="/articles" className="block rounded-xl px-4 py-3 text-sm font-medium text-slate-200 hover:bg-[var(--color-surface-muted)]">Blog</Link>
-                    <Link href="/articles?category=Desk%20Setup" className="block rounded-xl px-4 py-3 text-sm font-medium text-slate-200 hover:bg-[var(--color-surface-muted)]">Desk Setup</Link>
-                    <Link href="/articles?category=Homelab" className="block rounded-xl px-4 py-3 text-sm font-medium text-slate-200 hover:bg-[var(--color-surface-muted)]">Mini PC & Homelab</Link>
-                    <Link href="/articles?category=Keyboards" className="block rounded-xl px-4 py-3 text-sm font-medium text-slate-200 hover:bg-[var(--color-surface-muted)]">Keyboards</Link>
-                    <Link href="/affiliate-disclosure" className="block rounded-xl px-4 py-3 text-sm font-medium text-slate-200 hover:bg-[var(--color-surface-muted)]">Disclosure</Link>
-                    <Link
-                      href={session ? "/admin" : "/admin/login"}
-                      className="flex items-center gap-2.5 rounded-xl px-4 py-3 text-sm font-medium text-slate-200 hover:bg-[var(--color-surface-muted)]"
-                    >
-                      <div className="flex size-6 items-center justify-center rounded-full bg-[var(--color-brand-soft)] border border-[var(--color-brand-border)] text-[10px] font-bold text-[var(--color-brand-light)]">
-                        {session ? session.username.slice(0, 1).toUpperCase() : "👤"}
-                      </div>
-                      <span>{session ? `Admin (${session.username})` : "Sign in / Admin"}</span>
-                    </Link>
+                    <Link href="/submit-article" className="block rounded-xl bg-[var(--color-brand)] px-4 py-3 text-sm font-bold text-white hover:bg-[var(--color-brand-hover)]">Submit Article</Link>
+                    {primaryNavigation.map((item) => (
+                      <Link key={item.href} href={item.href} className="group flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-slate-200 transition-all duration-200 hover:translate-x-1 hover:bg-[var(--color-surface-muted)] hover:text-white">
+                        {item.label}
+                        <span aria-hidden="true" className="text-[var(--color-brand-light)] opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:opacity-100">→</span>
+                      </Link>
+                    ))}
+                    {session ? (
+                      session.role === "admin" ? (
+                        <Link
+                          href="/admin"
+                          className="flex items-center gap-2.5 rounded-xl px-4 py-3 text-sm font-medium text-slate-200 hover:bg-[var(--color-surface-muted)]"
+                        >
+                          <div className="flex size-6 items-center justify-center rounded-full bg-[var(--color-brand-soft)] border border-[var(--color-brand-border)]">
+                            <AvatarDisplay avatar={session.avatar} username={session.username} className="size-5" />
+                          </div>
+                          <span>Admin Dashboard</span>
+                        </Link>
+                      ) : (
+                        <div className="flex items-center gap-2.5 rounded-xl px-4 py-3 text-sm font-medium text-slate-300">
+                          <div className="flex size-6 items-center justify-center rounded-full bg-[var(--color-brand-soft)] border border-[var(--color-brand-border)]">
+                            <AvatarDisplay avatar={session.avatar} username={session.username} className="size-5" />
+                          </div>
+                          <span className="truncate">{session.name || session.username}</span>
+                        </div>
+                      )
+                    ) : (
+                      <Link
+                        href="/admin/login"
+                        className="flex items-center gap-2.5 rounded-xl px-4 py-3 text-sm font-medium text-slate-200 hover:bg-[var(--color-surface-muted)]"
+                      >
+                        <svg className="size-4 text-[var(--color-brand-light)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                        </svg>
+                        <span>Sign in</span>
+                      </Link>
+                    )}
                     <form action="/search" method="get" className="p-2"><input name="q" minLength={2} placeholder="Search gear, blog…" className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2 text-sm text-white" /></form>
                   </nav>
                 </details>
@@ -140,6 +178,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             </div>
           </footer>
         </div>
+        <div id="modal-root" />
       </body>
     </html>
   );

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { logoutAdminAction } from "@/app/admin/actions";
 
 const navItems = [
   {
@@ -43,9 +42,18 @@ const navItems = [
       </svg>
     ),
   },
+  {
+    href: "/admin/users",
+    label: "Users",
+    icon: (
+      <svg className="size-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+      </svg>
+    ),
+  },
 ];
 
-export function AdminSidebar({ username }: { username: string }) {
+export function AdminSidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -86,7 +94,7 @@ export function AdminSidebar({ username }: { username: string }) {
         </div>
 
         {/* Navigation items */}
-        <nav className="mt-4 space-y-1 px-2.5">
+        <nav className="mt-4 space-y-1 px-2.5" suppressHydrationWarning>
           {navItems.map((item) => {
             const active = isActive(item.href, item.exact);
             return (
@@ -110,29 +118,9 @@ export function AdminSidebar({ username }: { username: string }) {
         </nav>
       </div>
 
-      {/* User info and Sign out */}
-      <div className="border-t border-[var(--color-border)] p-3.5 space-y-3">
-        <div className="flex items-center gap-3 px-1">
-          <div className="flex size-8 items-center justify-center rounded-full bg-[var(--color-brand-soft)] border border-[var(--color-brand-border)] text-xs font-bold text-[var(--color-brand-light)]">
-            {username.slice(0, 1).toUpperCase()}
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-xs font-semibold text-white">{username}</p>
-            <p className="text-[10px] text-slate-400">Administrator</p>
-          </div>
-        </div>
-
-        <form action={logoutAdminAction}>
-          <button
-            type="submit"
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-muted)] px-3 py-2 text-xs font-semibold text-slate-300 transition hover:border-[var(--color-danger-border)] hover:bg-[var(--color-danger-soft)] hover:text-[var(--color-danger-text)]"
-          >
-            <svg className="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-            </svg>
-            <span>Sign out</span>
-          </button>
-        </form>
+      {/* Sidebar Footer */}
+      <div className="border-t border-[var(--color-border)] p-3 text-center">
+        <p className="text-[11px] text-slate-500 font-mono">Neroviax CMS · v1.0</p>
       </div>
     </div>
   );

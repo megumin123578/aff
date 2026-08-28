@@ -2,7 +2,7 @@ import "server-only";
 
 import { query } from "./db";
 
-export type ArticleStatus = "draft" | "published";
+export type ArticleStatus = "draft" | "published" | "pending";
 
 export type Article = {
   slug: string;
@@ -16,6 +16,9 @@ export type Article = {
   coverImage: string;
   affiliateIds: string[];
   body: string;
+  authorName?: string;
+  authorEmail?: string;
+  authorAvatar?: string;
 };
 
 export type AffiliateLink = {
@@ -41,6 +44,9 @@ type ArticleRow = {
   cover_image: string;
   affiliate_ids: string[];
   body_markdown: string;
+  author_name?: string | null;
+  author_email?: string | null;
+  author_avatar?: string | null;
 };
 
 type AffiliateRow = {
@@ -72,6 +78,9 @@ function articleFromRow(row: ArticleRow): Article {
     coverImage: row.cover_image || "",
     affiliateIds: row.affiliate_ids || [],
     body: row.body_markdown,
+    authorName: row.author_name || "",
+    authorEmail: row.author_email || "",
+    authorAvatar: row.author_avatar || "",
   };
 }
 
@@ -88,38 +97,78 @@ function affiliateFromRow(row: AffiliateRow): AffiliateLink {
   };
 }
 
-const articleColumns = "slug, title, description, category, tags, status, published_at, updated_at, cover_image, affiliate_ids, body_markdown";
-const affiliateColumns = "id, provider, label, destination_url, affiliate_url, enabled, last_verified, notes";
+const articleColumns =
+  "slug, title, description, category, tags, status, published_at, updated_at, cover_image, affiliate_ids, body_markdown, author_name, author_email, author_avatar";
+const affiliateColumns =
+  "id, provider, label, destination_url, affiliate_url, enabled, last_verified, notes";
 
 export async function getAllArticles() {
-  const result = await query<ArticleRow>(`SELECT ${articleColumns} FROM articles ORDER BY COALESCE(published_at, updated_at) DESC`);
+  const result = await query<ArticleRow>(
+    `SELECT ${articleColumns} FROM articles ORDER BY COALESCE(published_at, updated_at) DESC`
+  );
   return result.rows.map(articleFromRow);
 }
 
 export async function getPublishedArticles() {
-  const result = await query<ArticleRow>(`SELECT ${articleColumns} FROM articles WHERE status = $1 ORDER BY published_at DESC`, ["published"]);
+  const result = await query<ArticleRow>(
+    `SELECT ${articleColumns} FROM articles WHERE status = $1 ORDER BY published_at DESC`,
+    ["published"]
+  );
   return result.rows.map(articleFromRow);
 }
 
-export async function getArticle(slug: string, includeDraft = false) {
+export async function getArticlesByAuthorEmail(email: string) {
+  if (!email) return [];
+  const result = await query<ArticleRow>(
+    `SELECT ${articleColumns} FROM articles WHERE author_email = $1 ORDER BY updated_at DESC`,
+    [email]
+  );
+  return result.rows.map(articleFromRow);
+}
+
+export async function getArticle(slug: string, includeNonPublished = false) {
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return null;
   const result = await query<ArticleRow>(
     `SELECT ${articleColumns} FROM articles WHERE slug = $1 AND ($2::boolean OR status = 'published') LIMIT 1`,
-    [slug, includeDraft],
+    [slug, includeNonPublished]
   );
   return result.rows[0] ? articleFromRow(result.rows[0]) : null;
 }
 
 export async function upsertArticle(article: Article) {
   await query(
-    `INSERT INTO articles (slug, title, description, category, tags, status, published_at, updated_at, cover_image, affiliate_ids, body_markdown)
-     VALUES ($1, $2, $3, $4, $5, $6, NULLIF($7, '')::date, $8::date, $9, $10, $11)
+    `INSERT INTO articles (slug, title, description, category, tags, status, published_at, updated_at, cover_image, affiliate_ids, body_markdown, author_name, author_email, author_avatar)
+     VALUES ($1, $2, $3, $4, $5, $6, NULLIF($7, '')::date, $8::date, $9, $10, $11, $12, $13, $14)
      ON CONFLICT (slug) DO UPDATE SET
        title = EXCLUDED.title, description = EXCLUDED.description, category = EXCLUDED.category,
        tags = EXCLUDED.tags, status = EXCLUDED.status, published_at = EXCLUDED.published_at,
        updated_at = EXCLUDED.updated_at, cover_image = EXCLUDED.cover_image,
-       affiliate_ids = EXCLUDED.affiliate_ids, body_markdown = EXCLUDED.body_markdown`,
-    [article.slug, article.title, article.description, article.category, article.tags, article.status, article.publishedAt, article.updatedAt, article.coverImage, article.affiliateIds, article.body],
+       affiliate_ids = EXCLUDED.affiliate_ids, body_markdown = EXCLUDED.body_markdown,
+       author_name = EXCLUDED.author_name, author_email = EXCLUDED.author_email, author_avatar = EXCLUDED.author_avatar`,
+    [
+      article.slug,
+      article.title,
+      article.description,
+      article.category,
+      article.tags,
+      article.status,
+      article.publishedAt,
+      article.updatedAt,
+      article.coverImage,
+      article.affiliateIds,
+      article.body,
+      article.authorName || "",
+      article.authorEmail || "",
+      article.authorAvatar || "",
+    ]
+  );
+}
+
+export async function approveArticle(slug: string) {
+  const today = new Date().toISOString().slice(0, 10);
+  await query(
+    `UPDATE articles SET status = 'published', published_at = COALESCE(published_at, $2::date), updated_at = $2::date WHERE slug = $1`,
+    [slug, today]
   );
 }
 
@@ -142,7 +191,7 @@ export async function upsertAffiliateLink(link: AffiliateLink) {
        provider = EXCLUDED.provider, label = EXCLUDED.label, destination_url = EXCLUDED.destination_url,
        affiliate_url = EXCLUDED.affiliate_url, enabled = EXCLUDED.enabled,
        last_verified = EXCLUDED.last_verified, notes = EXCLUDED.notes`,
-    [link.id, link.provider, link.label, link.destinationUrl, link.affiliateUrl, link.enabled, link.lastVerified, link.notes],
+    [link.id, link.provider, link.label, link.destinationUrl, link.affiliateUrl, link.enabled, link.lastVerified, link.notes]
   );
 }
 
@@ -156,7 +205,7 @@ export async function recordAffiliateClick(input: {
   await query(
     `INSERT INTO affiliate_clicks (affiliate_link_id, source, article_slug, plan_id, placement)
      VALUES ($1, $2, $3, $4, $5)`,
-    [input.affiliateId, input.source, input.articleSlug || null, input.planId || null, input.placement || null],
+    [input.affiliateId, input.source, input.articleSlug || null, input.planId || null, input.placement || null]
   );
 }
 

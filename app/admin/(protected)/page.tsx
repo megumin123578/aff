@@ -21,6 +21,7 @@ export default async function AdminDashboardPage() {
     [links.length, "Affiliate Links", "/admin/affiliate-links"],
     [clicks, "Tracked Clicks", "/admin/affiliate-links"],
     [events, "Analytics Events", "/admin/analytics"],
+    [4, "Team Members", "/admin/users"],
   ] as const;
 
   return (

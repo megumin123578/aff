@@ -13,9 +13,24 @@ export function ArticleForm({ article, affiliateLinks }: { article?: Article; af
         <label className={`${labelClass} sm:col-span-2`}>Description<textarea required name="description" defaultValue={article?.description} rows={3} className={fieldClass} /></label>
         <label className={labelClass}>Category<input name="category" defaultValue={article?.category || "Desk Setup"} className={fieldClass} /></label>
         <label className={labelClass}>Tags, comma separated<input name="tags" defaultValue={article?.tags.join(", ")} className={fieldClass} /></label>
-        <label className={labelClass}>Status<select name="status" defaultValue={article?.status || "draft"} className={fieldClass}><option value="draft">Draft</option><option value="published">Published</option></select></label>
+        <label className={labelClass}>
+          Status
+          <select name="status" defaultValue={article?.status || "draft"} className={fieldClass}>
+            <option value="draft">Draft</option>
+            <option value="pending">Pending Approval</option>
+            <option value="published">Published</option>
+          </select>
+        </label>
         <label className={labelClass}>Published date<input type="date" name="publishedAt" defaultValue={article?.publishedAt} className={fieldClass} /></label>
         <label className={`${labelClass} sm:col-span-2`}>Cover image URL<input type="url" name="coverImage" defaultValue={article?.coverImage} className={fieldClass} /></label>
+        {article?.authorName && (
+          <div className="sm:col-span-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-3 text-xs text-slate-300">
+            <span>Submitted by: <strong className="text-white">{article.authorName}</strong> ({article.authorEmail || "No email"})</span>
+            <input type="hidden" name="authorName" value={article.authorName} />
+            <input type="hidden" name="authorEmail" value={article.authorEmail || ""} />
+            <input type="hidden" name="authorAvatar" value={article.authorAvatar || ""} />
+          </div>
+        )}
       </div>
 
       <fieldset className="rounded-xl border border-[var(--color-border)] p-4">

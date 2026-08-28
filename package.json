@@ -11,7 +11,8 @@
     "start": "pnpm db:setup && next start",
     "lint": "eslint .",
     "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test --test-isolation=none lib/*.test.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check": "pnpm typecheck && pnpm lint && pnpm test"
   },
   "dependencies": {
     "@tailwindcss/postcss": "4.3.3",
