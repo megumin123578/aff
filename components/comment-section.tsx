@@ -96,7 +96,7 @@ export function CommentSection({ slug, title, session }: CommentSectionProps) {
   };
 
   return (
-    <section className="mt-14 border-t border-[var(--color-border)] pt-10" id="comments">
+    <section className="mt-14 border-t border-(--color-border) pt-10" id="comments">
       <div className="flex items-center justify-between">
         <div>
           <Badge variant="azure">Community Discussion</Badge>
@@ -116,7 +116,7 @@ export function CommentSection({ slug, title, session }: CommentSectionProps) {
       <Card className="mt-6 border-[#2d3541] bg-[#0d1119] p-5 sm:p-6 shadow-xl">
         {session ? (
           /* Logged In User Header */
-          <div className="mb-4 flex items-center justify-between border-b border-[var(--color-border)] pb-3.5">
+          <div className="mb-4 flex items-center justify-between border-b border-(--color-border) pb-3.5">
             <div className="flex items-center gap-3">
               <div className="flex size-9 items-center justify-center rounded-full border border-[var(--color-brand-border)] bg-[var(--color-brand-soft)] overflow-hidden">
                 <AvatarDisplay avatar={session.avatar} username={session.username} className="size-8" />
@@ -138,7 +138,7 @@ export function CommentSection({ slug, title, session }: CommentSectionProps) {
           </div>
         ) : (
           /* Not Logged In Prompt */
-          <div className="mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-3.5">
+          <div className="mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-(--color-border) bg-[var(--color-surface)] p-3.5">
             <div className="flex items-center gap-2.5">
               <svg className="size-5 text-[var(--color-brand-light)] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -173,7 +173,7 @@ export function CommentSection({ slug, title, session }: CommentSectionProps) {
                 placeholder="Ask about hardware compatibility, keyboard switches, desk setup cable routing, or share your thoughts..."
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-                className="mt-2 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
+                className="mt-2 w-full rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-4 py-3 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
               />
             </div>
 
@@ -212,12 +212,12 @@ export function CommentSection({ slug, title, session }: CommentSectionProps) {
             className={`p-5 transition ${
               item.isAuthor
                 ? "border-[var(--color-brand-border)] bg-[#101726]"
-                : "border-[var(--color-border)] bg-[var(--color-surface)]"
+                : "border-(--color-border) bg-[var(--color-surface)]"
             }`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] overflow-hidden">
+                <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-(--color-border) bg-[var(--color-surface-muted)] overflow-hidden">
                   <AvatarDisplay avatar={item.avatar} username={item.author} className="size-8" />
                 </div>
                 <div>

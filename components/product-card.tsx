@@ -103,7 +103,7 @@ export function ProductCard({
         </div>
 
         {imageUrl && (
-          <div className="relative size-32 shrink-0 overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)]">
+          <div className="relative size-32 shrink-0 overflow-hidden rounded-xl border border-(--color-border) bg-[var(--color-bg)]">
             <Image
               src={imageUrl}
               alt={name}

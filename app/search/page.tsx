@@ -35,7 +35,7 @@ export default async function SearchPage({
             minLength={2}
             maxLength={100}
             placeholder="Search keychron, monitor, mini pc, desk setup…"
-            className="min-w-0 flex-1 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3 text-white outline-none focus:border-[var(--color-brand-border)]"
+            className="min-w-0 flex-1 rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-4 py-3 text-white outline-none focus:border-[var(--color-brand-border)]"
           />
           <button className="rounded-xl bg-[var(--color-brand)] px-6 py-3 text-sm font-bold text-white">
             Search

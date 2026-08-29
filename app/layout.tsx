@@ -86,7 +86,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               <div className="ml-auto flex shrink-0 items-center gap-2 lg:gap-3">
                 <form action="/search" method="get" className="hidden xl:block">
                   <label className="sr-only" htmlFor="header-search">Search</label>
-                  <input id="header-search" name="q" minLength={2} placeholder="Search gear, posts…" className="w-36 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2 text-xs text-white outline-none focus:w-48 focus:border-[var(--color-brand-border)]" />
+                  <input id="header-search" name="q" minLength={2} placeholder="Search gear, posts…" className="w-36 rounded-lg border border-(--color-border) bg-[var(--color-bg)] px-3 py-2 text-xs text-white outline-none focus:w-48 focus:border-[var(--color-brand-border)]" />
                 </form>
 
                 {session && (
@@ -106,14 +106,14 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                 <UserAvatarDropdown session={session} />
 
                 <details className="group relative md:hidden">
-                  <summary className="grid size-10 cursor-pointer list-none place-items-center rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] text-white [&::-webkit-details-marker]:hidden">
+                  <summary className="grid size-10 cursor-pointer list-none place-items-center rounded-xl border border-(--color-border) bg-[var(--color-surface)] text-white [&::-webkit-details-marker]:hidden">
                     <span className="sr-only">Open navigation menu</span>
                     <span aria-hidden="true" className="text-xl leading-none group-open:hidden">☰</span>
                     <span aria-hidden="true" className="hidden text-xl leading-none group-open:inline">×</span>
                   </summary>
                   <nav
                     aria-label="Mobile navigation"
-                    className="absolute right-0 top-12 w-64 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-2 shadow-[var(--shadow-card)]"
+                    className="absolute right-0 top-12 w-64 rounded-2xl border border-(--color-border) bg-[var(--color-surface)] p-2 shadow-[var(--shadow-card)]"
                   >
                     {session && (
                       <Link href="/submit-article" className="block rounded-xl bg-[var(--color-brand)] px-4 py-3 text-sm font-bold text-white hover:bg-[var(--color-brand-hover)]">Submit</Link>
@@ -154,7 +154,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                         <span>Sign in</span>
                       </Link>
                     )}
-                    <form action="/search" method="get" className="p-2"><input name="q" minLength={2} placeholder="Search gear, posts…" className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2 text-sm text-white" /></form>
+                    <form action="/search" method="get" className="p-2"><input name="q" minLength={2} placeholder="Search gear, posts…" className="w-full rounded-lg border border-(--color-border) bg-[var(--color-bg)] px-3 py-2 text-sm text-white" /></form>
                   </nav>
                 </details>
               </div>
@@ -163,7 +163,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
           {children}
 
-          <footer className="border-t border-[var(--color-border)] bg-[var(--color-footer)] px-5 py-10 text-center text-sm text-slate-400">
+          <footer className="border-t border-(--color-border) bg-[var(--color-footer)] px-5 py-10 text-center text-sm text-slate-400">
             <div className="flex w-full flex-col items-center justify-between gap-4 sm:flex-row">
               <div className="flex items-center gap-2">
                 <span className="font-semibold text-white">Neroviax</span>

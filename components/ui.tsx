@@ -32,7 +32,7 @@ function actionClassName(variant: Variant, size: Size, className: string) {
 export function Card({ children, className = "" }: CommonProps) {
   return (
     <div
-      className={`rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-card)] ${className}`}
+      className={`rounded-2xl border border-(--color-border) bg-[var(--color-surface)] shadow-[var(--shadow-card)] ${className}`}
     >
       {children}
     </div>
@@ -46,11 +46,11 @@ export function Badge({
 }: CommonProps & { variant?: Variant }) {
   const colors: Record<Variant, string> = {
     default:
-      "border-[var(--color-border)] bg-[var(--color-surface-muted)] text-slate-300",
+      "border-(--color-border) bg-[var(--color-surface-muted)] text-slate-300",
     azure:
       "border-[var(--color-brand-border)] bg-[var(--color-brand-soft)] text-[var(--color-brand-light)]",
     mint:
-      "border-[var(--color-success-border)] bg-[var(--color-success-soft)] text-[var(--color-success-text)]",
+      "border-(--color-success-border) bg-(--color-success-soft) text-(--color-success-text)",
   };
 
   return (
@@ -120,7 +120,7 @@ export function Chip({
       className={`inline-flex items-center rounded-full border px-3 py-1.5 text-xs font-medium ${
         active
           ? "border-[var(--color-brand-border)] bg-[var(--color-brand-soft)] text-[var(--color-brand-light)]"
-          : "border-[var(--color-border)] bg-[var(--color-surface)] text-slate-400"
+          : "border-(--color-border) bg-[var(--color-surface)] text-slate-400"
       }`}
     >
       {children}

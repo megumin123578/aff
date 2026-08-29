@@ -6,7 +6,7 @@ import { loginAdminAction, type LoginState } from "@/app/admin/login/actions";
 
 const initialState: LoginState = { error: "", username: "" };
 const inputClass =
-  "mt-2 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3 text-sm text-white outline-none focus:border-[var(--color-brand-border)]";
+  "mt-2 w-full rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-4 py-3 text-sm text-white outline-none focus:border-[var(--color-brand-border)]";
 
 export function LoginForm({ authError }: { authError?: string }) {
   const [state, action, pending] = useActionState(loginAdminAction, initialState);
@@ -32,7 +32,7 @@ export function LoginForm({ authError }: { authError?: string }) {
       {/* Google Sign-in Button */}
       <a
         href="/api/auth/google"
-        className="flex w-full items-center justify-center gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] px-5 py-3 text-sm font-semibold text-white transition hover:border-[var(--color-brand-border)] hover:bg-[var(--color-surface-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)]"
+        className="flex w-full items-center justify-center gap-3 rounded-xl border border-(--color-border) bg-[var(--color-surface-raised)] px-5 py-3 text-sm font-semibold text-white transition hover:border-[var(--color-brand-border)] hover:bg-[var(--color-surface-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)]"
       >
         <svg className="size-5" viewBox="0 0 24 24">
           <path
@@ -57,7 +57,7 @@ export function LoginForm({ authError }: { authError?: string }) {
 
       {/* Divider */}
       <div className="relative my-6 flex items-center justify-center">
-        <div className="w-full border-t border-[var(--color-border)]" />
+        <div className="w-full border-t border-(--color-border)" />
         <span className="absolute bg-[var(--color-surface)] px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
           or continue with password
         </span>

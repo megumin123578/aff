@@ -1,7 +1,7 @@
 import { saveArticleAction } from "@/app/admin/actions";
 import type { AffiliateLink, Article } from "@/lib/content";
 
-const fieldClass = "mt-2 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3 text-sm text-white outline-none focus:border-[var(--color-brand-border)]";
+const fieldClass = "mt-2 w-full rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-4 py-3 text-sm text-white outline-none focus:border-[var(--color-brand-border)]";
 const labelClass = "block text-xs font-semibold uppercase tracking-wider text-slate-300";
 
 export function ArticleForm({ article, affiliateLinks }: { article?: Article; affiliateLinks: AffiliateLink[] }) {
@@ -24,7 +24,7 @@ export function ArticleForm({ article, affiliateLinks }: { article?: Article; af
         <label className={labelClass}>Published date<input type="date" name="publishedAt" defaultValue={article?.publishedAt} className={fieldClass} /></label>
         <label className={`${labelClass} sm:col-span-2`}>Cover image URL<input type="url" name="coverImage" defaultValue={article?.coverImage} className={fieldClass} /></label>
         {article?.authorName && (
-          <div className="sm:col-span-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-3 text-xs text-slate-300">
+          <div className="sm:col-span-2 rounded-xl border border-(--color-border) bg-[var(--color-surface)] p-3 text-xs text-slate-300">
             <span>Submitted by: <strong className="text-white">{article.authorName}</strong> ({article.authorEmail || "No email"})</span>
             <input type="hidden" name="authorName" value={article.authorName} />
             <input type="hidden" name="authorEmail" value={article.authorEmail || ""} />
@@ -33,7 +33,7 @@ export function ArticleForm({ article, affiliateLinks }: { article?: Article; af
         )}
       </div>
 
-      <fieldset className="rounded-xl border border-[var(--color-border)] p-4">
+      <fieldset className="rounded-xl border border-(--color-border) p-4">
         <legend className="px-2 text-xs font-semibold uppercase tracking-wider text-slate-300">Available affiliate references</legend>
         <div className="mt-2 grid gap-3 sm:grid-cols-2">
           {affiliateLinks.map((link) => (

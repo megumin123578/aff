@@ -37,19 +37,19 @@ export default async function AdminArticlesPage({
       </div>
 
       {query.saved && (
-        <p className="rounded-xl border border-[var(--color-success-border)] bg-[var(--color-success-soft)] p-4 text-sm text-[var(--color-success-text)] animate-in fade-in">
+        <p className="rounded-xl border border-(--color-success-border) bg-(--color-success-soft) p-4 text-sm text-(--color-success-text) animate-in fade-in">
           ✔ Article saved successfully.
         </p>
       )}
 
       {query.approved && (
-        <p className="rounded-xl border border-[var(--color-success-border)] bg-[var(--color-success-soft)] p-4 text-sm text-[var(--color-success-text)] animate-in fade-in">
+        <p className="rounded-xl border border-(--color-success-border) bg-(--color-success-soft) p-4 text-sm text-(--color-success-text) animate-in fade-in">
           ✔ Article approved and published to the live posts!
         </p>
       )}
 
       {/* Filter Tabs */}
-      <div className="flex flex-wrap gap-2 border-b border-[var(--color-border)] pb-3">
+      <div className="flex flex-wrap gap-2 border-b border-(--color-border) pb-3">
         <Link
           href="/admin/articles"
           className={`rounded-xl px-3.5 py-1.5 text-xs font-semibold transition ${
@@ -150,7 +150,7 @@ export default async function AdminArticlesPage({
 
                 <Link
                   href={`/admin/articles/${article.slug}/preview`}
-                  className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-3.5 py-2 text-xs font-semibold text-slate-300 transition hover:border-[var(--color-border-strong)] hover:text-white"
+                  className="rounded-xl border border-(--color-border) bg-[var(--color-surface)] px-3.5 py-2 text-xs font-semibold text-slate-300 transition hover:border-[var(--color-border-strong)] hover:text-white"
                 >
                   Preview
                 </Link>

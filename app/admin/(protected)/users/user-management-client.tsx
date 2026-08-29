@@ -213,7 +213,7 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
         <div
           className={`rounded-2xl border p-4 text-sm font-semibold flex items-center justify-between ${
             feedbackMsg.type === "success"
-              ? "border-[var(--color-success-border)] bg-[var(--color-success-soft)] text-[var(--color-success-text)]"
+              ? "border-(--color-success-border) bg-(--color-success-soft) text-(--color-success-text)"
               : "border-[var(--color-danger-border)] bg-[var(--color-danger-soft)] text-[var(--color-danger-text)]"
           }`}
         >
@@ -266,7 +266,7 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by name, username or email…"
-              className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] py-2.5 pl-10 pr-4 text-sm text-white placeholder-slate-500 outline-none focus:border-[var(--color-brand-border)] focus:ring-1 focus:ring-[var(--color-brand)]"
+              className="w-full rounded-xl border border-(--color-border) bg-[var(--color-bg)] py-2.5 pl-10 pr-4 text-sm text-white placeholder-slate-500 outline-none focus:border-[var(--color-brand-border)] focus:ring-1 focus:ring-[var(--color-brand)]"
             />
             {searchQuery && (
               <button
@@ -284,7 +284,7 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
             <select
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.target.value)}
-              className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2.5 text-xs font-semibold text-slate-200 outline-none focus:border-[var(--color-brand-border)]"
+              className="rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-3 py-2.5 text-xs font-semibold text-slate-200 outline-none focus:border-[var(--color-brand-border)]"
             >
               <option value="All">All Roles</option>
               <option value="Super Admin">Super Admin</option>
@@ -297,7 +297,7 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2.5 text-xs font-semibold text-slate-200 outline-none focus:border-[var(--color-brand-border)]"
+              className="rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-3 py-2.5 text-xs font-semibold text-slate-200 outline-none focus:border-[var(--color-brand-border)]"
             >
               <option value="All">All Statuses</option>
               <option value="Active">Active</option>
@@ -313,7 +313,7 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-[var(--color-border)] bg-[var(--color-surface-muted)] text-[11px] font-bold uppercase tracking-wider text-slate-400">
+              <tr className="border-b border-(--color-border) bg-[var(--color-surface-muted)] text-[11px] font-bold uppercase tracking-wider text-slate-400">
                 <th className="px-6 py-4">User</th>
                 <th className="px-6 py-4">Role</th>
                 <th className="px-6 py-4">Status</th>
@@ -417,7 +417,7 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
                           type="button"
                           onClick={() => setEditUser(user)}
                           title="Edit user role & permissions"
-                          className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:bg-[var(--color-surface-muted)] hover:text-white"
+                          className="rounded-lg border border-(--color-border) bg-[var(--color-surface)] px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:bg-[var(--color-surface-muted)] hover:text-white"
                         >
                           Edit Role
                         </button>
@@ -425,7 +425,7 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
                           type="button"
                           onClick={() => handleGenerateReset(user)}
                           title="Reset user password"
-                          className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:bg-[var(--color-surface-muted)] hover:text-white"
+                          className="rounded-lg border border-(--color-border) bg-[var(--color-surface)] px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:bg-[var(--color-surface-muted)] hover:text-white"
                         >
                           Reset Pwd
                         </button>
@@ -435,7 +435,7 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
                               type="button"
                               onClick={() => handleToggleStatus(user)}
                               title={user.status === "Active" ? "Suspend user" : "Reactivate user"}
-                              className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:bg-[var(--color-surface-muted)] hover:text-white"
+                              className="rounded-lg border border-(--color-border) bg-[var(--color-surface)] px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:bg-[var(--color-surface-muted)] hover:text-white"
                             >
                               {user.status === "Active" ? "Suspend" : "Activate"}
                             </button>
@@ -468,7 +468,7 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
 
       {/* Audit & Activity Log */}
       <Card className="p-6">
-        <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-4">
+        <div className="flex items-center justify-between border-b border-(--color-border) pb-4">
           <div>
             <h2 className="text-lg font-bold text-white">Recent Team Activity</h2>
             <p className="text-xs text-slate-400">Audit trail of administrator and team changes.</p>
@@ -498,8 +498,8 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
       {inviteModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="fixed inset-0 bg-black/80 backdrop-blur-xs" onClick={() => setInviteModalOpen(false)} />
-          <div className="relative z-10 w-full max-w-md rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-4">
+          <div className="relative z-10 w-full max-w-md rounded-2xl border border-(--color-border) bg-[var(--color-surface)] p-6 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-(--color-border) pb-4">
               <h3 className="text-base font-bold text-white">Invite Team Member</h3>
               <button
                 type="button"
@@ -520,7 +520,7 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
                   value={inviteName}
                   onChange={(e) => setInviteName(e.target.value)}
                   placeholder="e.g. John Doe"
-                  className="mt-1.5 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
+                  className="mt-1.5 w-full rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
                 />
               </div>
 
@@ -534,7 +534,7 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
                   value={inviteUsername}
                   onChange={(e) => setInviteUsername(e.target.value)}
                   placeholder="e.g. john_dev"
-                  className="mt-1.5 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
+                  className="mt-1.5 w-full rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
                 />
               </div>
 
@@ -548,7 +548,7 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
                   value={inviteEmail}
                   onChange={(e) => setInviteEmail(e.target.value)}
                   placeholder="john@neroviax.com"
-                  className="mt-1.5 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
+                  className="mt-1.5 w-full rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
                 />
               </div>
 
@@ -559,7 +559,7 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
                 <select
                   value={inviteRole}
                   onChange={(e) => setInviteRole(e.target.value as UserRole)}
-                  className="mt-1.5 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
+                  className="mt-1.5 w-full rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
                 >
                   <option value="Super Admin">Super Admin (Full system control)</option>
                   <option value="Editor">Editor (Publish articles & affiliate links)</option>
@@ -572,7 +572,7 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
                 <button
                   type="button"
                   onClick={() => setInviteModalOpen(false)}
-                  className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-[var(--color-surface-muted)]"
+                  className="rounded-xl border border-(--color-border) bg-[var(--color-surface)] px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-[var(--color-surface-muted)]"
                 >
                   Cancel
                 </button>
@@ -592,8 +592,8 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
       {editUser && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="fixed inset-0 bg-black/80 backdrop-blur-xs" onClick={() => setEditUser(null)} />
-          <div className="relative z-10 w-full max-w-md rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-4">
+          <div className="relative z-10 w-full max-w-md rounded-2xl border border-(--color-border) bg-[var(--color-surface)] p-6 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-(--color-border) pb-4">
               <h3 className="text-base font-bold text-white">Edit Permissions: @{editUser.username}</h3>
               <button
                 type="button"
@@ -612,7 +612,7 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
                   type="text"
                   value={editUser.name}
                   onChange={(e) => setEditUser({ ...editUser, name: e.target.value })}
-                  className="mt-1.5 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
+                  className="mt-1.5 w-full rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
                 />
               </div>
 
@@ -623,7 +623,7 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
                 <select
                   value={editUser.role}
                   onChange={(e) => setEditUser({ ...editUser, role: e.target.value as UserRole })}
-                  className="mt-1.5 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
+                  className="mt-1.5 w-full rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
                 >
                   <option value="Super Admin">Super Admin</option>
                   <option value="Editor">Editor</option>
@@ -639,7 +639,7 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
                 <select
                   value={editUser.status}
                   onChange={(e) => setEditUser({ ...editUser, status: e.target.value as UserStatus })}
-                  className="mt-1.5 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
+                  className="mt-1.5 w-full rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
                 >
                   <option value="Active">Active</option>
                   <option value="Pending">Pending</option>
@@ -651,7 +651,7 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
                 <button
                   type="button"
                   onClick={() => setEditUser(null)}
-                  className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-[var(--color-surface-muted)]"
+                  className="rounded-xl border border-(--color-border) bg-[var(--color-surface)] px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-[var(--color-surface-muted)]"
                 >
                   Cancel
                 </button>
@@ -671,8 +671,8 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
       {resetPwUser && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="fixed inset-0 bg-black/80 backdrop-blur-xs" onClick={() => setResetPwUser(null)} />
-          <div className="relative z-10 w-full max-w-md rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-4">
+          <div className="relative z-10 w-full max-w-md rounded-2xl border border-(--color-border) bg-[var(--color-surface)] p-6 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-(--color-border) pb-4">
               <h3 className="text-base font-bold text-white">Reset Password: @{resetPwUser.username}</h3>
               <button
                 type="button"

@@ -17,7 +17,7 @@ const CATEGORIES = [
 ];
 
 const inputClass =
-  "mt-2 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3 text-sm text-white outline-none focus:border-[var(--color-brand-border)]";
+  "mt-2 w-full rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-4 py-3 text-sm text-white outline-none focus:border-[var(--color-brand-border)]";
 
 export function SubmitArticleForm({
   session,
@@ -53,9 +53,9 @@ export function SubmitArticleForm({
   return (
     <Card className="p-6 sm:p-8 border-[#2d3541] bg-[#0d1119] shadow-2xl">
       {/* Author Bar */}
-      <div className="mb-6 flex items-center justify-between border-b border-[var(--color-border)] pb-4">
+      <div className="mb-6 flex items-center justify-between border-b border-(--color-border) pb-4">
         <div className="flex items-center gap-3">
-          <div className="flex size-10 items-center justify-center rounded-full border border-[var(--color-brand-border)] bg-[var(--color-brand-soft)] overflow-hidden">
+          <div className="flex size-10 items-center justify-center rounded-full border border-(--color-brand-border) bg-(--color-brand-soft) overflow-hidden">
             <AvatarDisplay avatar={session.avatar} username={session.username} className="size-9" />
           </div>
           <div>
@@ -99,12 +99,12 @@ export function SubmitArticleForm({
               <button
                 type="button"
                 onClick={() => setAutoSlug(!autoSlug)}
-                className="text-[11px] text-[var(--color-brand-light)] hover:underline"
+                className="text-[11px] text-(--color-brand-light) hover:underline"
               >
                 {autoSlug ? "Edit slug manually" : "Auto-generate from title"}
               </button>
             </div>
-            <div className="mt-2 flex items-center rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3">
+            <div className="mt-2 flex items-center rounded-xl border border-(--color-border) bg-(--color-bg) px-4 py-3">
               <span className="text-xs text-slate-500 font-mono">/posts/</span>
               <input
                 required

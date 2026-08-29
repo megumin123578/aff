@@ -159,7 +159,7 @@ export default async function Home() {
       </section>
 
       {/* Latest Articles Section */}
-      <section id="guides" className="w-full border-t border-[var(--color-border)] px-5 py-20 lg:px-8">
+      <section id="guides" className="w-full border-t border-(--color-border) px-5 py-20 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
           <div>
             <div className="mb-2">
@@ -202,7 +202,7 @@ export default async function Home() {
       </section>
 
       {/* Methodology Section */}
-      <section id="method" className="border-y border-[var(--color-border)] bg-[var(--color-surface)]">
+      <section id="method" className="border-y border-(--color-border) bg-[var(--color-surface)]">
         <div className="w-full px-5 py-20 lg:px-8">
           <Badge variant="azure">Our Philosophy</Badge>
           <h2 className="mt-3 max-w-3xl text-3xl font-extrabold tracking-tight text-white leading-snug">

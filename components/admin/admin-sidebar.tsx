@@ -71,7 +71,7 @@ export function AdminSidebar() {
     <div className="flex h-full flex-col justify-between">
       <div>
         {/* Logo / Brand Header */}
-        <div className="flex items-center justify-between border-b border-[var(--color-border)] px-4 py-4">
+        <div className="flex items-center justify-between border-b border-(--color-border) px-4 py-4">
           <Link href="/admin" className="flex items-center gap-2.5">
             <span className="flex size-8 items-center justify-center rounded-lg bg-[var(--color-brand)] text-sm font-black text-white shadow-sm">
               N
@@ -85,7 +85,7 @@ export function AdminSidebar() {
             href="/"
             target="_blank"
             title="View live website"
-            className="flex size-7 items-center justify-center rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-muted)] text-slate-400 transition hover:border-[var(--color-border-strong)] hover:text-white"
+            className="flex size-7 items-center justify-center rounded-lg border border-(--color-border) bg-[var(--color-surface-muted)] text-slate-400 transition hover:border-[var(--color-border-strong)] hover:text-white"
           >
             <svg className="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
@@ -119,7 +119,7 @@ export function AdminSidebar() {
       </div>
 
       {/* Sidebar Footer */}
-      <div className="border-t border-[var(--color-border)] p-3 text-center">
+      <div className="border-t border-(--color-border) p-3 text-center">
         <p className="text-[11px] text-slate-500 font-mono">Neroviax CMS · v1.0</p>
       </div>
     </div>
@@ -128,7 +128,7 @@ export function AdminSidebar() {
   return (
     <>
       {/* Mobile Top bar */}
-      <div className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-[var(--color-border)] bg-[var(--color-surface)] px-4 md:hidden">
+      <div className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-(--color-border) bg-[var(--color-surface)] px-4 md:hidden">
         <Link href="/admin" className="flex items-center gap-2 font-bold text-white text-sm">
           <span className="flex size-7 items-center justify-center rounded-lg bg-[var(--color-brand)] text-xs font-black text-white">N</span>
           <span>Neroviax Admin</span>
@@ -136,7 +136,7 @@ export function AdminSidebar() {
         <button
           type="button"
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="flex size-9 items-center justify-center rounded-lg border border-[var(--color-border)] text-slate-300 hover:text-white"
+          className="flex size-9 items-center justify-center rounded-lg border border-(--color-border) text-slate-300 hover:text-white"
           aria-label="Toggle Navigation"
         >
           <svg className="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -159,7 +159,7 @@ export function AdminSidebar() {
 
       {/* Mobile Drawer */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 transform border-r border-[var(--color-border)] bg-[var(--color-surface)] transition-transform duration-200 ease-in-out md:hidden ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 transform border-r border-(--color-border) bg-[var(--color-surface)] transition-transform duration-200 ease-in-out md:hidden ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -167,7 +167,7 @@ export function AdminSidebar() {
       </aside>
 
       {/* Desktop Fixed Sidebar */}
-      <aside className="hidden md:flex md:w-60 lg:w-64 md:shrink-0 md:flex-col md:fixed md:inset-y-0 border-r border-[var(--color-border)] bg-[var(--color-surface)]">
+      <aside className="hidden md:flex md:w-60 lg:w-64 md:shrink-0 md:flex-col md:fixed md:inset-y-0 border-r border-(--color-border) bg-[var(--color-surface)]">
         {renderNavContent()}
       </aside>
     </>

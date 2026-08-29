@@ -6,7 +6,7 @@ import { registerAdminAction, type RegisterState } from "@/app/admin/register/ac
 
 const initialState: RegisterState = { error: "", success: "", username: "", email: "" };
 const inputClass =
-  "mt-2 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3 text-sm text-white outline-none focus:border-[var(--color-brand-border)]";
+  "mt-2 w-full rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-4 py-3 text-sm text-white outline-none focus:border-[var(--color-brand-border)]";
 
 export function RegisterForm() {
   const [state, action, pending] = useActionState(registerAdminAction, initialState);
@@ -16,7 +16,7 @@ export function RegisterForm() {
       {/* Google Sign-in Button */}
       <a
         href="/api/auth/google"
-        className="flex w-full items-center justify-center gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] px-5 py-3 text-sm font-semibold text-white transition hover:border-[var(--color-brand-border)] hover:bg-[var(--color-surface-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)]"
+        className="flex w-full items-center justify-center gap-3 rounded-xl border border-(--color-border) bg-[var(--color-surface-raised)] px-5 py-3 text-sm font-semibold text-white transition hover:border-[var(--color-brand-border)] hover:bg-[var(--color-surface-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)]"
       >
         <svg className="size-5" viewBox="0 0 24 24">
           <path
@@ -41,7 +41,7 @@ export function RegisterForm() {
 
       {/* Divider */}
       <div className="relative my-6 flex items-center justify-center">
-        <div className="w-full border-t border-[var(--color-border)]" />
+        <div className="w-full border-t border-(--color-border)" />
         <span className="absolute bg-[var(--color-surface)] px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
           or register with credentials
         </span>
@@ -108,7 +108,7 @@ export function RegisterForm() {
         {state.success && (
           <div
             role="status"
-            className="rounded-xl border border-[var(--color-success-border)] bg-[var(--color-success-soft)] p-3 text-xs text-[var(--color-success-text)] animate-in fade-in"
+            className="rounded-xl border border-(--color-success-border) bg-(--color-success-soft) p-3 text-xs text-(--color-success-text) animate-in fade-in"
           >
             {state.success}
           </div>
@@ -124,7 +124,7 @@ export function RegisterForm() {
           </button>
           <Link
             href="/admin/login"
-            className="flex w-full items-center justify-center rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-5 py-3 text-sm font-semibold text-slate-300 transition hover:border-[var(--color-border-strong)] hover:bg-[var(--color-surface-muted)] hover:text-white"
+            className="flex w-full items-center justify-center rounded-xl border border-(--color-border) bg-[var(--color-surface)] px-5 py-3 text-sm font-semibold text-slate-300 transition hover:border-[var(--color-border-strong)] hover:bg-[var(--color-surface-muted)] hover:text-white"
           >
             Already have an account? Sign in
           </Link>

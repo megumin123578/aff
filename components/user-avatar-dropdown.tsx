@@ -232,16 +232,16 @@ export function UserAvatarDropdown({ session }: { session: UserSession }) {
         title={`Account menu (${session.username})`}
         aria-expanded={dropdownOpen}
         aria-haspopup="true"
-        className="grid size-11 place-items-center rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] text-slate-300 shadow-sm transition hover:border-[var(--color-brand-border)] hover:bg-[var(--color-surface-muted)] hover:text-white focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)]"
+        className="grid size-11 place-items-center rounded-full border border-(--color-border) bg-[var(--color-surface)] text-slate-300 shadow-sm transition hover:border-[var(--color-brand-border)] hover:bg-[var(--color-surface-muted)] hover:text-white focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)]"
       >
         <AvatarDisplay avatar={effectiveAvatar} username={session.username} className="size-9" />
       </button>
 
       {/* Dropdown Menu */}
       {dropdownOpen && (
-        <div className="absolute right-0 top-full mt-2 z-50 w-64 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-2 shadow-[var(--shadow-card)] backdrop-blur-xl">
+        <div className="absolute right-0 top-full mt-2 z-50 w-64 rounded-2xl border border-(--color-border) bg-[var(--color-surface)] p-2 shadow-[var(--shadow-card)] backdrop-blur-xl">
           {/* User Profile Header */}
-          <div className="flex items-center gap-3 border-b border-[var(--color-border)] px-3 py-3">
+          <div className="flex items-center gap-3 border-b border-(--color-border) px-3 py-3">
             <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-[var(--color-brand-border)] bg-[var(--color-brand-soft)] overflow-hidden">
               <AvatarDisplay avatar={effectiveAvatar} username={session.username} className="size-9" />
             </div>
@@ -309,7 +309,7 @@ export function UserAvatarDropdown({ session }: { session: UserSession }) {
           </div>
 
           {/* Sign out */}
-          <div className="border-t border-[var(--color-border)] pt-1.5">
+          <div className="border-t border-(--color-border) pt-1.5">
             <form action={logoutAdminAction}>
               <button
                 type="submit"
@@ -335,8 +335,8 @@ export function UserAvatarDropdown({ session }: { session: UserSession }) {
           />
           
           {/* Modal card */}
-          <div className="relative z-10 w-full max-w-md rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-4">
+          <div className="relative z-10 w-full max-w-md rounded-2xl border border-(--color-border) bg-[var(--color-surface)] p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-(--color-border) pb-4">
               <h3 className="text-base font-bold text-white">Change Avatar</h3>
               <button
                 type="button"
@@ -370,7 +370,7 @@ export function UserAvatarDropdown({ session }: { session: UserSession }) {
                     className={`flex w-full items-center gap-3 rounded-xl border p-2.5 transition ${
                       avatarPreview === session.avatar
                         ? "border-[var(--color-brand)] bg-[var(--color-brand-soft)]"
-                        : "border-[var(--color-border)] bg-[var(--color-bg)] hover:border-[var(--color-brand-border)]"
+                        : "border-(--color-border) bg-[var(--color-bg)] hover:border-[var(--color-brand-border)]"
                     }`}
                   >
                     <AvatarDisplay avatar={session.avatar} className="size-8" />
@@ -432,7 +432,7 @@ export function UserAvatarDropdown({ session }: { session: UserSession }) {
                         className={`flex flex-col items-center justify-center gap-1.5 rounded-xl border p-2 text-sm transition ${
                           isSelected
                             ? "border-[var(--color-brand-border)] bg-[var(--color-brand-soft)] text-white shadow-sm ring-2 ring-[var(--color-brand)]"
-                            : "border-[var(--color-border)] bg-[var(--color-bg)] text-slate-300 hover:border-[var(--color-border-strong)] hover:text-white"
+                            : "border-(--color-border) bg-[var(--color-bg)] text-slate-300 hover:border-[var(--color-border-strong)] hover:text-white"
                         }`}
                       >
                         <div className="flex size-9 items-center justify-center rounded-full bg-[var(--color-surface-muted)] p-0.5">
@@ -450,7 +450,7 @@ export function UserAvatarDropdown({ session }: { session: UserSession }) {
                 <button
                   type="button"
                   onClick={() => setAvatarModalOpen(false)}
-                  className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-[var(--color-surface-muted)]"
+                  className="rounded-xl border border-(--color-border) bg-[var(--color-surface)] px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-[var(--color-surface-muted)]"
                 >
                   Cancel
                 </button>
@@ -476,8 +476,8 @@ export function UserAvatarDropdown({ session }: { session: UserSession }) {
             onClick={() => setPasswordModalOpen(false)}
           />
 
-          <div className="relative z-10 w-full max-w-md rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-4">
+          <div className="relative z-10 w-full max-w-md rounded-2xl border border-(--color-border) bg-[var(--color-surface)] p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-(--color-border) pb-4">
               <h3 className="text-base font-bold text-white">Change Password</h3>
               <button
                 type="button"
@@ -493,7 +493,7 @@ export function UserAvatarDropdown({ session }: { session: UserSession }) {
                 <div
                   className={`rounded-xl border p-3 text-xs ${
                     passwordMsg.type === "success"
-                      ? "border-[var(--color-success-border)] bg-[var(--color-success-soft)] text-[var(--color-success-text)]"
+                      ? "border-(--color-success-border) bg-(--color-success-soft) text-(--color-success-text)"
                       : "border-[var(--color-danger-border)] bg-[var(--color-danger-soft)] text-[var(--color-danger-text)]"
                   }`}
                 >
@@ -511,7 +511,7 @@ export function UserAvatarDropdown({ session }: { session: UserSession }) {
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   placeholder="Enter current password"
-                  className="mt-1.5 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
+                  className="mt-1.5 w-full rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
                 />
               </div>
 
@@ -526,7 +526,7 @@ export function UserAvatarDropdown({ session }: { session: UserSession }) {
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="At least 8 characters"
-                  className="mt-1.5 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
+                  className="mt-1.5 w-full rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
                 />
               </div>
 
@@ -541,7 +541,7 @@ export function UserAvatarDropdown({ session }: { session: UserSession }) {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Repeat new password"
-                  className="mt-1.5 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
+                  className="mt-1.5 w-full rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
                 />
               </div>
 
@@ -549,7 +549,7 @@ export function UserAvatarDropdown({ session }: { session: UserSession }) {
                 <button
                   type="button"
                   onClick={() => setPasswordModalOpen(false)}
-                  className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-[var(--color-surface-muted)]"
+                  className="rounded-xl border border-(--color-border) bg-[var(--color-surface)] px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-[var(--color-surface-muted)]"
                 >
                   Cancel
                 </button>
