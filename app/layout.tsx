@@ -89,18 +89,6 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                   <input id="header-search" name="q" minLength={2} placeholder="Search gear, posts…" className="w-36 rounded-lg border border-(--color-border) bg-[var(--color-bg)] px-3 py-2 text-xs text-white outline-none focus:w-48 focus:border-[var(--color-brand-border)]" />
                 </form>
 
-                {session && (
-                  <Link
-                    href="/submit-article"
-                    aria-label="Submit an article"
-                    className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-brand)] text-sm font-bold text-white transition hover:bg-[var(--color-brand-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] sm:h-auto sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
-                  >
-                    <svg aria-hidden="true" className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                    </svg>
-                    <span className="hidden xl:inline">Submit</span>
-                  </Link>
-                )}
 
                 {/* User Avatar Dropdown */}
                 <UserAvatarDropdown session={session} />

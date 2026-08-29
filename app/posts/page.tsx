@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Badge, Card } from "@/components/ui";
+import { Card } from "@/components/ui";
 import { getPublishedArticles } from "@/lib/content";
+import { getAuthSession } from "@/lib/admin-auth";
 
 export const metadata: Metadata = {
   title: "Tech Posts — Hardware Reviews & Desk Setups",
@@ -11,23 +12,25 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default async function PostsPage({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
-  const [allPosts, query] = await Promise.all([getPublishedArticles(), searchParams]);
-  const categories = ["All", ...Array.from(new Set(allPosts.map((post) => post.category)))];
-  const posts = query.category ? allPosts.filter((post) => post.category === query.category) : allPosts;
+export default async function PostsPage() {
+  const [posts, session] = await Promise.all([getPublishedArticles(), getAuthSession()]);
 
   return (
     <main className="w-full px-5 py-12 lg:px-8 lg:py-16">
-      <div className="mb-10">
-        <Badge variant="azure">Neroviax Posts</Badge>
-        <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">Tech Posts & Workspace Notes</h1>
-      </div>
-      <nav aria-label="Post categories" className="mb-10 flex flex-wrap gap-2">
-        {categories.map((category) => {
-          const active = (category === "All" && !query.category) || category === query.category;
-          return <Link key={category} href={category === "All" ? "/posts" : `/posts?category=${encodeURIComponent(category)}`} className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${active ? "border-(--color-brand-border) bg-(--color-brand-soft) text-(--color-brand-light)" : "border-(--color-border) text-slate-300 hover:border-(--color-border-strong) hover:text-white"}`}>{category}</Link>;
-        })}
-      </nav>
+      {session && (
+        <div className="mb-8 flex justify-end">
+          <Link
+            href="/submit-article"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-(--color-brand-border) bg-(--color-brand) px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-(--color-brand-hover) focus:outline-none focus:ring-2 focus:ring-(--color-focus) focus:ring-offset-2 focus:ring-offset-(--color-bg)"
+          >
+            <svg aria-hidden="true" className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Submit
+          </Link>
+        </div>
+      )}
+
       {posts.length ? (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
@@ -41,7 +44,7 @@ export default async function PostsPage({ searchParams }: { searchParams: Promis
             </Link>
           ))}
         </div>
-      ) : <Card className="p-8 text-center"><p className="text-slate-300">No posts found in this category.</p></Card>}
+      ) : <Card className="p-8 text-center"><p className="text-slate-300">No posts available yet.</p></Card>}
     </main>
   );
 }
