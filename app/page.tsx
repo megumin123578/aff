@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Badge, Card, Chip, LinkButton } from "@/components/ui";
+import { Badge, Card, LinkButton } from "@/components/ui";
 import { getPublishedArticles } from "@/lib/content";
 import type { Metadata } from "next";
 import { absoluteUrl, jsonLd, organizationJsonLd } from "@/lib/seo";
@@ -89,11 +89,7 @@ export default async function Home() {
               </LinkButton>
             </div>
 
-            <div className="mt-10 flex flex-wrap items-center gap-3">
-              <Chip active>Real-world Benchmarks</Chip>
-              <Chip>Transparent Affiliates</Chip>
-              <Chip>Community Q&A Discussions</Chip>
-            </div>
+
           </div>
 
           {/* Option 1: Code Block UI preview for desk-setup.json */}
@@ -131,13 +127,10 @@ export default async function Home() {
       {/* Tech Gear Categories Section */}
       <section id="categories" className="w-full px-5 py-20 lg:px-8">
         <div className="mb-10">
-          <Badge variant="azure">Curated Categories</Badge>
-          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+          <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
             Explore by Gear & Topic
           </h2>
-          <p className="mt-2 text-sm text-slate-400">
-            Handpicked hardware, setup recommendations, and accessories tested for productivity.
-          </p>
+
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -169,31 +162,28 @@ export default async function Home() {
               Latest Posts & Reviews
             </h2>
           </div>
-          <Chip active>{guides.length} {guides.length === 1 ? "Post" : "Posts"} Available</Chip>
+
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
           {guides.map((guide, i) => (
-            <Card key={guide.slug} className="h-full p-6">
-              <div className="flex flex-col justify-between h-full">
-                <div>
-                  <span className="font-mono text-xs font-semibold text-slate-400">
-                    0{i + 1} · {guide.category}
-                  </span>
-                  <h3 className="mt-4 text-lg font-bold leading-snug text-white">
-                    {guide.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-slate-400">
-                    {guide.description}
-                  </p>
-                </div>
-                <div className="mt-6">
-                  <LinkButton href={`/posts/${guide.slug}`} size="small">
-                    Read post & discussion →
-                  </LinkButton>
-                </div>
-              </div>
-            </Card>
+            <Link
+              key={guide.slug}
+              href={`/posts/${guide.slug}`}
+              className="block h-full rounded-2xl focus:outline-none focus:ring-2 focus:ring-(--color-focus)"
+            >
+              <Card className="h-full p-6 transition hover:border-(--color-border-strong) hover:bg-[#121722]">
+                <span className="font-mono text-xs font-semibold text-slate-400">
+                  0{i + 1} · {guide.category}
+                </span>
+                <h3 className="mt-4 text-lg font-bold leading-snug text-white">
+                  {guide.title}
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-slate-400">
+                  {guide.description}
+                </p>
+              </Card>
+            </Link>
           ))}
         </div>
         <div className="mt-10 text-center">

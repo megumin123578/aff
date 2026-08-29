@@ -32,15 +32,6 @@ export default async function SubmitArticlePage({
           ]}
         />
 
-        <div className="flex flex-col gap-2">
-          <Badge variant="azure">Community Submissions</Badge>
-          <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-            Write & Share an Article
-          </h1>
-          <p className="text-base text-slate-300">
-            Publish your desk setups, hardware teardowns, homelab recipes, and workflow tips.
-          </p>
-        </div>
 
         {query.submitted && (
           <div className="rounded-2xl border border-emerald-500/40 bg-emerald-950/20 p-5 text-emerald-300 animate-in fade-in">
@@ -56,15 +47,11 @@ export default async function SubmitArticlePage({
         {!session ? (
           /* Sign-in Required Card */
           <Card className="p-8 sm:p-12 text-center border-[#2d3541] bg-[#0d1119]">
-            <div className="mx-auto flex size-16 items-center justify-center rounded-2xl border border-[var(--color-brand-border)] bg-[var(--color-brand-soft)] text-2xl">
-              ✍️
-            </div>
+
             <h2 className="mt-5 text-2xl font-bold text-white">
               Sign in with Google to Write Articles
             </h2>
-            <p className="mt-2 text-sm text-slate-400 max-w-md mx-auto">
-              Connect with your Google account to submit articles with your profile photo and track submission review status in real time.
-            </p>
+
             <div className="mt-6 flex justify-center">
               <a
                 href="/api/auth/google"

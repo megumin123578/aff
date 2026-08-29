@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Badge, Card } from "@/components/ui";
+import { Card } from "@/components/ui";
 import { getPublishedArticles } from "@/lib/content";
 
 export const metadata: Metadata = {
@@ -17,13 +17,11 @@ export default async function ForumsPage() {
   return (
     <main className="min-h-[70vh] bg-[var(--color-bg-deep)] px-5 py-12 lg:px-8 lg:py-16">
       <div className="mx-auto w-full max-w-6xl">
-        <Badge variant="azure">Community</Badge>
-        <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">Forums</h1>
-            <p className="mt-3 max-w-2xl text-slate-400">
-              Browse the latest articles, ideas, and discussions from the Neroviax community.
-            </p>
+
           </div>
           <Link
             href="/submit-article"
