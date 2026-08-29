@@ -9,11 +9,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     { url: base },
-    { url: `${base}/articles` },
+    { url: `${base}/posts` },
     { url: `${base}/affiliate-disclosure` },
     ...["about", "contact", "methodology", "privacy", "terms"].map((path) => ({ url: `${base}/${path}` })),
     ...articles.map((article) => ({
-      url: `${base}/articles/${article.slug}`,
+      url: `${base}/posts/${article.slug}`,
       lastModified: article.updatedAt || article.publishedAt,
     })),
   ];

@@ -59,8 +59,8 @@ export async function saveArticleAction(formData: FormData) {
 
   await upsertArticle(article);
   revalidatePath("/");
-  revalidatePath("/articles");
-  revalidatePath(`/articles/${slug}`);
+  revalidatePath("/posts");
+  revalidatePath(`/posts/${slug}`);
   revalidatePath("/sitemap.xml");
   redirect("/admin/articles?saved=1");
 }
@@ -72,8 +72,8 @@ export async function approveArticleAction(formData: FormData) {
 
   await approveArticle(slug);
   revalidatePath("/");
-  revalidatePath("/articles");
-  revalidatePath(`/articles/${slug}`);
+  revalidatePath("/posts");
+  revalidatePath(`/posts/${slug}`);
   revalidatePath("/admin/articles");
   redirect("/admin/articles?approved=1");
 }

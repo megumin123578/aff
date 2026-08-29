@@ -26,13 +26,13 @@ const googleAdSenseAccount =
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
-  title: { default: "Neroviax — Practical Tech, Hardware & Workspace Gear", template: "%s | Neroviax" },
-  description: "Curated tech gear, in-depth reviews, homelab hardware, and minimalist desk setups for developers and builders.",
+  title: { default: "Neroviax — Practical Tech for Builders", template: "%s | Neroviax" },
+  description: "In-depth technology reviews, developer insights, and practical guidance for builders.",
   openGraph: {
     type: "website",
     siteName: "Neroviax",
-    title: "Neroviax — Practical Tech, Hardware & Workspace Gear",
-    description: "Curated tech gear, in-depth reviews, homelab hardware, and minimalist desk setups for developers and builders.",
+    title: "Neroviax — Practical Tech for Builders",
+    description: "In-depth technology reviews, developer insights, and practical guidance for builders.",
     images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Neroviax" }],
   },
   twitter: { card: "summary_large_image", images: ["/opengraph-image"] },
@@ -86,19 +86,21 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               <div className="ml-auto flex shrink-0 items-center gap-2 lg:gap-3">
                 <form action="/search" method="get" className="hidden xl:block">
                   <label className="sr-only" htmlFor="header-search">Search</label>
-                  <input id="header-search" name="q" minLength={2} placeholder="Search gear, blog…" className="w-36 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2 text-xs text-white outline-none focus:w-48 focus:border-[var(--color-brand-border)]" />
+                  <input id="header-search" name="q" minLength={2} placeholder="Search gear, posts…" className="w-36 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2 text-xs text-white outline-none focus:w-48 focus:border-[var(--color-brand-border)]" />
                 </form>
 
-                <Link
-                  href="/submit-article"
-                  aria-label="Submit an article"
-                  className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-brand)] text-sm font-bold text-white transition hover:bg-[var(--color-brand-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] sm:h-auto sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
-                >
-                  <svg aria-hidden="true" className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                  </svg>
-                  <span className="hidden xl:inline">Submit Article</span>
-                </Link>
+                {session && (
+                  <Link
+                    href="/submit-article"
+                    aria-label="Submit an article"
+                    className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-brand)] text-sm font-bold text-white transition hover:bg-[var(--color-brand-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)] sm:h-auto sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
+                  >
+                    <svg aria-hidden="true" className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    <span className="hidden xl:inline">Submit</span>
+                  </Link>
+                )}
 
                 {/* User Avatar Dropdown */}
                 <UserAvatarDropdown session={session} />
@@ -113,7 +115,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                     aria-label="Mobile navigation"
                     className="absolute right-0 top-12 w-64 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-2 shadow-[var(--shadow-card)]"
                   >
-                    <Link href="/submit-article" className="block rounded-xl bg-[var(--color-brand)] px-4 py-3 text-sm font-bold text-white hover:bg-[var(--color-brand-hover)]">Submit Article</Link>
+                    {session && (
+                      <Link href="/submit-article" className="block rounded-xl bg-[var(--color-brand)] px-4 py-3 text-sm font-bold text-white hover:bg-[var(--color-brand-hover)]">Submit</Link>
+                    )}
                     {primaryNavigation.map((item) => (
                       <Link key={item.href} href={item.href} className="group flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-slate-200 transition-all duration-200 hover:translate-x-1 hover:bg-[var(--color-surface-muted)] hover:text-white">
                         {item.label}
@@ -150,7 +154,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                         <span>Sign in</span>
                       </Link>
                     )}
-                    <form action="/search" method="get" className="p-2"><input name="q" minLength={2} placeholder="Search gear, blog…" className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2 text-sm text-white" /></form>
+                    <form action="/search" method="get" className="p-2"><input name="q" minLength={2} placeholder="Search gear, posts…" className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2 text-sm text-white" /></form>
                   </nav>
                 </details>
               </div>

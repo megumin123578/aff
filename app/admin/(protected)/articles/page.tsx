@@ -44,7 +44,7 @@ export default async function AdminArticlesPage({
 
       {query.approved && (
         <p className="rounded-xl border border-[var(--color-success-border)] bg-[var(--color-success-soft)] p-4 text-sm text-[var(--color-success-text)] animate-in fade-in">
-          ✔ Article approved and published to the live blog!
+          ✔ Article approved and published to the live posts!
         </p>
       )}
 

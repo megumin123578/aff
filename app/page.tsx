@@ -5,8 +5,8 @@ import type { Metadata } from "next";
 import { absoluteUrl, jsonLd, organizationJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Neroviax — Practical Tech, Hardware & Workspace Gear",
-  description: "Curated tech gear, in-depth reviews, homelab hardware, and minimalist desk setups for developers and builders.",
+  title: "Neroviax — Practical Tech for Builders",
+  description: "In-depth technology reviews, developer insights, and practical guidance for builders.",
   alternates: { canonical: "/" },
 };
 
@@ -65,31 +65,27 @@ export default async function Home() {
       <section className="hero">
         <div className="relative z-10 grid w-full items-center gap-12 px-5 lg:grid-cols-[1.1fr_.9fr] lg:px-8">
           <div>
-            <div className="mb-6 flex flex-wrap items-center gap-2">
-              <Badge variant="azure">Tested by Engineers</Badge>
-              <Badge>Honest Reviews & Benchmarks</Badge>
-            </div>
 
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-6xl leading-[1.08] font-sans">
-              Practical Tech & Gear.<br />
+              Practical Tech.<br />
               <span className="text-slate-400">Built for Builders.</span>
             </h1>
 
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-300 font-normal">
-              In-depth reviews, benchmarked developer hardware, homelab configurations, and minimalist desk setups. No marketing fluff, transparent affiliate disclosures, and real-world testing.
+              In-depth technology reviews, practical developer insights, and real-world testing.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <LinkButton
-                href="/articles"
+                href="/posts"
                 variant="mint"
                 size="large"
                 className="border-[#12955d] bg-[#087a4b] text-white hover:bg-[#06633d]"
               >
-                Read Our Blog →
+                Discover More →
               </LinkButton>
               <LinkButton href="#categories" size="large">
-                Explore Tech Gear
+                Explore Technology
               </LinkButton>
             </div>
 
@@ -146,7 +142,7 @@ export default async function Home() {
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {categories.map((cat) => (
-            <Link key={cat.title} href={`/articles?category=${encodeURIComponent(cat.tag)}`}>
+            <Link key={cat.title} href={`/posts?category=${encodeURIComponent(cat.tag)}`}>
               <Card className="h-full p-6 transition duration-200 hover:border-[var(--color-border-strong)] hover:bg-[#121722]">
                 <div className="text-3xl">{cat.icon}</div>
                 <h3 className="mt-4 text-lg font-bold text-white">{cat.title}</h3>
@@ -167,10 +163,10 @@ export default async function Home() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
           <div>
             <div className="mb-2">
-              <Badge>From the Blog</Badge>
+              <Badge>From the Posts</Badge>
             </div>
             <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-              Latest Blog Posts & Reviews
+              Latest Posts & Reviews
             </h2>
           </div>
           <Chip active>{guides.length} {guides.length === 1 ? "Post" : "Posts"} Available</Chip>
@@ -192,7 +188,7 @@ export default async function Home() {
                   </p>
                 </div>
                 <div className="mt-6">
-                  <LinkButton href={`/articles/${guide.slug}`} size="small">
+                  <LinkButton href={`/posts/${guide.slug}`} size="small">
                     Read post & discussion →
                   </LinkButton>
                 </div>
@@ -201,7 +197,7 @@ export default async function Home() {
           ))}
         </div>
         <div className="mt-10 text-center">
-          <LinkButton href="/articles">Browse all blog posts →</LinkButton>
+          <LinkButton href="/posts">Browse all posts →</LinkButton>
         </div>
       </section>
 

@@ -41,10 +41,10 @@ export default async function AffiliateDisclosurePage({
           </p>
         </div>
         <Link
-          href="/articles"
+          href="/posts"
           className="mt-8 inline-flex rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-brand)] px-4 py-3 text-sm font-bold text-white hover:bg-[var(--color-brand-hover)]"
         >
-          Explore Our Blog →
+          Explore Our Posts →
         </Link>
       </Card>
     </main>

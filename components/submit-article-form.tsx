@@ -105,7 +105,7 @@ export function SubmitArticleForm({
               </button>
             </div>
             <div className="mt-2 flex items-center rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3">
-              <span className="text-xs text-slate-500 font-mono">/articles/</span>
+              <span className="text-xs text-slate-500 font-mono">/posts/</span>
               <input
                 required
                 name="slug"
@@ -202,7 +202,7 @@ export function SubmitArticleForm({
             <span>🛡️</span> Editorial Review Process
           </p>
           <p className="mt-1 text-slate-300">
-            Once submitted, your article will be marked as <strong>Pending Approval</strong>. Our administrators will review the content for clarity and guidelines before publishing it to the public blog.
+            Once submitted, your article will be marked as <strong>Pending Approval</strong>. Our administrators will review the content for clarity and guidelines before publishing it to the public posts.
           </p>
         </div>
 

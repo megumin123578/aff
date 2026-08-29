@@ -27,7 +27,7 @@ export default async function SubmitArticlePage({
         <Breadcrumbs
           items={[
             { name: "Home", path: "/" },
-            { name: "Blog", path: "/articles" },
+            { name: "Posts", path: "/posts" },
             { name: "Submit Article", path: "/submit-article" },
           ]}
         />
@@ -114,7 +114,7 @@ export default async function SubmitArticlePage({
 
                       {art.status === "published" ? (
                         <Link
-                          href={`/articles/${art.slug}`}
+                          href={`/posts/${art.slug}`}
                           className="rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-brand-soft)] px-4 py-2 text-xs font-bold text-white transition hover:bg-[var(--color-brand)]"
                         >
                           View Live Article →
