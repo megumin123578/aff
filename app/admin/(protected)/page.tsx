@@ -15,7 +15,7 @@ export default async function AdminDashboardPage() {
   const draftCount = articles.length - publishedCount;
 
   const stats = [
-    [articles.length, "Total Articles", "/admin/articles"],
+    [articles.length, "Total Posts", "/admin/articles"],
     [publishedCount, "Published Posts", "/admin/articles"],
     [draftCount, "Drafts", "/admin/articles"],
     [links.length, "Affiliate Links", "/admin/affiliate-links"],
@@ -27,7 +27,7 @@ export default async function AdminDashboardPage() {
   return (
     <div>
       <h1 className="text-3xl font-extrabold text-white">Content Dashboard</h1>
-      <p className="mt-2 text-sm text-slate-400">Manage articles, affiliate links, and monitor engagement metrics.</p>
+      <p className="mt-2 text-sm text-slate-400">Manage posts, affiliate links, and monitor engagement metrics.</p>
       <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {stats.map(([value, label, href]) => (
           <Link key={label} href={href}>

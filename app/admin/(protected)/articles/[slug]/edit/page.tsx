@@ -7,5 +7,5 @@ export default async function EditArticlePage({ params }: { params: Promise<{ sl
   const { slug } = await params;
   const [article, links] = await Promise.all([getArticle(slug, true), getAffiliateLinks()]);
   if (!article) notFound();
-  return <div><h1 className="text-3xl font-extrabold text-white">Edit article</h1><p className="mt-2 text-sm text-slate-400">/{article.slug}</p><Card className="mt-8 p-6"><ArticleForm article={article} affiliateLinks={links} /></Card></div>;
+  return <div><h1 className="text-3xl font-extrabold text-white">Edit post</h1><p className="mt-2 text-sm text-slate-400">/{article.slug}</p><Card className="mt-8 p-6"><ArticleForm article={article} affiliateLinks={links} /></Card></div>;
 }

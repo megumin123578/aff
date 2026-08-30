@@ -24,21 +24,10 @@ export default async function AdminArticlesPage({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h1 className="text-3xl font-extrabold text-white">Articles & Submissions</h1>
-          <p className="mt-2 text-sm text-slate-400">
-            Review community submissions, edit drafts, and publish guides.
-          </p>
-        </div>
-        <LinkButton href="/admin/articles/new" variant="azure">
-          + New Article
-        </LinkButton>
-      </div>
 
       {query.saved && (
         <p className="rounded-xl border border-(--color-success-border) bg-(--color-success-soft) p-4 text-sm text-(--color-success-text) animate-in fade-in">
-          ✔ Article saved successfully.
+          ✔ Post saved successfully.
         </p>
       )}
 
@@ -49,7 +38,8 @@ export default async function AdminArticlesPage({
       )}
 
       {/* Filter Tabs */}
-      <div className="flex flex-wrap gap-2 border-b border-(--color-border) pb-3">
+      <div className="flex flex-wrap items-center gap-3 border-b border-(--color-border) pb-3">
+        <div className="flex flex-wrap gap-2">
         <Link
           href="/admin/articles"
           className={`rounded-xl px-3.5 py-1.5 text-xs font-semibold transition ${
@@ -95,6 +85,13 @@ export default async function AdminArticlesPage({
         >
           Drafts ({draftCount})
         </Link>
+        </div>
+
+        <div className="ml-auto">
+          <LinkButton href="/admin/articles/new" variant="azure">
+            + New Post
+          </LinkButton>
+        </div>
       </div>
 
       {/* Article List */}
@@ -167,7 +164,7 @@ export default async function AdminArticlesPage({
 
         {filteredArticles.length === 0 && (
           <Card className="p-8 text-center text-sm text-slate-400">
-            No articles found matching this filter.
+            No posts found matching this filter.
           </Card>
         )}
       </div>

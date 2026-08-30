@@ -47,8 +47,8 @@ export function ArticleForm({ article, affiliateLinks }: { article?: Article; af
 
       <label className={labelClass}>Markdown body<textarea required name="body" defaultValue={article?.body} rows={24} className={`${fieldClass} font-mono leading-6`} /></label>
       <div className="flex flex-wrap gap-3">
-        <button className="rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-brand)] px-5 py-3 text-sm font-bold text-white hover:bg-[var(--color-brand-hover)]">Save article</button>
-        {article && <a href={`/admin/articles/${article.slug}/preview`} className="rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-action)] px-5 py-3 text-sm font-bold text-white">Preview current version</a>}
+        <button className="rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-brand)] px-5 py-3 text-sm font-bold text-white hover:bg-[var(--color-brand-hover)]">Save post</button>
+        {article && <a href={`/admin/articles/${article.slug}/preview`} className="rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-action)] px-5 py-3 text-sm font-bold text-white">Preview current post</a>}
       </div>
     </form>
   );
