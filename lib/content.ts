@@ -172,6 +172,22 @@ export async function approveArticle(slug: string) {
   );
 }
 
+export async function deleteArticle(slug: string) {
+  await query("DELETE FROM articles WHERE slug = $1", [slug]);
+}
+
+export async function updateArticleStatus(slug: string, status: ArticleStatus) {
+  const today = new Date().toISOString().slice(0, 10);
+  await query(
+    `UPDATE articles
+     SET status = $2,
+         published_at = CASE WHEN $2 = 'published' THEN COALESCE(published_at, $3::date) ELSE published_at END,
+         updated_at = $3::date
+     WHERE slug = $1`,
+    [slug, status, today]
+  );
+}
+
 export async function getAffiliateLinks() {
   const result = await query<AffiliateRow>(`SELECT ${affiliateColumns} FROM affiliate_links ORDER BY provider, id`);
   return result.rows.map(affiliateFromRow);

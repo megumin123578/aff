@@ -1,12 +1,14 @@
 import Link from "next/link";
-import { Badge, Card, LinkButton } from "@/components/ui";
+import { Card, LinkButton } from "@/components/ui";
 import { getAllArticles } from "@/lib/content";
-import { approveArticleAction } from "@/app/admin/actions";
+import { approveArticleAction, deleteArticleAction } from "@/app/admin/actions";
+import { PostStatusSelect } from "@/components/admin/post-status-select";
+import { StatusToast } from "@/components/admin/status-toast";
 
 export default async function AdminArticlesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ saved?: string; approved?: string; filter?: string }>;
+  searchParams: Promise<{ saved?: string; approved?: string; updated?: string; deleted?: string; filter?: string }>;
 }) {
   const [articles, query] = await Promise.all([getAllArticles(), searchParams]);
 
@@ -33,7 +35,15 @@ export default async function AdminArticlesPage({
 
       {query.approved && (
         <p className="rounded-xl border border-(--color-success-border) bg-(--color-success-soft) p-4 text-sm text-(--color-success-text) animate-in fade-in">
-          ✔ Article approved and published to the live posts!
+          ✔ Post approved and published to the live forums!
+        </p>
+      )}
+
+      {query.updated && <StatusToast message="Post status updated successfully." />}
+
+      {query.deleted && (
+        <p className="rounded-xl border border-(--color-success-border) bg-(--color-success-soft) p-4 text-sm text-(--color-success-text) animate-in fade-in">
+          ✔ Post deleted successfully.
         </p>
       )}
 
@@ -59,11 +69,7 @@ export default async function AdminArticlesPage({
           }`}
         >
           Pending Review ({pendingCount})
-          {pendingCount > 0 && currentFilter !== "pending" && (
-            <span className="ml-1.5 rounded-full bg-amber-500/30 px-1.5 py-0.2 text-[10px] font-bold text-amber-300">
-              Needs Review
-            </span>
-          )}
+
         </Link>
         <Link
           href="/admin/articles?filter=published"
@@ -98,7 +104,6 @@ export default async function AdminArticlesPage({
       <div className="space-y-4">
         {filteredArticles.map((article) => {
           const isPending = article.status === "pending";
-          const isPublished = article.status === "published";
 
           return (
             <Card
@@ -109,13 +114,7 @@ export default async function AdminArticlesPage({
             >
               <div className="min-w-0 flex-1 space-y-1.5">
                 <div className="flex flex-wrap items-center gap-2">
-                  {isPublished && <Badge variant="mint">Published</Badge>}
-                  {isPending && (
-                    <span className="rounded-full bg-amber-500/20 border border-amber-500/40 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-amber-300">
-                      Pending Approval
-                    </span>
-                  )}
-                  {article.status === "draft" && <Badge variant="default">Draft</Badge>}
+
                   <span className="text-xs text-slate-400">{article.category}</span>
                   {article.authorName && (
                     <span className="text-xs text-slate-400">
@@ -133,6 +132,8 @@ export default async function AdminArticlesPage({
               </div>
 
               <div className="flex flex-wrap items-center gap-2 shrink-0">
+                <PostStatusSelect slug={article.slug} status={article.status} />
+
                 {isPending && (
                   <form action={approveArticleAction}>
                     <input type="hidden" name="slug" value={article.slug} />
@@ -140,23 +141,45 @@ export default async function AdminArticlesPage({
                       type="submit"
                       className="rounded-xl border border-emerald-500/50 bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-emerald-500"
                     >
-                      ✓ Approve & Publish
+                      ✓ Approve
                     </button>
                   </form>
                 )}
 
                 <Link
                   href={`/admin/articles/${article.slug}/preview`}
-                  className="rounded-xl border border-(--color-border) bg-[var(--color-surface)] px-3.5 py-2 text-xs font-semibold text-slate-300 transition hover:border-[var(--color-border-strong)] hover:text-white"
+                  aria-label={`Preview ${article.title}`}
+                  title="Preview post"
+                  className="grid size-9 place-items-center rounded-xl border border-(--color-border) bg-(--color-surface) text-slate-300 transition hover:border-(--color-border-strong) hover:text-white focus:outline-none focus:ring-2 focus:ring-(--color-focus)"
                 >
-                  Preview
+                  <svg aria-hidden="true" className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12s3.75-7.5 9.75-7.5S21.75 12 21.75 12 18 19.5 12 19.5 2.25 12 2.25 12Z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
                 </Link>
                 <Link
                   href={`/admin/articles/${article.slug}/edit`}
-                  className="rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-brand)] px-3.5 py-2 text-xs font-bold text-white transition hover:bg-[var(--color-brand-hover)]"
+                  aria-label={`Edit ${article.title}`}
+                  title="Edit post"
+                  className="grid size-9 place-items-center rounded-xl border border-(--color-brand-border) bg-(--color-brand) text-white transition hover:bg-(--color-brand-hover) focus:outline-none focus:ring-2 focus:ring-(--color-focus)"
                 >
-                  Edit
+                  <svg aria-hidden="true" className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 3.487 3.651 3.651M4.5 19.5l3.169-.792a4.5 4.5 0 0 0 2.168-1.195L19.5 7.5a2.582 2.582 0 0 0-3.651-3.651L6.187 13.513a4.5 4.5 0 0 0-1.195 2.168L4.5 19.5Z" />
+                  </svg>
                 </Link>
+                <form action={deleteArticleAction}>
+                  <input type="hidden" name="slug" value={article.slug} />
+                  <button
+                    type="submit"
+                    aria-label={`Delete ${article.title}`}
+                    title="Delete post"
+                    className="grid size-9 place-items-center rounded-xl border border-rose-500/40 text-rose-400 transition hover:bg-rose-500/10 hover:text-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-400"
+                  >
+                    <svg aria-hidden="true" className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9 14.394 18m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673A2.25 2.25 0 0 1 15.916 21H8.084a2.25 2.25 0 0 1-2.244-1.327L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.14-2.09-2.18a51.964 51.964 0 0 0-3.32 0c-1.18.04-2.09 1-2.09 2.18v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                    </svg>
+                  </button>
+                </form>
               </div>
             </Card>
           );

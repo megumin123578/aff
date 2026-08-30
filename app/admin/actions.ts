@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import { clearAdminSession, requireAdminSession } from "@/lib/admin-auth";
 import {
   approveArticle,
+  deleteArticle,
+  updateArticleStatus,
   upsertAffiliateLink,
   upsertArticle,
   type AffiliateLink,
@@ -76,6 +78,38 @@ export async function approveArticleAction(formData: FormData) {
   revalidatePath(`/forums/${slug}`);
   revalidatePath("/admin/articles");
   redirect("/admin/articles?approved=1");
+}
+
+export async function updateArticleStatusAction(formData: FormData) {
+  await requireAdminSession();
+  const slug = text(formData, "slug");
+  const rawStatus = text(formData, "status");
+  if (!validSlug(slug)) throw new Error("Invalid post slug");
+  if (rawStatus !== "draft" && rawStatus !== "pending" && rawStatus !== "published") {
+    throw new Error("Invalid post status");
+  }
+
+  await updateArticleStatus(slug, rawStatus);
+  revalidatePath("/");
+  revalidatePath("/forums");
+  revalidatePath(`/forums/${slug}`);
+  revalidatePath("/sitemap.xml");
+  revalidatePath("/admin/articles");
+  redirect("/admin/articles?updated=1");
+}
+
+export async function deleteArticleAction(formData: FormData) {
+  await requireAdminSession();
+  const slug = text(formData, "slug");
+  if (!validSlug(slug)) throw new Error("Invalid post slug");
+
+  await deleteArticle(slug);
+  revalidatePath("/");
+  revalidatePath("/forums");
+  revalidatePath(`/forums/${slug}`);
+  revalidatePath("/sitemap.xml");
+  revalidatePath("/admin/articles");
+  redirect("/admin/articles?deleted=1");
 }
 
 export async function saveAffiliateLinkAction(formData: FormData) {
