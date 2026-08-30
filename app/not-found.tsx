@@ -17,7 +17,7 @@ export default function NotFound() {
           <LinkButton href="/" variant="azure">
             Go to Home
           </LinkButton>
-          <LinkButton href="/posts" variant="default">
+          <LinkButton href="/forums" variant="default">
             Read Posts & Reviews
           </LinkButton>
         </div>

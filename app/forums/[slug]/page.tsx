@@ -15,8 +15,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: post.title,
     description: post.description,
-    alternates: { canonical: `/posts/${post.slug}` },
-    openGraph: { type: "article", title: post.title, description: post.description, url: `/posts/${post.slug}`, publishedTime: post.publishedAt, modifiedTime: post.updatedAt, images: post.coverImage ? [post.coverImage] : undefined },
+    alternates: { canonical: `/forums/${post.slug}` },
+    openGraph: { type: "article", title: post.title, description: post.description, url: `/forums/${post.slug}`, publishedTime: post.publishedAt, modifiedTime: post.updatedAt, images: post.coverImage ? [post.coverImage] : undefined },
   };
 }
 
@@ -27,8 +27,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   return (
     <main className="w-full px-5 py-12 lg:px-8 lg:py-16">
       <article className="mx-auto max-w-3xl">
-        <Breadcrumbs items={[{ name: "Home", path: "/" }, { name: "Posts", path: "/posts" }, { name: post.title, path: `/posts/${post.slug}` }]} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd({ "@context": "https://schema.org", "@type": "Article", headline: post.title, description: post.description, datePublished: post.publishedAt, dateModified: post.updatedAt, image: post.coverImage ? [absoluteUrl(post.coverImage)] : undefined, mainEntityOfPage: absoluteUrl(`/posts/${post.slug}`), author: organizationJsonLd, publisher: organizationJsonLd })} />
+        <Breadcrumbs items={[{ name: "Home", path: "/" }, { name: "Forums", path: "/forums" }, { name: post.title, path: `/forums/${post.slug}` }]} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd({ "@context": "https://schema.org", "@type": "Article", headline: post.title, description: post.description, datePublished: post.publishedAt, dateModified: post.updatedAt, image: post.coverImage ? [absoluteUrl(post.coverImage)] : undefined, mainEntityOfPage: absoluteUrl(`/forums/${post.slug}`), author: organizationJsonLd, publisher: organizationJsonLd })} />
         <div className="mt-7"><Badge variant="azure">{post.category}</Badge></div>
         <h1 className="mt-5 text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">{post.title}</h1>
         <p className="mt-5 text-lg leading-relaxed text-slate-300">{post.description}</p>

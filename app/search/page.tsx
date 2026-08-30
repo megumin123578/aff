@@ -83,7 +83,7 @@ export default async function SearchPage({
                     Try searching with another keyword or explore our full article library.
                   </p>
                   <Link
-                    href="/posts"
+                    href="/forums"
                     className="mt-4 inline-block text-sm text-[var(--color-brand-light)] font-semibold"
                   >
                     Browse all articles →

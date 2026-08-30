@@ -35,7 +35,7 @@ export async function globalSearch(rawQuery: string, limit = 30) {
       kind,
       title: article.title,
       description: article.description,
-      href: `/posts/${article.slug}`,
+      href: `/forums/${article.slug}`,
       meta: article.category,
       score: relevance(
         query,

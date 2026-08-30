@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Card } from "@/components/ui";
 import { getPublishedArticles } from "@/lib/content";
+import { getAuthSession } from "@/lib/admin-auth";
 
 export const metadata: Metadata = {
   title: "Forums",
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function ForumsPage() {
-  const articles = await getPublishedArticles();
+  const [articles, session] = await Promise.all([getPublishedArticles(), getAuthSession()]);
 
   return (
     <main className="min-h-[70vh] bg-[var(--color-bg-deep)] px-5 py-12 lg:px-8 lg:py-16">
@@ -23,17 +24,20 @@ export default async function ForumsPage() {
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">Forums</h1>
 
           </div>
-          <Link
-            href="/submit-article"
-            className="inline-flex w-fit rounded-xl bg-[var(--color-brand)] px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-[var(--color-brand-hover)]"
-          >
-            Start a discussion
-          </Link>
+          {session && (
+            <Link
+              href="/submit-article"
+              className="inline-flex w-fit items-center gap-2 rounded-xl bg-[var(--color-brand)] px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-[var(--color-brand-hover)]"
+            >
+              <span aria-hidden="true">+</span>
+              Start a discussion
+            </Link>
+          )}
         </div>
 
         <div className="mt-10 space-y-3">
           {articles.map((article) => (
-            <Link key={article.slug} href={`/posts/${article.slug}`} className="group block rounded-2xl">
+            <Link key={article.slug} href={`/forums/${article.slug}`} className="group block rounded-2xl">
               <Card className="p-5 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:border-[var(--color-brand-border)] group-hover:bg-[#121722] sm:p-6">
                 <div className="flex items-start gap-4">
                   <div className="grid size-11 shrink-0 place-items-center rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-brand-soft)] text-sm font-extrabold text-[var(--color-brand-light)]">

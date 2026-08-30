@@ -105,7 +105,7 @@ export function SubmitArticleForm({
               </button>
             </div>
             <div className="mt-2 flex items-center rounded-xl border border-(--color-border) bg-(--color-bg) px-4 py-3">
-              <span className="text-xs text-slate-500 font-mono">/posts/</span>
+              <span className="text-xs text-slate-500 font-mono">/forums/</span>
               <input
                 required
                 name="slug"

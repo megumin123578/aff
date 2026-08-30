@@ -77,7 +77,7 @@ export default async function Home() {
 
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <LinkButton
-                href="/posts"
+                href="/forums"
                 variant="mint"
                 size="large"
                 className="border-[#12955d] bg-[#087a4b] text-white hover:bg-[#06633d]"
@@ -135,7 +135,7 @@ export default async function Home() {
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {categories.map((cat) => (
-            <Link key={cat.title} href={`/posts?category=${encodeURIComponent(cat.tag)}`}>
+            <Link key={cat.title} href={`/forums?category=${encodeURIComponent(cat.tag)}`}>
               <Card className="h-full p-6 transition duration-200 hover:border-[var(--color-border-strong)] hover:bg-[#121722]">
                 <div className="text-3xl">{cat.icon}</div>
                 <h3 className="mt-4 text-lg font-bold text-white">{cat.title}</h3>
@@ -169,7 +169,7 @@ export default async function Home() {
           {guides.map((guide, i) => (
             <Link
               key={guide.slug}
-              href={`/posts/${guide.slug}`}
+              href={`/forums/${guide.slug}`}
               className="block h-full rounded-2xl focus:outline-none focus:ring-2 focus:ring-(--color-focus)"
             >
               <Card className="h-full p-6 transition hover:border-(--color-border-strong) hover:bg-[#121722]">
@@ -187,7 +187,7 @@ export default async function Home() {
           ))}
         </div>
         <div className="mt-10 text-center">
-          <LinkButton href="/posts">Browse all posts →</LinkButton>
+          <LinkButton href="/forums">Browse all posts →</LinkButton>
         </div>
       </section>
 
