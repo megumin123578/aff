@@ -3,7 +3,7 @@ import { Badge, Card, LinkButton } from "@/components/ui";
 
 export default function NotFound() {
   return (
-    <main className="min-h-[70vh] bg-[var(--color-bg-deep)] px-5 py-16 lg:px-8">
+    <main className="min-h-[70vh] bg-(--color-bg-deep) px-5 py-16 lg:px-8">
       <Card className="mx-auto max-w-2xl p-[clamp(24px,5vw,48px)] text-center">
         <Badge variant="default">404 Not Found</Badge>
         <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">

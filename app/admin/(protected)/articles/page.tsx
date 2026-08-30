@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { Card, LinkButton } from "@/components/ui";
 import { getAllArticles } from "@/lib/content";
-import { approveArticleAction, deleteArticleAction } from "@/app/admin/actions";
+import { deleteArticleAction } from "@/app/admin/actions";
 import { PostStatusSelect } from "@/components/admin/post-status-select";
-import { StatusToast } from "@/components/admin/status-toast";
+
 
 export default async function AdminArticlesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ saved?: string; approved?: string; updated?: string; deleted?: string; filter?: string }>;
+  searchParams: Promise<{ saved?: string; approved?: string; deleted?: string; filter?: string }>;
 }) {
   const [articles, query] = await Promise.all([getAllArticles(), searchParams]);
 
@@ -39,7 +39,6 @@ export default async function AdminArticlesPage({
         </p>
       )}
 
-      {query.updated && <StatusToast message="Post status updated successfully." />}
 
       {query.deleted && (
         <p className="rounded-xl border border-(--color-success-border) bg-(--color-success-soft) p-4 text-sm text-(--color-success-text) animate-in fade-in">
@@ -54,8 +53,8 @@ export default async function AdminArticlesPage({
           href="/admin/articles"
           className={`rounded-xl px-3.5 py-1.5 text-xs font-semibold transition ${
             currentFilter === "all"
-              ? "bg-[var(--color-brand)] text-white shadow-sm"
-              : "text-slate-400 hover:bg-[var(--color-surface-muted)] hover:text-white"
+              ? "bg-(--color-brand) text-white shadow-sm"
+              : "text-slate-400 hover:bg-(--color-surface-muted) hover:text-white"
           }`}
         >
           All ({articles.length})
@@ -76,7 +75,7 @@ export default async function AdminArticlesPage({
           className={`rounded-xl px-3.5 py-1.5 text-xs font-semibold transition ${
             currentFilter === "published"
               ? "bg-emerald-600 text-white font-bold shadow-sm"
-              : "text-slate-400 hover:bg-[var(--color-surface-muted)] hover:text-white"
+              : "text-slate-400 hover:bg-(--color-surface-muted) hover:text-white"
           }`}
         >
           Published ({publishedCount})
@@ -86,7 +85,7 @@ export default async function AdminArticlesPage({
           className={`rounded-xl px-3.5 py-1.5 text-xs font-semibold transition ${
             currentFilter === "draft"
               ? "bg-slate-700 text-white font-bold shadow-sm"
-              : "text-slate-400 hover:bg-[var(--color-surface-muted)] hover:text-white"
+              : "text-slate-400 hover:bg-(--color-surface-muted) hover:text-white"
           }`}
         >
           Drafts ({draftCount})
@@ -108,11 +107,15 @@ export default async function AdminArticlesPage({
           return (
             <Card
               key={article.slug}
-              className={`flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between transition ${
+              className={`group flex flex-col gap-4 p-5 transition hover:border-(--color-border-strong) hover:bg-(--color-surface-muted) sm:flex-row sm:items-center sm:justify-between ${
                 isPending ? "border-amber-500/40 bg-amber-950/10" : ""
               }`}
             >
-              <div className="min-w-0 flex-1 space-y-1.5">
+              <Link
+                href={`/admin/articles/${article.slug}/edit`}
+                aria-label={`Edit ${article.title}`}
+                className="min-w-0 flex-1 space-y-1.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-(--color-focus)"
+              >
                 <div className="flex flex-wrap items-center gap-2">
 
                   <span className="text-xs text-slate-400">{article.category}</span>
@@ -123,50 +126,16 @@ export default async function AdminArticlesPage({
                   )}
                 </div>
 
-                <h2 className="text-base font-bold text-white leading-snug">
+                <h2 className="text-base font-bold leading-snug text-white transition group-hover:text-(--color-brand-light)">
                   {article.title}
                 </h2>
                 <p className="text-xs text-slate-400 font-mono">
                   /{article.slug} · Updated {article.updatedAt || "—"}
                 </p>
-              </div>
+              </Link>
 
-              <div className="flex flex-wrap items-center gap-2 shrink-0">
+              <div className="flex shrink-0 flex-wrap items-center gap-2">
                 <PostStatusSelect slug={article.slug} status={article.status} />
-
-                {isPending && (
-                  <form action={approveArticleAction}>
-                    <input type="hidden" name="slug" value={article.slug} />
-                    <button
-                      type="submit"
-                      className="rounded-xl border border-emerald-500/50 bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-emerald-500"
-                    >
-                      ✓ Approve
-                    </button>
-                  </form>
-                )}
-
-                <Link
-                  href={`/admin/articles/${article.slug}/preview`}
-                  aria-label={`Preview ${article.title}`}
-                  title="Preview post"
-                  className="grid size-9 place-items-center rounded-xl border border-(--color-border) bg-(--color-surface) text-slate-300 transition hover:border-(--color-border-strong) hover:text-white focus:outline-none focus:ring-2 focus:ring-(--color-focus)"
-                >
-                  <svg aria-hidden="true" className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12s3.75-7.5 9.75-7.5S21.75 12 21.75 12 18 19.5 12 19.5 2.25 12 2.25 12Z" />
-                    <circle cx="12" cy="12" r="3" />
-                  </svg>
-                </Link>
-                <Link
-                  href={`/admin/articles/${article.slug}/edit`}
-                  aria-label={`Edit ${article.title}`}
-                  title="Edit post"
-                  className="grid size-9 place-items-center rounded-xl border border-(--color-brand-border) bg-(--color-brand) text-white transition hover:bg-(--color-brand-hover) focus:outline-none focus:ring-2 focus:ring-(--color-focus)"
-                >
-                  <svg aria-hidden="true" className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 3.487 3.651 3.651M4.5 19.5l3.169-.792a4.5 4.5 0 0 0 2.168-1.195L19.5 7.5a2.582 2.582 0 0 0-3.651-3.651L6.187 13.513a4.5 4.5 0 0 0-1.195 2.168L4.5 19.5Z" />
-                  </svg>
-                </Link>
                 <form action={deleteArticleAction}>
                   <input type="hidden" name="slug" value={article.slug} />
                   <button

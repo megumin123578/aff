@@ -14,7 +14,7 @@ export default async function AdminLoginPage({
   const query = await searchParams;
 
   return (
-    <main className="grid min-h-[75vh] place-items-center bg-[var(--color-bg-deep)] px-5 py-16">
+    <main className="grid min-h-[75vh] place-items-center bg-(--color-bg-deep) px-5 py-16">
       <Card className="w-full max-w-md p-8 text-center shadow-2xl">
         <Badge variant="azure">Neroviax CMS</Badge>
         <h1 className="mt-4 text-2xl font-bold text-white">Welcome back</h1>

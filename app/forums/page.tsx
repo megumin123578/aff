@@ -16,7 +16,7 @@ export default async function ForumsPage() {
   const [articles, session] = await Promise.all([getPublishedArticles(), getAuthSession()]);
 
   return (
-    <main className="min-h-[70vh] bg-[var(--color-bg-deep)] px-5 py-12 lg:px-8 lg:py-16">
+    <main className="min-h-[70vh] bg-(--color-bg-deep) px-5 py-12 lg:px-8 lg:py-16">
       <div className="mx-auto w-full max-w-6xl">
 
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -27,7 +27,7 @@ export default async function ForumsPage() {
           {session && (
             <Link
               href="/submit-article"
-              className="inline-flex w-fit items-center gap-2 rounded-xl bg-[var(--color-brand)] px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-[var(--color-brand-hover)]"
+              className="inline-flex w-fit items-center gap-2 rounded-xl bg-(--color-brand) px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-(--color-brand-hover)"
             >
               <span aria-hidden="true">+</span>
               Start a discussion
@@ -38,25 +38,25 @@ export default async function ForumsPage() {
         <div className="mt-10 space-y-3">
           {articles.map((article) => (
             <Link key={article.slug} href={`/forums/${article.slug}`} className="group block rounded-2xl">
-              <Card className="p-5 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:border-[var(--color-brand-border)] group-hover:bg-[#121722] sm:p-6">
+              <Card className="p-5 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:border-(--color-brand-border) group-hover:bg-[#121722] sm:p-6">
                 <div className="flex items-start gap-4">
-                  <div className="grid size-11 shrink-0 place-items-center rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-brand-soft)] text-sm font-extrabold text-[var(--color-brand-light)]">
+                  <div className="grid size-11 shrink-0 place-items-center rounded-xl border border-(--color-brand-border) bg-(--color-brand-soft) text-sm font-extrabold text-(--color-brand-light)">
                     {(article.authorName || "N").slice(0, 1).toUpperCase()}
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500">
-                      <span className="font-semibold text-[var(--color-brand-light)]">{article.category}</span>
+                      <span className="font-semibold text-(--color-brand-light)">{article.category}</span>
                       <span>{article.authorName || "Neroviax Editorial"}</span>
                       <span>{article.publishedAt}</span>
                     </div>
-                    <h2 className="mt-2 text-lg font-bold leading-snug text-white transition-colors group-hover:text-[var(--color-brand-light)] sm:text-xl">
+                    <h2 className="mt-2 text-lg font-bold leading-snug text-white transition-colors group-hover:text-(--color-brand-light) sm:text-xl">
                       {article.title}
                     </h2>
                     <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-400">
                       {article.description}
                     </p>
                   </div>
-                  <span aria-hidden="true" className="hidden self-center text-xl text-slate-600 transition-all group-hover:translate-x-1 group-hover:text-[var(--color-brand-light)] sm:block">→</span>
+                  <span aria-hidden="true" className="hidden self-center text-xl text-slate-600 transition-all group-hover:translate-x-1 group-hover:text-(--color-brand-light) sm:block">→</span>
                 </div>
               </Card>
             </Link>

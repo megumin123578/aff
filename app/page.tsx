@@ -94,7 +94,7 @@ export default async function Home() {
 
           {/* Option 1: Code Block UI preview for desk-setup.json */}
           <div className="w-full">
-            <Card className="overflow-hidden border-[#2d3541] bg-[#0d1119] p-0 shadow-[0_24px_60px_rgb(0_0_0_/_0.28)]">
+            <Card className="overflow-hidden border-[#2d3541] bg-[#0d1119] p-0 shadow-[0_24px_60px_rgb(0_0_0/0.28)]">
               <div className="flex items-center justify-between border-b border-[#28303b] px-4 py-4 sm:px-5">
                 <div className="flex items-center gap-2" aria-hidden="true">
                   <span className="size-2.5 rounded-full bg-[#e06666]" />
@@ -136,13 +136,13 @@ export default async function Home() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {categories.map((cat) => (
             <Link key={cat.title} href={`/forums?category=${encodeURIComponent(cat.tag)}`}>
-              <Card className="h-full p-6 transition duration-200 hover:border-[var(--color-border-strong)] hover:bg-[#121722]">
+              <Card className="h-full p-6 transition duration-200 hover:border-(--color-border-strong) hover:bg-[#121722]">
                 <div className="text-3xl">{cat.icon}</div>
                 <h3 className="mt-4 text-lg font-bold text-white">{cat.title}</h3>
                 <p className="mt-2 text-xs leading-relaxed text-slate-400">
                   {cat.description}
                 </p>
-                <p className="mt-4 font-mono text-xs font-semibold text-[var(--color-brand-light)]">
+                <p className="mt-4 font-mono text-xs font-semibold text-(--color-brand-light)">
                   Browse category →
                 </p>
               </Card>
@@ -192,7 +192,7 @@ export default async function Home() {
       </section>
 
       {/* Methodology Section */}
-      <section id="method" className="border-y border-(--color-border) bg-[var(--color-surface)]">
+      <section id="method" className="border-y border-(--color-border) bg-(--color-surface)">
         <div className="w-full px-5 py-20 lg:px-8">
           <Badge variant="azure">Our Philosophy</Badge>
           <h2 className="mt-3 max-w-3xl text-3xl font-extrabold tracking-tight text-white leading-snug">

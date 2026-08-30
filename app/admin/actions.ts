@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { clearAdminSession, requireAdminSession } from "@/lib/admin-auth";
+import { clearAdminSession, getAdminSession, requireAdminSession } from "@/lib/admin-auth";
 import {
   approveArticle,
   deleteArticle,
@@ -81,7 +81,8 @@ export async function approveArticleAction(formData: FormData) {
 }
 
 export async function updateArticleStatusAction(formData: FormData) {
-  await requireAdminSession();
+  const session = await getAdminSession();
+  if (!session) redirect("/admin/login");
   const slug = text(formData, "slug");
   const rawStatus = text(formData, "status");
   if (!validSlug(slug)) throw new Error("Invalid post slug");
@@ -95,7 +96,7 @@ export async function updateArticleStatusAction(formData: FormData) {
   revalidatePath(`/forums/${slug}`);
   revalidatePath("/sitemap.xml");
   revalidatePath("/admin/articles");
-  redirect("/admin/articles?updated=1");
+  redirect("/admin/articles");
 }
 
 export async function deleteArticleAction(formData: FormData) {

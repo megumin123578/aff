@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
+
+const emptySubscribe = () => () => {};
 
 const navItems = [
   {
@@ -53,9 +55,15 @@ const navItems = [
   },
 ];
 
-export function AdminSidebar() {
+type AdminSidebarProps = {
+  desktopOpen: boolean;
+  onDesktopOpenChange: (open: boolean) => void;
+};
+
+export function AdminSidebar({ desktopOpen, onDesktopOpenChange }: AdminSidebarProps) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
 
   // Normalize pathname to prevent hydration mismatch from leading double slashes or trailing slashes
   const normalizedPathname = pathname ? pathname.replace(/\/+/g, "/").replace(/\/$/, "") || "/" : "";
@@ -73,24 +81,25 @@ export function AdminSidebar() {
         {/* Logo / Brand Header */}
         <div className="flex items-center justify-between border-b border-(--color-border) px-4 py-4">
           <Link href="/admin" className="flex items-center gap-2.5">
-            <span className="flex size-8 items-center justify-center rounded-lg bg-[var(--color-brand)] text-sm font-black text-white shadow-sm">
+            <span className="flex size-8 items-center justify-center rounded-lg bg-(--color-brand) text-sm font-black text-white shadow-sm">
               N
             </span>
             <div>
               <span className="block text-sm font-bold text-white leading-tight">Neroviax</span>
-              <span className="block text-[10px] font-semibold text-[var(--color-brand-light)] uppercase tracking-wider">Admin CMS</span>
+              <span className="block text-[10px] font-semibold text-(--color-brand-light) uppercase tracking-wider">Admin CMS</span>
             </div>
           </Link>
-          <Link
-            href="/"
-            target="_blank"
-            title="View live website"
-            className="flex size-7 items-center justify-center rounded-lg border border-(--color-border) bg-[var(--color-surface-muted)] text-slate-400 transition hover:border-[var(--color-border-strong)] hover:text-white"
+          <button
+            type="button"
+            onClick={() => onDesktopOpenChange(false)}
+            aria-label="Collapse sidebar"
+            title="Collapse sidebar"
+            className="hidden size-8 items-center justify-center text-slate-400 transition-[color,transform] duration-300 hover:rotate-90 hover:text-white md:flex"
           >
-            <svg className="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+            <svg aria-hidden="true" className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
-          </Link>
+          </button>
         </div>
 
         {/* Navigation items */}
@@ -104,8 +113,8 @@ export function AdminSidebar() {
                 onClick={() => setMobileOpen(false)}
                 className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition ${
                   active
-                    ? "bg-[var(--color-brand)] text-white shadow-sm font-bold"
-                    : "text-slate-300 hover:bg-[var(--color-surface-muted)] hover:text-white"
+                    ? "bg-(--color-brand) text-white shadow-sm font-bold"
+                    : "text-slate-300 hover:bg-(--color-surface-muted) hover:text-white"
                 }`}
               >
                 <span className="shrink-0">
@@ -128,9 +137,9 @@ export function AdminSidebar() {
   return (
     <>
       {/* Mobile Top bar */}
-      <div className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-(--color-border) bg-[var(--color-surface)] px-4 md:hidden">
+      <div className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-(--color-border) bg-(--color-surface) px-4 md:hidden">
         <Link href="/admin" className="flex items-center gap-2 font-bold text-white text-sm">
-          <span className="flex size-7 items-center justify-center rounded-lg bg-[var(--color-brand)] text-xs font-black text-white">N</span>
+          <span className="flex size-7 items-center justify-center rounded-lg bg-(--color-brand) text-xs font-black text-white">N</span>
           <span>Neroviax Admin</span>
         </Link>
         <button
@@ -159,17 +168,66 @@ export function AdminSidebar() {
 
       {/* Mobile Drawer */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 transform border-r border-(--color-border) bg-[var(--color-surface)] transition-transform duration-200 ease-in-out md:hidden ${
+        className={`fixed bottom-0 left-0 top-18 z-50 w-64 transform border-r border-(--color-border) transition-transform duration-200 ease-in-out md:hidden ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
+        style={{ backgroundColor: "#151a22" }}
       >
         {renderNavContent()}
+        {mounted && (
+          <button
+            type="button"
+            onClick={() => setMobileOpen(false)}
+            aria-label="Close navigation"
+            title="Close sidebar"
+            className="absolute right-3 top-4 flex size-8 items-center justify-center rounded-lg border border-(--color-border) bg-(--color-surface-muted) text-slate-300 shadow-sm transition hover:border-(--color-border-strong) hover:text-white"
+          >
+            <svg aria-hidden="true" className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          </button>
+        )}
       </aside>
 
       {/* Desktop Fixed Sidebar */}
-      <aside className="hidden md:flex md:w-60 lg:w-64 md:shrink-0 md:flex-col md:fixed md:inset-y-0 border-r border-(--color-border) bg-[var(--color-surface)]">
-        {renderNavContent()}
+      <aside
+        aria-hidden={!desktopOpen}
+        className={`sticky top-18 z-40 hidden h-[calc(100dvh-4.5rem)] shrink-0 overflow-hidden border-r transition-[width,flex-basis,opacity,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:flex ${
+          desktopOpen
+            ? "border-(--color-border) opacity-100"
+            : "pointer-events-none border-transparent opacity-0"
+        }`}
+        style={{
+          backgroundColor: "#151a22",
+          width: desktopOpen ? "16rem" : "0rem",
+          flexBasis: desktopOpen ? "16rem" : "0rem",
+        }}
+      >
+        <div
+          className={`h-full w-64 shrink-0 transition-[transform,opacity] duration-300 ease-out ${
+            desktopOpen ? "translate-x-0 opacity-100 delay-100" : "-translate-x-8 opacity-0"
+          }`}
+        >
+          {renderNavContent()}
+        </div>
       </aside>
+
+      <button
+        type="button"
+        onClick={() => onDesktopOpenChange(true)}
+        aria-label="Open sidebar"
+        title="Open sidebar"
+        tabIndex={desktopOpen ? -1 : 0}
+        className={`fixed left-4 top-22 z-40 hidden size-9 items-center justify-center text-slate-400 transition-[opacity,transform,color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:rotate-90 hover:text-white md:flex ${
+          desktopOpen
+            ? "pointer-events-none -translate-x-3 scale-90 opacity-0"
+            : "translate-x-0 scale-100 opacity-100 delay-100"
+        }`}
+      >
+        <svg aria-hidden="true" className="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+      </button>
     </>
   );
 }

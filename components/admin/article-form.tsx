@@ -1,7 +1,7 @@
 import { saveArticleAction } from "@/app/admin/actions";
 import type { AffiliateLink, Article } from "@/lib/content";
 
-const fieldClass = "mt-2 w-full rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-4 py-3 text-sm text-white outline-none focus:border-[var(--color-brand-border)]";
+const fieldClass = "mt-2 w-full rounded-xl border border-(--color-border) bg-(--color-bg) px-4 py-3 text-sm text-white outline-none focus:border-(--color-brand-border)";
 const labelClass = "block text-xs font-semibold uppercase tracking-wider text-slate-300";
 
 export function ArticleForm({ article, affiliateLinks }: { article?: Article; affiliateLinks: AffiliateLink[] }) {
@@ -24,7 +24,7 @@ export function ArticleForm({ article, affiliateLinks }: { article?: Article; af
         <label className={labelClass}>Published date<input type="date" name="publishedAt" defaultValue={article?.publishedAt} className={fieldClass} /></label>
         <label className={`${labelClass} sm:col-span-2`}>Cover image URL<input type="url" name="coverImage" defaultValue={article?.coverImage} className={fieldClass} /></label>
         {article?.authorName && (
-          <div className="sm:col-span-2 rounded-xl border border-(--color-border) bg-[var(--color-surface)] p-3 text-xs text-slate-300">
+          <div className="sm:col-span-2 rounded-xl border border-(--color-border) bg-(--color-surface) p-3 text-xs text-slate-300">
             <span>Submitted by: <strong className="text-white">{article.authorName}</strong> ({article.authorEmail || "No email"})</span>
             <input type="hidden" name="authorName" value={article.authorName} />
             <input type="hidden" name="authorEmail" value={article.authorEmail || ""} />
@@ -38,7 +38,7 @@ export function ArticleForm({ article, affiliateLinks }: { article?: Article; af
         <div className="mt-2 grid gap-3 sm:grid-cols-2">
           {affiliateLinks.map((link) => (
             <label key={link.id} className="flex items-start gap-3 text-sm text-slate-300">
-              <input type="checkbox" name="affiliateIds" value={link.id} defaultChecked={article?.affiliateIds.includes(link.id)} className="mt-1 accent-[var(--color-brand)]" />
+              <input type="checkbox" name="affiliateIds" value={link.id} defaultChecked={article?.affiliateIds.includes(link.id)} className="mt-1 accent-(--color-brand)" />
               <span><strong className="text-white">{link.provider}</strong><br /><code className="text-xs text-slate-500">{`{{affiliate:${link.id}|Button label}}`}</code></span>
             </label>
           ))}
@@ -47,8 +47,8 @@ export function ArticleForm({ article, affiliateLinks }: { article?: Article; af
 
       <label className={labelClass}>Markdown body<textarea required name="body" defaultValue={article?.body} rows={24} className={`${fieldClass} font-mono leading-6`} /></label>
       <div className="flex flex-wrap gap-3">
-        <button className="rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-brand)] px-5 py-3 text-sm font-bold text-white hover:bg-[var(--color-brand-hover)]">Save post</button>
-        {article && <a href={`/admin/articles/${article.slug}/preview`} className="rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-action)] px-5 py-3 text-sm font-bold text-white">Preview current post</a>}
+        <button className="rounded-xl border border-(--color-brand-border) bg-(--color-brand) px-5 py-3 text-sm font-bold text-white hover:bg-(--color-brand-hover)">Save post</button>
+        {article && <a href={`/admin/articles/${article.slug}/preview`} className="rounded-xl border border-(--color-border-strong) bg-(--color-action) px-5 py-3 text-sm font-bold text-white">Preview current post</a>}
       </div>
     </form>
   );

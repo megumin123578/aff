@@ -22,7 +22,7 @@ export default async function SubmitArticlePage({
   const userArticles = session?.email ? await getArticlesByAuthorEmail(session.email) : [];
 
   return (
-    <main className="min-h-[70vh] bg-[var(--color-bg-deep)] px-5 py-12 lg:px-8">
+    <main className="min-h-[70vh] bg-(--color-bg-deep) px-5 py-12 lg:px-8">
       <div className="mx-auto max-w-4xl space-y-8">
         <Breadcrumbs
           items={[
@@ -55,7 +55,7 @@ export default async function SubmitArticlePage({
             <div className="mt-6 flex justify-center">
               <a
                 href="/api/auth/google"
-                className="inline-flex items-center gap-3 rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-brand)] px-6 py-3.5 text-sm font-bold text-white shadow-lg transition hover:bg-[var(--color-brand-hover)]"
+                className="inline-flex items-center gap-3 rounded-xl border border-(--color-brand-border) bg-(--color-brand) px-6 py-3.5 text-sm font-bold text-white shadow-lg transition hover:bg-(--color-brand-hover)"
               >
                 <svg className="size-5" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -102,7 +102,7 @@ export default async function SubmitArticlePage({
                       {art.status === "published" ? (
                         <Link
                           href={`/forums/${art.slug}`}
-                          className="rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-brand-soft)] px-4 py-2 text-xs font-bold text-white transition hover:bg-[var(--color-brand)]"
+                          className="rounded-xl border border-(--color-brand-border) bg-(--color-brand-soft) px-4 py-2 text-xs font-bold text-white transition hover:bg-(--color-brand)"
                         >
                           View Live Article →
                         </Link>

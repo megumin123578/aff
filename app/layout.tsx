@@ -60,23 +60,23 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           />
         ) : null}
       </head>
-      <body className="bg-[var(--color-bg)] text-[var(--color-text)] antialiased">
+      <body className="bg-(--color-bg) text-(--color-text) antialiased">
         <AnalyticsPageView />
         <div className="min-h-dvh w-full">
-          <header className="sticky top-0 z-50 border-b border-white/[0.08] bg-[var(--color-header)]/95 shadow-[0_8px_30px_rgba(0,0,0,0.16)] backdrop-blur-xl">
-            <div className="flex h-[4.5rem] w-full items-center gap-3 px-4 sm:px-5 lg:gap-5 lg:px-8">
-              <Link href="/" className="flex shrink-0 items-center gap-2.5 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-focus)]">
+          <header className="sticky top-0 z-50 border-b border-white/8 bg-(--color-header)/95 shadow-[0_8px_30px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+            <div className="flex h-18 w-full items-center gap-3 px-4 sm:px-5 lg:gap-5 lg:px-8">
+              <Link href="/" className="flex shrink-0 items-center gap-2.5 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-(--color-focus)">
                 <Image src="/favicon.ico?v=20260815" alt="" width={32} height={32} priority unoptimized className="size-8 rounded-xl shadow-sm" />
                 <span className="text-xl font-bold tracking-tight text-white">
                   Neroviax
                 </span>
               </Link>
-              <nav aria-label="Primary navigation" className="ml-3 hidden min-w-0 flex-1 items-center gap-1 overflow-x-auto text-sm font-semibold text-slate-300 [scrollbar-width:none] md:flex lg:ml-5 lg:gap-2 xl:justify-center [&::-webkit-scrollbar]:hidden">
+              <nav aria-label="Primary navigation" className="ml-3 hidden min-w-0 flex-1 items-center gap-1 overflow-x-auto text-sm font-semibold text-slate-300 scrollbar-none md:flex lg:ml-5 lg:gap-2 xl:justify-center [&::-webkit-scrollbar]:hidden">
                 {primaryNavigation.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="relative whitespace-nowrap rounded-lg px-3 py-2 transition-all duration-200 after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:origin-center after:scale-x-0 after:rounded-full after:bg-[var(--color-brand-light)] after:transition-transform after:duration-200 hover:-translate-y-0.5 hover:bg-[var(--color-brand)] hover:text-white hover:shadow-[0_6px_18px_rgba(59,130,246,0.24)] hover:after:scale-x-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-focus)]"
+                    className="relative whitespace-nowrap rounded-lg px-3 py-2 transition-all duration-200 after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:origin-center after:scale-x-0 after:rounded-full after:bg-(--color-brand-light) after:transition-transform after:duration-200 hover:-translate-y-0.5 hover:bg-(--color-brand) hover:text-white hover:shadow-[0_6px_18px_rgba(59,130,246,0.24)] hover:after:scale-x-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-focus)"
                   >
                     {item.label}
                   </Link>
@@ -86,7 +86,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               <div className="ml-auto flex shrink-0 items-center gap-2 lg:gap-3">
                 <form action="/search" method="get" className="hidden xl:block">
                   <label className="sr-only" htmlFor="header-search">Search</label>
-                  <input id="header-search" name="q" minLength={2} placeholder="Search gear, posts…" className="w-36 rounded-lg border border-(--color-border) bg-[var(--color-bg)] px-3 py-2 text-xs text-white outline-none focus:w-48 focus:border-[var(--color-brand-border)]" />
+                  <input id="header-search" name="q" minLength={2} placeholder="Search gear, posts…" className="w-36 rounded-lg border border-(--color-border) bg-(--color-bg) px-3 py-2 text-xs text-white outline-none focus:w-48 focus:border-(--color-brand-border)" />
                 </form>
 
 
@@ -94,38 +94,38 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                 <UserAvatarDropdown session={session} />
 
                 <details className="group relative md:hidden">
-                  <summary className="grid size-10 cursor-pointer list-none place-items-center rounded-xl border border-(--color-border) bg-[var(--color-surface)] text-white [&::-webkit-details-marker]:hidden">
+                  <summary className="grid size-10 cursor-pointer list-none place-items-center rounded-xl border border-(--color-border) bg-(--color-surface) text-white [&::-webkit-details-marker]:hidden">
                     <span className="sr-only">Open navigation menu</span>
                     <span aria-hidden="true" className="text-xl leading-none group-open:hidden">☰</span>
                     <span aria-hidden="true" className="hidden text-xl leading-none group-open:inline">×</span>
                   </summary>
                   <nav
                     aria-label="Mobile navigation"
-                    className="absolute right-0 top-12 w-64 rounded-2xl border border-(--color-border) bg-[var(--color-surface)] p-2 shadow-[var(--shadow-card)]"
+                    className="absolute right-0 top-12 w-64 rounded-2xl border border-(--color-border) bg-(--color-surface) p-2 shadow-(--shadow-card)"
                   >
                     {session && (
-                      <Link href="/submit-article" className="block rounded-xl bg-[var(--color-brand)] px-4 py-3 text-sm font-bold text-white hover:bg-[var(--color-brand-hover)]">Submit</Link>
+                      <Link href="/submit-article" className="block rounded-xl bg-(--color-brand) px-4 py-3 text-sm font-bold text-white hover:bg-(--color-brand-hover)">Submit</Link>
                     )}
                     {primaryNavigation.map((item) => (
-                      <Link key={item.href} href={item.href} className="group flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-slate-200 transition-all duration-200 hover:translate-x-1 hover:bg-[var(--color-surface-muted)] hover:text-white">
+                      <Link key={item.href} href={item.href} className="group flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-slate-200 transition-all duration-200 hover:translate-x-1 hover:bg-(--color-surface-muted) hover:text-white">
                         {item.label}
-                        <span aria-hidden="true" className="text-[var(--color-brand-light)] opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:opacity-100">→</span>
+                        <span aria-hidden="true" className="text-(--color-brand-light) opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:opacity-100">→</span>
                       </Link>
                     ))}
                     {session ? (
                       session.role === "admin" ? (
                         <Link
                           href="/admin"
-                          className="flex items-center gap-2.5 rounded-xl px-4 py-3 text-sm font-medium text-slate-200 hover:bg-[var(--color-surface-muted)]"
+                          className="flex items-center gap-2.5 rounded-xl px-4 py-3 text-sm font-medium text-slate-200 hover:bg-(--color-surface-muted)"
                         >
-                          <div className="flex size-6 items-center justify-center rounded-full bg-[var(--color-brand-soft)] border border-[var(--color-brand-border)]">
+                          <div className="flex size-6 items-center justify-center rounded-full bg-(--color-brand-soft) border border-(--color-brand-border)">
                             <AvatarDisplay avatar={session.avatar} username={session.username} className="size-5" />
                           </div>
                           <span>Admin Dashboard</span>
                         </Link>
                       ) : (
                         <div className="flex items-center gap-2.5 rounded-xl px-4 py-3 text-sm font-medium text-slate-300">
-                          <div className="flex size-6 items-center justify-center rounded-full bg-[var(--color-brand-soft)] border border-[var(--color-brand-border)]">
+                          <div className="flex size-6 items-center justify-center rounded-full bg-(--color-brand-soft) border border-(--color-brand-border)">
                             <AvatarDisplay avatar={session.avatar} username={session.username} className="size-5" />
                           </div>
                           <span className="truncate">{session.name || session.username}</span>
@@ -134,15 +134,15 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                     ) : (
                       <Link
                         href="/admin/login"
-                        className="flex items-center gap-2.5 rounded-xl px-4 py-3 text-sm font-medium text-slate-200 hover:bg-[var(--color-surface-muted)]"
+                        className="flex items-center gap-2.5 rounded-xl px-4 py-3 text-sm font-medium text-slate-200 hover:bg-(--color-surface-muted)"
                       >
-                        <svg className="size-4 text-[var(--color-brand-light)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <svg className="size-4 text-(--color-brand-light)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
                         </svg>
                         <span>Sign in</span>
                       </Link>
                     )}
-                    <form action="/search" method="get" className="p-2"><input name="q" minLength={2} placeholder="Search gear, posts…" className="w-full rounded-lg border border-(--color-border) bg-[var(--color-bg)] px-3 py-2 text-sm text-white" /></form>
+                    <form action="/search" method="get" className="p-2"><input name="q" minLength={2} placeholder="Search gear, posts…" className="w-full rounded-lg border border-(--color-border) bg-(--color-bg) px-3 py-2 text-sm text-white" /></form>
                   </nav>
                 </details>
               </div>
@@ -151,7 +151,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
           {children}
 
-          <footer className="border-t border-(--color-border) bg-[var(--color-footer)] px-5 py-10 text-center text-sm text-slate-400">
+          <footer className="border-t border-(--color-border) bg-(--color-footer) px-5 py-10 text-center text-sm text-slate-400">
             <div className="flex w-full flex-col items-center justify-between gap-4 sm:flex-row">
               <div className="flex items-center gap-2">
                 <span className="font-semibold text-white">Neroviax</span>

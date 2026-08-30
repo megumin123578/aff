@@ -6,7 +6,7 @@ import { registerAdminAction, type RegisterState } from "@/app/admin/register/ac
 
 const initialState: RegisterState = { error: "", success: "", username: "", email: "" };
 const inputClass =
-  "mt-2 w-full rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-4 py-3 text-sm text-white outline-none focus:border-[var(--color-brand-border)]";
+  "mt-2 w-full rounded-xl border border-(--color-border) bg-(--color-bg) px-4 py-3 text-sm text-white outline-none focus:border-(--color-brand-border)";
 
 export function RegisterForm() {
   const [state, action, pending] = useActionState(registerAdminAction, initialState);
@@ -16,7 +16,7 @@ export function RegisterForm() {
       {/* Google Sign-in Button */}
       <a
         href="/api/auth/google"
-        className="flex w-full items-center justify-center gap-3 rounded-xl border border-(--color-border) bg-[var(--color-surface-raised)] px-5 py-3 text-sm font-semibold text-white transition hover:border-[var(--color-brand-border)] hover:bg-[var(--color-surface-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-focus)]"
+        className="flex w-full items-center justify-center gap-3 rounded-xl border border-(--color-border) bg-(--color-surface-raised) px-5 py-3 text-sm font-semibold text-white transition hover:border-(--color-brand-border) hover:bg-(--color-surface-muted) focus:outline-none focus:ring-2 focus:ring-(--color-focus)"
       >
         <svg className="size-5" viewBox="0 0 24 24">
           <path
@@ -42,7 +42,7 @@ export function RegisterForm() {
       {/* Divider */}
       <div className="relative my-6 flex items-center justify-center">
         <div className="w-full border-t border-(--color-border)" />
-        <span className="absolute bg-[var(--color-surface)] px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+        <span className="absolute bg-(--color-surface) px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
           or register with credentials
         </span>
       </div>
@@ -99,7 +99,7 @@ export function RegisterForm() {
         {state.error && (
           <p
             role="alert"
-            className="rounded-xl border border-[var(--color-danger-border)] bg-[var(--color-danger-soft)] p-3 text-xs text-[var(--color-danger-text)] animate-in fade-in"
+            className="rounded-xl border border-(--color-danger-border) bg-(--color-danger-soft) p-3 text-xs text-(--color-danger-text) animate-in fade-in"
           >
             {state.error}
           </p>
@@ -118,13 +118,13 @@ export function RegisterForm() {
           <button
             type="submit"
             disabled={pending}
-            className="w-full rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-brand)] px-5 py-3 text-sm font-bold text-white hover:bg-[var(--color-brand-hover)] disabled:cursor-wait disabled:opacity-60 shadow-sm"
+            className="w-full rounded-xl border border-(--color-brand-border) bg-(--color-brand) px-5 py-3 text-sm font-bold text-white hover:bg-(--color-brand-hover) disabled:cursor-wait disabled:opacity-60 shadow-sm"
           >
             {pending ? "Creating account…" : "Sign up →"}
           </button>
           <Link
             href="/admin/login"
-            className="flex w-full items-center justify-center rounded-xl border border-(--color-border) bg-[var(--color-surface)] px-5 py-3 text-sm font-semibold text-slate-300 transition hover:border-[var(--color-border-strong)] hover:bg-[var(--color-surface-muted)] hover:text-white"
+            className="flex w-full items-center justify-center rounded-xl border border-(--color-border) bg-(--color-surface) px-5 py-3 text-sm font-semibold text-slate-300 transition hover:border-(--color-border-strong) hover:bg-(--color-surface-muted) hover:text-white"
           >
             Already have an account? Sign in
           </Link>

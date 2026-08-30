@@ -69,6 +69,15 @@ a {
   outline-offset: 3px;
 }
 
+select {
+  color-scheme: dark;
+}
+
+option {
+  background-color: var(--color-surface, #1e222a);
+  color: var(--color-text, #f2f3f7);
+}
+
 ::selection {
   background: var(--color-brand);
   color: white;

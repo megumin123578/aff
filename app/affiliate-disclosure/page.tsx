@@ -15,14 +15,14 @@ export default async function AffiliateDisclosurePage({
 }) {
   const { link } = await searchParams;
   return (
-    <main className="min-h-[70vh] bg-[var(--color-bg-deep)] px-5 py-16 lg:px-8">
+    <main className="min-h-[70vh] bg-(--color-bg-deep) px-5 py-16 lg:px-8">
       <Card className="mx-auto max-w-3xl p-[clamp(24px,5vw,48px)]">
         <Badge variant="azure">Transparency</Badge>
         <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
           Affiliate disclosure
         </h1>
         {link && (
-          <p className="mt-5 rounded-xl border border-[var(--color-warning-border)] bg-[var(--color-warning-soft)] p-4 text-sm text-[var(--color-warning-text)]">
+          <p className="mt-5 rounded-xl border border-(--color-warning-border) bg-(--color-warning-soft) p-4 text-sm text-(--color-warning-text)">
             That outbound product link is currently unavailable. No redirect was performed.
           </p>
         )}
@@ -42,7 +42,7 @@ export default async function AffiliateDisclosurePage({
         </div>
         <Link
           href="/forums"
-          className="mt-8 inline-flex rounded-xl border border-[var(--color-brand-border)] bg-[var(--color-brand)] px-4 py-3 text-sm font-bold text-white hover:bg-[var(--color-brand-hover)]"
+          className="mt-8 inline-flex rounded-xl border border-(--color-brand-border) bg-(--color-brand) px-4 py-3 text-sm font-bold text-white hover:bg-(--color-brand-hover)"
         >
           Explore Our Posts →
         </Link>

@@ -17,7 +17,7 @@ const CATEGORIES = [
 ];
 
 const inputClass =
-  "mt-2 w-full rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-4 py-3 text-sm text-white outline-none focus:border-[var(--color-brand-border)]";
+  "mt-2 w-full rounded-xl border border-(--color-border) bg-(--color-bg) px-4 py-3 text-sm text-white outline-none focus:border-(--color-brand-border)";
 
 export function SubmitArticleForm({
   session,

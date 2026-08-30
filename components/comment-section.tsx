@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge, Card, Button } from "@/components/ui";
 import { AvatarDisplay } from "@/components/avatar-display";
 
@@ -47,19 +47,23 @@ const sampleCommentsBySlug: Record<string, LocalComment[]> = {
 };
 
 export function CommentSection({ slug, title, session }: CommentSectionProps) {
-  const [comments, setComments] = useState<LocalComment[]>(() => {
-    if (typeof window === "undefined") return sampleCommentsBySlug.default;
-    try {
-      const saved = localStorage.getItem(`comments_${slug}`);
-      if (saved) return JSON.parse(saved);
-    } catch {
-      // fallback
-    }
-    return sampleCommentsBySlug.default;
-  });
+  const [comments, setComments] = useState<LocalComment[]>(sampleCommentsBySlug.default);
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    const timeout = window.setTimeout(() => {
+      try {
+        const saved = localStorage.getItem(`comments_${slug}`);
+        if (saved) setComments(JSON.parse(saved));
+      } catch {
+        // Keep the server-rendered fallback comments.
+      }
+    }, 0);
+
+    return () => window.clearTimeout(timeout);
+  }, [slug]);
 
   const authorDisplayName = session?.name || session?.username || "";
   const authorAvatar = session?.avatar || "";
@@ -118,7 +122,7 @@ export function CommentSection({ slug, title, session }: CommentSectionProps) {
           /* Logged In User Header */
           <div className="mb-4 flex items-center justify-between border-b border-(--color-border) pb-3.5">
             <div className="flex items-center gap-3">
-              <div className="flex size-9 items-center justify-center rounded-full border border-[var(--color-brand-border)] bg-[var(--color-brand-soft)] overflow-hidden">
+              <div className="flex size-9 items-center justify-center rounded-full border border-(--color-brand-border) bg-(--color-brand-soft) overflow-hidden">
                 <AvatarDisplay avatar={session.avatar} username={session.username} className="size-8" />
               </div>
               <div>
@@ -127,7 +131,7 @@ export function CommentSection({ slug, title, session }: CommentSectionProps) {
                 </span>
                 <span className="text-[11px] text-slate-400">
                   {session.role === "admin" ? (
-                    <span className="font-semibold text-[var(--color-brand-light)]">Administrator</span>
+                    <span className="font-semibold text-(--color-brand-light)">Administrator</span>
                   ) : (
                     <span className="font-semibold text-emerald-400">Community Member</span>
                   )}
@@ -138,16 +142,16 @@ export function CommentSection({ slug, title, session }: CommentSectionProps) {
           </div>
         ) : (
           /* Not Logged In Prompt */
-          <div className="mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-(--color-border) bg-[var(--color-surface)] p-3.5">
+          <div className="mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-(--color-border) bg-(--color-surface) p-3.5">
             <div className="flex items-center gap-2.5">
-              <svg className="size-5 text-[var(--color-brand-light)] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="size-5 text-(--color-brand-light) shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
               <span className="text-xs text-slate-300">Sign in with Google to post comments with your profile avatar:</span>
             </div>
             <a
               href="/api/auth/google"
-              className="inline-flex items-center justify-center gap-2 shrink-0 rounded-lg border border-[var(--color-border-strong)] bg-[var(--color-surface-raised)] px-3.5 py-1.5 text-xs font-bold text-white transition hover:border-[var(--color-brand-border)] hover:bg-[var(--color-surface-muted)]"
+              className="inline-flex items-center justify-center gap-2 shrink-0 rounded-lg border border-(--color-border-strong) bg-(--color-surface-raised) px-3.5 py-1.5 text-xs font-bold text-white transition hover:border-(--color-brand-border) hover:bg-(--color-surface-muted)"
             >
               <svg className="size-4" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -173,7 +177,7 @@ export function CommentSection({ slug, title, session }: CommentSectionProps) {
                 placeholder="Ask about hardware compatibility, keyboard switches, desk setup cable routing, or share your thoughts..."
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-                className="mt-2 w-full rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-4 py-3 text-sm text-white outline-none focus:border-[var(--color-brand-border)]"
+                className="mt-2 w-full rounded-xl border border-(--color-border) bg-(--color-bg) px-4 py-3 text-sm text-white outline-none focus:border-(--color-brand-border)"
               />
             </div>
 
@@ -211,13 +215,13 @@ export function CommentSection({ slug, title, session }: CommentSectionProps) {
             key={item.id}
             className={`p-5 transition ${
               item.isAuthor
-                ? "border-[var(--color-brand-border)] bg-[#101726]"
-                : "border-(--color-border) bg-[var(--color-surface)]"
+                ? "border-(--color-brand-border) bg-[#101726]"
+                : "border-(--color-border) bg-(--color-surface)"
             }`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-(--color-border) bg-[var(--color-surface-muted)] overflow-hidden">
+                <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-(--color-border) bg-(--color-surface-muted) overflow-hidden">
                   <AvatarDisplay avatar={item.avatar} username={item.author} className="size-8" />
                 </div>
                 <div>
@@ -226,11 +230,11 @@ export function CommentSection({ slug, title, session }: CommentSectionProps) {
                       {item.author}
                     </span>
                     {item.isAuthor ? (
-                      <span className="rounded bg-[var(--color-brand)] px-2 py-0.5 text-[10px] font-bold uppercase text-white">
+                      <span className="rounded bg-(--color-brand) px-2 py-0.5 text-[10px] font-bold uppercase text-white">
                         Author
                       </span>
                     ) : (
-                      <span className="rounded bg-[var(--color-surface-muted)] px-1.5 py-0.5 text-[10px] font-medium text-slate-400">
+                      <span className="rounded bg-(--color-surface-muted) px-1.5 py-0.5 text-[10px] font-medium text-slate-400">
                         Member
                       </span>
                     )}

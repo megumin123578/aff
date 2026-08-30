@@ -45,14 +45,14 @@ const platformStyles: Record<ProductAffiliateLink["platform"], { bg: string; tex
     hover: "hover:bg-[#990000]",
   },
   direct: {
-    bg: "bg-[var(--color-brand)] border-[var(--color-brand-border)]",
+    bg: "bg-(--color-brand) border-(--color-brand-border)",
     text: "text-white font-bold",
-    hover: "hover:bg-[var(--color-brand-hover)]",
+    hover: "hover:bg-(--color-brand-hover)",
   },
   other: {
-    bg: "bg-[var(--color-action)] border-[var(--color-border-strong)]",
+    bg: "bg-(--color-action) border-(--color-border-strong)",
     text: "text-white font-bold",
-    hover: "hover:bg-[var(--color-action-hover)]",
+    hover: "hover:bg-(--color-action-hover)",
   },
 };
 
@@ -103,7 +103,7 @@ export function ProductCard({
         </div>
 
         {imageUrl && (
-          <div className="relative size-32 shrink-0 overflow-hidden rounded-xl border border-(--color-border) bg-[var(--color-bg)]">
+          <div className="relative size-32 shrink-0 overflow-hidden rounded-xl border border-(--color-border) bg-(--color-bg)">
             <Image
               src={imageUrl}
               alt={name}

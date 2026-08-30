@@ -23,7 +23,7 @@ export default async function SearchPage({
   const results = await globalSearch(query);
 
   return (
-    <main className="min-h-[70vh] bg-[var(--color-bg-deep)] px-5 py-16 lg:px-8">
+    <main className="min-h-[70vh] bg-(--color-bg-deep) px-5 py-16 lg:px-8">
       <div className="mx-auto max-w-4xl">
         <Badge variant="azure">Global search</Badge>
         <h1 className="mt-4 text-4xl font-extrabold text-white">Search Neroviax</h1>
@@ -35,9 +35,9 @@ export default async function SearchPage({
             minLength={2}
             maxLength={100}
             placeholder="Search keychron, monitor, mini pc, desk setup…"
-            className="min-w-0 flex-1 rounded-xl border border-(--color-border) bg-[var(--color-bg)] px-4 py-3 text-white outline-none focus:border-[var(--color-brand-border)]"
+            className="min-w-0 flex-1 rounded-xl border border-(--color-border) bg-(--color-bg) px-4 py-3 text-white outline-none focus:border-(--color-brand-border)"
           />
-          <button className="rounded-xl bg-[var(--color-brand)] px-6 py-3 text-sm font-bold text-white">
+          <button className="rounded-xl bg-(--color-brand) px-6 py-3 text-sm font-bold text-white">
             Search
           </button>
         </form>
@@ -64,7 +64,7 @@ export default async function SearchPage({
                         href={result.href}
                         eventName="guide_clicked"
                         eventProperties={{ source: "global-search", query, target: result.href }}
-                        className="mt-3 block text-xl font-bold text-white hover:text-[var(--color-brand-light)]"
+                        className="mt-3 block text-xl font-bold text-white hover:text-(--color-brand-light)"
                       >
                         {result.title}
                       </TrackedLink>
@@ -84,7 +84,7 @@ export default async function SearchPage({
                   </p>
                   <Link
                     href="/forums"
-                    className="mt-4 inline-block text-sm text-[var(--color-brand-light)] font-semibold"
+                    className="mt-4 inline-block text-sm text-(--color-brand-light) font-semibold"
                   >
                     Browse all articles →
                   </Link>
