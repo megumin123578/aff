@@ -79,22 +79,18 @@ export function AdminSidebar({ desktopOpen, onDesktopOpenChange }: AdminSidebarP
     <div className="flex h-full flex-col justify-between">
       <div>
         {/* Logo / Brand Header */}
-        <div className="flex items-center justify-between border-b border-(--color-border) px-4 py-4">
-          <Link href="/admin" className="flex items-center gap-2.5">
-            <span className="flex size-8 items-center justify-center rounded-lg bg-(--color-brand) text-sm font-black text-white shadow-sm">
-              N
-            </span>
-            <div>
-              <span className="block text-sm font-bold text-white leading-tight">Neroviax</span>
-              <span className="block text-[10px] font-semibold text-(--color-brand-light) uppercase tracking-wider">Admin CMS</span>
-            </div>
-          </Link>
+        <div
+          className="grid h-16 items-center border-b border-(--color-border) px-4"
+          style={{ gridTemplateColumns: "2rem minmax(0, 1fr) 2rem" }}
+        >
+          <span aria-hidden="true" />
+          <span className="text-center text-sm font-bold tracking-wide text-white">Admin</span>
           <button
             type="button"
             onClick={() => onDesktopOpenChange(false)}
             aria-label="Collapse sidebar"
             title="Collapse sidebar"
-            className="hidden size-8 items-center justify-center text-slate-400 transition-[color,transform] duration-300 hover:rotate-90 hover:text-white md:flex"
+            className="hidden size-8 shrink-0 items-center justify-center text-slate-400 transition-[color,transform] duration-300 hover:rotate-90 hover:text-white md:flex"
           >
             <svg aria-hidden="true" className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -138,10 +134,7 @@ export function AdminSidebar({ desktopOpen, onDesktopOpenChange }: AdminSidebarP
     <>
       {/* Mobile Top bar */}
       <div className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-(--color-border) bg-(--color-surface) px-4 md:hidden">
-        <Link href="/admin" className="flex items-center gap-2 font-bold text-white text-sm">
-          <span className="flex size-7 items-center justify-center rounded-lg bg-(--color-brand) text-xs font-black text-white">N</span>
-          <span>Neroviax Admin</span>
-        </Link>
+        <span className="text-sm font-bold text-white">Admin</span>
         <button
           type="button"
           onClick={() => setMobileOpen(!mobileOpen)}

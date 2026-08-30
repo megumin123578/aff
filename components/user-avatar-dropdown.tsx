@@ -243,7 +243,10 @@ export function UserAvatarDropdown({ session }: { session: UserSession }) {
 
       {/* Dropdown Menu */}
       {dropdownOpen && (
-        <div className="absolute right-0 top-full mt-2 z-50 w-64 rounded-2xl border border-(--color-border) bg-(--color-surface) p-2 shadow-2xl">
+        <div
+          className="isolate absolute right-0 top-full z-50 mt-2 w-64 rounded-2xl border border-(--color-border-strong) p-2 opacity-100 shadow-[0_24px_60px_rgba(0,0,0,0.72)] ring-1 ring-black/40"
+          style={{ backgroundColor: "#151a22" }}
+        >
           {/* User Profile Header */}
           <div className="flex items-center gap-3 border-b border-(--color-border) px-3 py-3">
             <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-(--color-brand-border) bg-(--color-brand-soft) overflow-hidden">
