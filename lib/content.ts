@@ -9,7 +9,6 @@ export type Article = {
   title: string;
   description: string;
   category: string;
-  tags: string[];
   status: ArticleStatus;
   publishedAt: string;
   updatedAt: string;
@@ -37,7 +36,6 @@ type ArticleRow = {
   title: string;
   description: string;
   category: string;
-  tags: string[];
   status: ArticleStatus;
   published_at: string | Date | null;
   updated_at: string | Date;
@@ -71,7 +69,6 @@ function articleFromRow(row: ArticleRow): Article {
     title: row.title,
     description: row.description,
     category: row.category,
-    tags: row.tags || [],
     status: row.status,
     publishedAt: dateOnly(row.published_at),
     updatedAt: dateOnly(row.updated_at),
@@ -98,7 +95,7 @@ function affiliateFromRow(row: AffiliateRow): AffiliateLink {
 }
 
 const articleColumns =
-  "slug, title, description, category, tags, status, published_at, updated_at, cover_image, affiliate_ids, body_markdown, author_name, author_email, author_avatar";
+  "slug, title, description, category, status, published_at, updated_at, cover_image, affiliate_ids, body_markdown, author_name, author_email, author_avatar";
 const affiliateColumns =
   "id, provider, label, destination_url, affiliate_url, enabled, last_verified, notes";
 
@@ -137,11 +134,11 @@ export async function getArticle(slug: string, includeNonPublished = false) {
 
 export async function upsertArticle(article: Article) {
   await query(
-    `INSERT INTO articles (slug, title, description, category, tags, status, published_at, updated_at, cover_image, affiliate_ids, body_markdown, author_name, author_email, author_avatar)
-     VALUES ($1, $2, $3, $4, $5, $6, NULLIF($7, '')::date, $8::date, $9, $10, $11, $12, $13, $14)
+    `INSERT INTO articles (slug, title, description, category, status, published_at, updated_at, cover_image, affiliate_ids, body_markdown, author_name, author_email, author_avatar)
+     VALUES ($1, $2, $3, $4, $5, NULLIF($6, '')::date, $7::date, $8, $9, $10, $11, $12, $13)
      ON CONFLICT (slug) DO UPDATE SET
        title = EXCLUDED.title, description = EXCLUDED.description, category = EXCLUDED.category,
-       tags = EXCLUDED.tags, status = EXCLUDED.status, published_at = EXCLUDED.published_at,
+       status = EXCLUDED.status, published_at = EXCLUDED.published_at,
        updated_at = EXCLUDED.updated_at, cover_image = EXCLUDED.cover_image,
        affiliate_ids = EXCLUDED.affiliate_ids, body_markdown = EXCLUDED.body_markdown,
        author_name = EXCLUDED.author_name, author_email = EXCLUDED.author_email, author_avatar = EXCLUDED.author_avatar`,
@@ -150,7 +147,6 @@ export async function upsertArticle(article: Article) {
       article.title,
       article.description,
       article.category,
-      article.tags,
       article.status,
       article.publishedAt,
       article.updatedAt,

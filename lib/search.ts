@@ -28,7 +28,7 @@ export async function globalSearch(rawQuery: string, limit = 30) {
 
   const results: SearchResult[] = articles.map((article) => {
     const isReview = article.category.toLowerCase().includes("review") || article.title.toLowerCase().includes("review") || article.title.toLowerCase().includes("vs");
-    const isSetup = article.category.toLowerCase().includes("setup") || article.tags.some((t) => t.toLowerCase().includes("setup"));
+    const isSetup = article.category.toLowerCase().includes("setup");
     const kind: SearchResult["kind"] = isReview ? "review" : isSetup ? "setup" : "guide";
 
     return {
@@ -40,7 +40,7 @@ export async function globalSearch(rawQuery: string, limit = 30) {
       score: relevance(
         query,
         article.title,
-        `${article.description} ${article.category} ${article.tags.join(" ")} ${article.body}`
+        `${article.description} ${article.category} ${article.body}`
       ),
     };
   });

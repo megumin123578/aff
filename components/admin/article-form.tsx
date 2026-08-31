@@ -1,39 +1,23 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { saveArticleAction } from "@/app/admin/actions";
-import type { AffiliateLink, Article } from "@/lib/content";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
+import type { Article } from "@/lib/content";
 
 const fieldClass = "mt-2 w-full rounded-xl border border-(--color-border) bg-(--color-bg) px-4 py-3 text-sm text-white outline-none focus:border-(--color-brand-border)";
 const labelClass = "block text-xs font-semibold uppercase tracking-wider text-slate-300";
 
-export function ArticleForm({ article, affiliateLinks }: { article?: Article; affiliateLinks: AffiliateLink[] }) {
+export function ArticleForm({ article }: { article?: Article }) {
   const [title, setTitle] = useState(article?.title ?? "");
   const [description, setDescription] = useState(article?.description ?? "");
   const [body, setBody] = useState(article?.body ?? "");
   const [coverImage, setCoverImage] = useState(article?.coverImage ?? "");
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
-  const bodyRef = useRef<HTMLTextAreaElement>(null);
-
-  const insertLink = () => {
-    const textarea = bodyRef.current;
-    if (!textarea) return;
-    const selectedText = body.slice(textarea.selectionStart, textarea.selectionEnd);
-    const url = window.prompt("Link URL", "https://");
-    if (!url) return;
-    const label = selectedText || window.prompt("Link text", "Read more") || "Link";
-    const markdown = `[${label}](${url})`;
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    setBody(`${body.slice(0, start)}${markdown}${body.slice(end)}`);
-    requestAnimationFrame(() => {
-      textarea.focus();
-      textarea.setSelectionRange(start + markdown.length, start + markdown.length);
-    });
-  };
+  const [dirty, setDirty] = useState(false);
 
   const uploadCoverImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -47,6 +31,7 @@ export function ArticleForm({ article, affiliateLinks }: { article?: Article; af
       const result = (await response.json()) as { url?: string; error?: string };
       if (!response.ok || !result.url) throw new Error(result.error || "Image upload failed");
       setCoverImage(result.url);
+      setDirty(true);
     } catch (error) {
       setUploadError(error instanceof Error ? error.message : "Image upload failed");
     } finally {
@@ -56,14 +41,13 @@ export function ArticleForm({ article, affiliateLinks }: { article?: Article; af
   };
 
   return (
-    <form action={saveArticleAction} className="article-editor-layout grid min-w-0 items-start gap-6">
+    <form action={saveArticleAction} onChange={() => setDirty(true)} className="article-editor-layout grid min-w-0 items-start gap-6">
       <div className="min-w-0 space-y-6">
         <div className="grid gap-5 @min-[640px]:grid-cols-2">
           <label className={labelClass}>Title<input required name="title" value={title} onChange={(event) => setTitle(event.target.value)} className={fieldClass} /></label>
           <label className={labelClass}>Slug<input required readOnly={Boolean(article)} name="slug" defaultValue={article?.slug} placeholder="mac-mini-m4-homelab-setup" className={`${fieldClass} read-only:cursor-not-allowed read-only:opacity-60`} /></label>
           <label className={`${labelClass} @min-[640px]:col-span-2`}>Description<textarea required name="description" value={description} onChange={(event) => setDescription(event.target.value)} rows={3} className={fieldClass} /></label>
           <label className={labelClass}>Category<input name="category" defaultValue={article?.category || "Desk Setup"} className={fieldClass} /></label>
-          <label className={labelClass}>Tags, comma separated<input name="tags" defaultValue={article?.tags.join(", ")} className={fieldClass} /></label>
           <label className={labelClass}>
             Status
             <select name="status" defaultValue={article?.status || "draft"} className={fieldClass}>
@@ -82,7 +66,7 @@ export function ArticleForm({ article, affiliateLinks }: { article?: Article; af
                 <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" disabled={uploading} onChange={uploadCoverImage} className="sr-only" />
               </label>
               <p className="text-xs text-slate-500">JPEG, PNG, WebP or GIF · maximum 8 MB</p>
-              {coverImage && <button type="button" onClick={() => setCoverImage("")} className="text-xs font-semibold text-rose-400 hover:text-rose-300 @min-[640px]:ml-auto">Remove</button>}
+              {coverImage && <button type="button" onClick={() => { setCoverImage(""); setDirty(true); }} className="text-xs font-semibold text-rose-400 hover:text-rose-300 @min-[640px]:ml-auto">Remove</button>}
             </div>
             {uploadError && <p className="mt-2 text-xs font-semibold text-rose-400">{uploadError}</p>}
           </div>
@@ -96,30 +80,23 @@ export function ArticleForm({ article, affiliateLinks }: { article?: Article; af
           )}
         </div>
 
-        <fieldset className="rounded-xl border border-(--color-border) p-4">
-          <legend className="px-2 text-xs font-semibold uppercase tracking-wider text-slate-300">Available affiliate references</legend>
-          <div className="mt-2 grid gap-3 @min-[640px]:grid-cols-2">
-            {affiliateLinks.map((link) => (
-              <label key={link.id} className="flex items-start gap-3 text-sm text-slate-300">
-                <input type="checkbox" name="affiliateIds" value={link.id} defaultChecked={article?.affiliateIds.includes(link.id)} className="mt-1 accent-(--color-brand)" />
-                <span><strong className="text-white">{link.provider}</strong><br /><code className="text-xs text-slate-500">{`{{affiliate:${link.id}|Button label}}`}</code></span>
-              </label>
-            ))}
-          </div>
-        </fieldset>
+        {article?.affiliateIds.map((id) => <input key={id} type="hidden" name="affiliateIds" value={id} />)}
 
         <div>
-          <div className="flex items-center justify-between gap-3">
-            <label htmlFor="article-body" className={labelClass}>Markdown body</label>
-            <button type="button" onClick={insertLink} className="inline-flex items-center gap-1.5 rounded-lg border border-(--color-border) bg-(--color-action) px-3 py-1.5 text-xs font-bold text-white transition hover:bg-(--color-action-hover)"><span aria-hidden="true">🔗</span> Insert link</button>
-          </div>
-          <textarea ref={bodyRef} id="article-body" required name="body" value={body} onChange={(event) => setBody(event.target.value)} rows={28} className={`${fieldClass} font-mono leading-6`} />
-          <p className="mt-2 text-xs text-slate-500">Select text first, then choose “Insert link” to wrap it in a Markdown link.</p>
+          <label htmlFor="article-body" className={labelClass}>Article body</label>
+          <RichTextEditor value={body} onChangeAction={(value) => { setBody(value); setDirty(true); }} />
+          <p className="mt-2 text-xs text-slate-500">Format text with the toolbar. Content remains compatible with existing posts.</p>
         </div>
 
-        <div className="flex flex-wrap gap-3">
-          <button disabled={uploading} className="rounded-xl border border-(--color-brand-border) bg-(--color-brand) px-5 py-3 text-sm font-bold text-white hover:bg-(--color-brand-hover) disabled:cursor-wait disabled:opacity-60">Save post</button>
-          {article && <a href={`/admin/articles/${article.slug}/preview`} className="rounded-xl border border-(--color-border-strong) bg-(--color-action) px-5 py-3 text-sm font-bold text-white">Open saved preview</a>}
+        <div className="sticky bottom-4 z-30 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-(--color-border) bg-(--color-surface)/95 p-3 shadow-xl backdrop-blur-xl">
+          <span className={`flex items-center gap-2 text-xs font-semibold ${dirty ? "text-amber-300" : "text-slate-400"}`}>
+            <span className={`size-2 rounded-full ${dirty ? "bg-amber-400" : "bg-emerald-400"}`} />
+            {dirty ? "Unsaved changes" : article ? "All changes saved" : "Ready to save"}
+          </span>
+          <div className="flex items-center gap-2">
+            {article && <a href={`/admin/articles/${article.slug}/preview`} className="rounded-lg border border-(--color-border-strong) bg-(--color-action) px-4 py-2.5 text-xs font-bold text-white hover:bg-(--color-action-hover)">Preview</a>}
+            <button disabled={uploading} className="rounded-lg border border-(--color-brand-border) bg-(--color-brand) px-4 py-2.5 text-xs font-bold text-white hover:bg-(--color-brand-hover) disabled:cursor-wait disabled:opacity-60">Save post</button>
+          </div>
         </div>
       </div>
 
@@ -138,7 +115,7 @@ export function ArticleForm({ article, affiliateLinks }: { article?: Article; af
             <h1 className="text-3xl font-extrabold leading-tight text-white">{title || "Untitled post"}</h1>
             <p className="mt-3 text-sm leading-relaxed text-slate-400">{description || "The article description will appear here."}</p>
             <div className="article-content mt-6 border-t border-(--color-border) pt-6">
-              {body ? <ReactMarkdown remarkPlugins={[remarkGfm]}>{body}</ReactMarkdown> : <p className="text-slate-500">Start writing to see a live Markdown preview.</p>}
+              {body ? <ReactMarkdown remarkPlugins={[remarkGfm]}>{body}</ReactMarkdown> : <p className="text-slate-500">Start writing to see a live preview.</p>}
             </div>
           </article>
         </div>

@@ -32,7 +32,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <div className="mt-7"><Badge variant="azure">{post.category}</Badge></div>
         <h1 className="mt-5 text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">{post.title}</h1>
         <p className="mt-5 text-lg leading-relaxed text-slate-300">{post.description}</p>
-        <div className="mt-5 flex flex-wrap gap-2 text-xs text-slate-500"><span>Published {post.publishedAt}</span>{post.tags.map((tag) => <span key={tag}>· {tag}</span>)}</div>
+        <p className="mt-5 text-xs text-slate-500">Published {post.publishedAt}</p>
         <div className="mt-8 border-t border-(--color-border) pt-8"><ArticleContent body={post.body} slug={post.slug} /></div>
       </article>
     </main>

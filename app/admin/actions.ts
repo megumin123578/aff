@@ -50,7 +50,6 @@ export async function saveArticleAction(formData: FormData) {
     title,
     description,
     category: text(formData, "category") || "Desk Setup",
-    tags: text(formData, "tags").split(",").map((tag) => tag.trim()).filter(Boolean),
     status,
     publishedAt: text(formData, "publishedAt") || (status === "published" ? today : ""),
     updatedAt: today,

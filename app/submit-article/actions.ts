@@ -23,7 +23,6 @@ export async function submitArticleAction(formData: FormData) {
   const title = String(formData.get("title") || "").trim();
   const description = String(formData.get("description") || "").trim();
   const category = String(formData.get("category") || "Community").trim();
-  const tagsStr = String(formData.get("tags") || "").trim();
   const coverImage = String(formData.get("coverImage") || "").trim();
   const body = String(formData.get("body") || "").trim();
 
@@ -40,17 +39,12 @@ export async function submitArticleAction(formData: FormData) {
   }
 
   const today = new Date().toISOString().slice(0, 10);
-  const tags = tagsStr
-    .split(",")
-    .map((t) => t.trim())
-    .filter(Boolean);
 
   const article: Article = {
     slug,
     title,
     description,
     category,
-    tags,
     status: "pending", // Always pending for user submissions
     publishedAt: "",
     updatedAt: today,

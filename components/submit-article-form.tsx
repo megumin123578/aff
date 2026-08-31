@@ -137,17 +137,6 @@ export function SubmitArticleForm({
             </select>
           </div>
 
-          {/* Tags */}
-          <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
-              Tags (comma separated)
-            </label>
-            <input
-              name="tags"
-              placeholder="Keyboards, macOS, Productivity, 4K"
-              className={inputClass}
-            />
-          </div>
 
           {/* Summary Description */}
           <div className="sm:col-span-2">
