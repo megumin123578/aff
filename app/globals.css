@@ -176,6 +176,8 @@ option {
 .article-content ol { list-style: decimal; }
 .article-content strong { color: white; }
 .article-content a { color: var(--color-brand-light); text-decoration: underline; text-underline-offset: 3px; }
+.article-content img { display: block; max-width: 100%; height: auto; margin: 1.5rem auto; border-radius: 0.75rem; }
+.article-content img[data-selected-image="true"] { outline: 2px solid var(--color-focus); outline-offset: 3px; }
 .article-content table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 .article-content :where(th, td) { border: 1px solid var(--color-border); padding: 0.7rem; text-align: left; }
 .article-content th { background: var(--color-surface); color: white; }
@@ -194,10 +196,6 @@ option {
     gap: 2rem;
   }
 
-  .article-editor-preview {
-    position: sticky;
-    top: 6rem;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
