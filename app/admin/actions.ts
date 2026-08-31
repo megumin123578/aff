@@ -28,6 +28,11 @@ function assertHttpUrl(value: string, field: string, allowEmpty = false) {
   if (!new Set(["http:", "https:"]).has(url.protocol)) throw new Error(`${field} must use HTTP or HTTPS`);
 }
 
+function assertCoverImage(value: string) {
+  if (value.startsWith("/uploads/") && /^\/uploads\/[a-f0-9-]+\.(?:jpg|png|webp|gif)$/.test(value)) return;
+  assertHttpUrl(value, "Cover image");
+}
+
 export async function saveArticleAction(formData: FormData) {
   await requireAdminSession();
   const slug = text(formData, "slug");
@@ -57,7 +62,7 @@ export async function saveArticleAction(formData: FormData) {
     authorAvatar: text(formData, "authorAvatar"),
   };
   if (!article.body) throw new Error("Article body is required");
-  if (article.coverImage) assertHttpUrl(article.coverImage, "Cover image");
+  if (article.coverImage) assertCoverImage(article.coverImage);
 
   await upsertArticle(article);
   revalidatePath("/");

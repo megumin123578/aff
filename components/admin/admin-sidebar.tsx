@@ -90,7 +90,7 @@ export function AdminSidebar({ desktopOpen, onDesktopOpenChange }: AdminSidebarP
             onClick={() => onDesktopOpenChange(false)}
             aria-label="Collapse sidebar"
             title="Collapse sidebar"
-            className="hidden size-8 shrink-0 items-center justify-center text-slate-400 transition-[color,transform] duration-300 hover:rotate-90 hover:text-white md:flex"
+            className="hidden size-8 shrink-0 items-center justify-center text-slate-400 transition-colors duration-300 hover:text-white md:flex"
           >
             <svg aria-hidden="true" className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -131,7 +131,7 @@ export function AdminSidebar({ desktopOpen, onDesktopOpenChange }: AdminSidebarP
   );
 
   return (
-    <>
+    <div className="contents">
       {/* Mobile Top bar */}
       <div className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-(--color-border) bg-(--color-surface) px-4 md:hidden">
         <span className="text-sm font-bold text-white">Admin</span>
@@ -182,10 +182,10 @@ export function AdminSidebar({ desktopOpen, onDesktopOpenChange }: AdminSidebarP
         )}
       </aside>
 
-      {/* Desktop Fixed Sidebar */}
+      {/* Desktop Sticky Sidebar */}
       <aside
         aria-hidden={!desktopOpen}
-        className={`sticky top-18 z-40 hidden h-[calc(100dvh-4.5rem)] shrink-0 overflow-hidden border-r transition-[width,flex-basis,opacity,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:flex ${
+        className={`sticky top-18 z-40 hidden h-[calc(100dvh-4.5rem)] shrink-0 self-start overflow-hidden border-r transition-[width,flex-basis,opacity,border-color] duration-300 ease-out md:flex ${
           desktopOpen
             ? "border-(--color-border) opacity-100"
             : "pointer-events-none border-transparent opacity-0"
@@ -211,7 +211,7 @@ export function AdminSidebar({ desktopOpen, onDesktopOpenChange }: AdminSidebarP
         aria-label="Open sidebar"
         title="Open sidebar"
         tabIndex={desktopOpen ? -1 : 0}
-        className={`fixed left-4 top-22 z-40 hidden size-9 items-center justify-center text-slate-400 transition-[opacity,transform,color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:rotate-90 hover:text-white md:flex ${
+        className={`fixed left-5 top-26 z-40 hidden size-9 items-center justify-center text-slate-400 transition-[opacity,transform,color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:text-white md:flex ${
           desktopOpen
             ? "pointer-events-none -translate-x-3 scale-90 opacity-0"
             : "translate-x-0 scale-100 opacity-100 delay-100"
@@ -221,6 +221,6 @@ export function AdminSidebar({ desktopOpen, onDesktopOpenChange }: AdminSidebarP
           <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
         </svg>
       </button>
-    </>
+    </div>
   );
 }

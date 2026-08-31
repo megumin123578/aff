@@ -189,7 +189,7 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-4 @min-[640px]:flex-row @min-[640px]:items-end @min-[640px]:justify-between">
         <div>
           <h1 className="text-3xl font-extrabold text-white">Team & Users</h1>
           <p className="mt-2 text-sm text-slate-400">
@@ -225,7 +225,7 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
       )}
 
       {/* Stats Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 @min-[640px]:grid-cols-2 @min-[1024px]:grid-cols-4">
         <Card className="p-5 border-l-4 border-l-(--color-brand)">
           <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Members</p>
           <p className="mt-2 text-3xl font-extrabold text-white">{totalMembers}</p>
@@ -250,7 +250,7 @@ export function UserManagementClient({ currentUsername }: { currentUsername?: st
 
       {/* Filter and Search Bar */}
       <Card className="p-4">
-        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-3 @min-[768px]:flex-row @min-[768px]:items-center @min-[768px]:justify-between">
           <div className="relative flex-1">
             <svg
               className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-slate-400"

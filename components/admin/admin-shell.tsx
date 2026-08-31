@@ -12,8 +12,14 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         desktopOpen={desktopOpen}
         onDesktopOpenChange={setDesktopOpen}
       />
-      <div className="min-w-0 flex-1">
-        <main className="w-full px-5 py-8 lg:px-10 lg:py-10">{children}</main>
+      <div className="admin-content min-w-0 w-full md:w-auto md:flex-1">
+        <main
+          className={`w-full px-5 py-8 @min-[1024px]:px-10 @min-[1024px]:py-10 ${
+            desktopOpen ? "" : "md:pl-20 @min-[1024px]:pl-20"
+          }`}
+        >
+          {children}
+        </main>
       </div>
     </div>
   );

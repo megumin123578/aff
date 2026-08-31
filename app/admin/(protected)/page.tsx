@@ -28,7 +28,7 @@ export default async function AdminDashboardPage() {
     <div>
       <h1 className="text-3xl font-extrabold text-white">Content Dashboard</h1>
       <p className="mt-2 text-sm text-slate-400">Manage posts, affiliate links, and monitor engagement metrics.</p>
-      <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-8 grid gap-5 @min-[640px]:grid-cols-2 @min-[1024px]:grid-cols-3">
         {stats.map(([value, label, href]) => (
           <Link key={label} href={href}>
             <Card className="p-6 transition hover:border-(--color-border-strong) hover:bg-[#121722]">

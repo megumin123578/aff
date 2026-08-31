@@ -107,7 +107,7 @@ export default async function AdminArticlesPage({
           return (
             <Card
               key={article.slug}
-              className={`group flex flex-col gap-4 p-5 transition hover:border-(--color-border-strong) hover:bg-(--color-surface-muted) sm:flex-row sm:items-center sm:justify-between ${
+              className={`group flex flex-col gap-4 p-5 transition hover:border-(--color-border-strong) hover:bg-(--color-surface-muted) @min-[640px]:flex-row @min-[640px]:items-center @min-[640px]:justify-between ${
                 isPending ? "border-amber-500/40 bg-amber-950/10" : ""
               }`}
             >
