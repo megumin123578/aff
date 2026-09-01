@@ -1,12 +1,22 @@
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { getAffiliateLinks } from "@/lib/content";
+import { TrackedPostLink } from "@/components/tracked-post-link";
+import { getAffiliateLinks, getArticleOutboundLinksBySlug } from "@/lib/content";
 
 const affiliatePattern = /\{\{affiliate:([a-z0-9]+(?:-[a-z0-9]+)*)\|([^}]+)\}\}/g;
 
 export async function ArticleContent({ body, slug }: { body: string; slug: string }) {
-  const links = await getAffiliateLinks();
-  const linkMap = new Map(links.map((link) => [link.id, link]));
+  const [links, outboundLinks] = await Promise.all([getAffiliateLinks(), getArticleOutboundLinksBySlug(slug)]);
+  const affiliateMap = new Map(links.map((link) => [link.id, link]));
+  const outboundMap = new Map(outboundLinks.map((link) => [link.sourceUrl, link]));
+  const markdownComponents: Components = {
+    a: ({ href, children }) => {
+      const link = href ? outboundMap.get(href) : null;
+      return link
+        ? <TrackedPostLink id={link.id} href={link.destinationUrl}>{children}</TrackedPostLink>
+        : <a href={href}>{children}</a>;
+    },
+  };
   const parts: Array<{ type: "markdown" | "affiliate"; value: string; label?: string }> = [];
   let cursor = 0;
 
@@ -22,10 +32,10 @@ export async function ArticleContent({ body, slug }: { body: string; slug: strin
     <div className="article-content">
       {parts.map((part, index) => {
         if (part.type === "markdown") {
-          return <ReactMarkdown key={index} remarkPlugins={[remarkGfm]}>{part.value}</ReactMarkdown>;
+          return <ReactMarkdown key={index} remarkPlugins={[remarkGfm]} components={markdownComponents}>{part.value}</ReactMarkdown>;
         }
 
-        const link = linkMap.get(part.value);
+        const link = affiliateMap.get(part.value);
         if (!link?.enabled) return null;
         return (
           <div key={`${part.value}-${index}`} className="my-8 rounded-2xl border border-(--color-brand-border) bg-(--color-brand-soft) p-5">

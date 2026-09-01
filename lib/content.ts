@@ -31,6 +31,16 @@ export type AffiliateLink = {
   notes: string;
 };
 
+export type ArticleOutboundLink = {
+  id: number;
+  articleSlug: string;
+  articleTitle: string;
+  sourceUrl: string;
+  destinationUrl: string;
+  label: string;
+  impressions: number;
+};
+
 type ArticleRow = {
   slug: string;
   title: string;
@@ -45,6 +55,16 @@ type ArticleRow = {
   author_name?: string | null;
   author_email?: string | null;
   author_avatar?: string | null;
+};
+
+type ArticleOutboundLinkRow = {
+  id: number;
+  article_slug: string;
+  article_title: string;
+  source_url: string;
+  destination_url: string;
+  label: string;
+  impressions: number;
 };
 
 type AffiliateRow = {
@@ -78,6 +98,18 @@ function articleFromRow(row: ArticleRow): Article {
     authorName: row.author_name || "",
     authorEmail: row.author_email || "",
     authorAvatar: row.author_avatar || "",
+  };
+}
+
+function articleOutboundLinkFromRow(row: ArticleOutboundLinkRow): ArticleOutboundLink {
+  return {
+    id: row.id,
+    articleSlug: row.article_slug,
+    articleTitle: row.article_title,
+    sourceUrl: row.source_url,
+    destinationUrl: row.destination_url,
+    label: row.label,
+    impressions: row.impressions,
   };
 }
 
@@ -132,6 +164,36 @@ export async function getArticle(slug: string, includeNonPublished = false) {
   return result.rows[0] ? articleFromRow(result.rows[0]) : null;
 }
 
+const markdownLinkPattern = /(?<!!)\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)(?:\s+"[^"]*")?\)/g;
+
+async function syncArticleOutboundLinks(articleSlug: string, body: string) {
+  const discovered = new Map<string, string>();
+  for (const match of body.matchAll(markdownLinkPattern)) {
+    const label = match[1].replace(/[*_~`]/g, "").trim();
+    discovered.set(match[2], label);
+  }
+
+  for (const [sourceUrl, label] of discovered) {
+    await query(
+      `INSERT INTO article_outbound_links (article_slug, source_url, destination_url, label)
+       VALUES ($1, $2, $2, $3)
+       ON CONFLICT (article_slug, source_url) DO UPDATE SET
+         label = EXCLUDED.label, updated_at = now()`,
+      [articleSlug, sourceUrl, label],
+    );
+  }
+
+  const urls = [...discovered.keys()];
+  if (urls.length === 0) {
+    await query("DELETE FROM article_outbound_links WHERE article_slug = $1", [articleSlug]);
+  } else {
+    await query(
+      "DELETE FROM article_outbound_links WHERE article_slug = $1 AND NOT (source_url = ANY($2::text[]))",
+      [articleSlug, urls],
+    );
+  }
+}
+
 export async function upsertArticle(article: Article) {
   await query(
     `INSERT INTO articles (slug, title, description, category, status, published_at, updated_at, cover_image, affiliate_ids, body_markdown, author_name, author_email, author_avatar)
@@ -158,6 +220,7 @@ export async function upsertArticle(article: Article) {
       article.authorAvatar || "",
     ]
   );
+  await syncArticleOutboundLinks(article.slug, article.body);
 }
 
 export async function approveArticle(slug: string) {
@@ -181,6 +244,43 @@ export async function updateArticleStatus(slug: string, status: ArticleStatus) {
          updated_at = $3::date
      WHERE slug = $1`,
     [slug, status, today]
+  );
+}
+
+export async function getArticleOutboundLinks() {
+  const result = await query<ArticleOutboundLinkRow>(
+    `SELECT l.id::int AS id, l.article_slug, a.title AS article_title, l.source_url,
+       l.destination_url, l.label, l.impressions::int AS impressions
+     FROM article_outbound_links l
+     JOIN articles a ON a.slug = l.article_slug
+     ORDER BY l.impressions DESC, l.updated_at DESC`,
+  );
+  return result.rows.map(articleOutboundLinkFromRow);
+}
+
+export async function getArticleOutboundLinksBySlug(articleSlug: string) {
+  const result = await query<ArticleOutboundLinkRow>(
+    `SELECT l.id::int AS id, l.article_slug, a.title AS article_title, l.source_url,
+       l.destination_url, l.label, l.impressions::int AS impressions
+     FROM article_outbound_links l
+     JOIN articles a ON a.slug = l.article_slug
+     WHERE l.article_slug = $1`,
+    [articleSlug],
+  );
+  return result.rows.map(articleOutboundLinkFromRow);
+}
+
+export async function updateArticleOutboundLink(id: number, destinationUrl: string) {
+  await query(
+    "UPDATE article_outbound_links SET destination_url = $2, updated_at = now() WHERE id = $1",
+    [id, destinationUrl],
+  );
+}
+
+export async function recordArticleOutboundLinkImpression(id: number) {
+  await query(
+    "UPDATE article_outbound_links SET impressions = impressions + 1 WHERE id = $1",
+    [id],
   );
 }
 

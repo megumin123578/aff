@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  SESSION_TTL_SECONDS,
   signAdminSession,
   verifyAdminPassword,
   verifyAdminSession,
@@ -21,5 +22,5 @@ test("signed admin sessions reject tampering and expiry", () => {
   assert.equal(verifyAdminSession(token, secret, now)?.sub, "admin");
   assert.equal(verifyAdminSession(`${token}tampered`, secret, now), null);
   assert.equal(verifyAdminSession(token, "different-secret-that-is-also-long-enough", now), null);
-  assert.equal(verifyAdminSession(token, secret, now + 9 * 60 * 60 * 1000), null);
+  assert.equal(verifyAdminSession(token, secret, now + (SESSION_TTL_SECONDS + 1) * 1000), null);
 });

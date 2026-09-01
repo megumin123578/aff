@@ -3,6 +3,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import {
   signAdminSession,
+  SESSION_TTL_SECONDS,
   verifyAdminPassword,
   verifyAdminSession,
   type SessionOptions,
@@ -11,7 +12,7 @@ import {
 import { isEmailAllowedForAdmin } from "./google-auth";
 
 export const ADMIN_COOKIE = "neroviax_admin_session";
-export const SESSION_MAX_AGE = 8 * 60 * 60;
+export const SESSION_MAX_AGE = SESSION_TTL_SECONDS;
 
 export function credentials() {
   return {

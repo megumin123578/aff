@@ -6,6 +6,7 @@ import { clearAdminSession, getAdminSession, requireAdminSession } from "@/lib/a
 import {
   approveArticle,
   deleteArticle,
+  updateArticleOutboundLink,
   updateArticleStatus,
   upsertAffiliateLink,
   upsertArticle,
@@ -115,6 +116,20 @@ export async function deleteArticleAction(formData: FormData) {
   revalidatePath("/sitemap.xml");
   revalidatePath("/admin/articles");
   redirect("/admin/articles?deleted=1");
+}
+
+export async function updateArticleOutboundLinkAction(formData: FormData) {
+  await requireAdminSession();
+  const id = Number(formData.get("id"));
+  const articleSlug = text(formData, "articleSlug");
+  const destinationUrl = text(formData, "destinationUrl");
+  if (!Number.isSafeInteger(id) || id <= 0) throw new Error("Invalid article link ID");
+  if (!validSlug(articleSlug)) throw new Error("Invalid article slug");
+  assertHttpUrl(destinationUrl, "Destination URL");
+
+  await updateArticleOutboundLink(id, destinationUrl);
+  revalidatePath("/admin/affiliate-links");
+  revalidatePath(`/forums/${articleSlug}`);
 }
 
 export async function saveAffiliateLinkAction(formData: FormData) {

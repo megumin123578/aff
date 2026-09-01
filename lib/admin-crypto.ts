@@ -1,6 +1,6 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 const SESSION_VERSION = 1;
-const SESSION_TTL_SECONDS = 8 * 60 * 60;
+export const SESSION_TTL_SECONDS = 30 * 24 * 60 * 60;
 
 export type UserRole = "admin" | "user";
 
