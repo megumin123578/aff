@@ -33,6 +33,14 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <h1 className="mt-5 text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">{post.title}</h1>
         <p className="mt-5 text-lg leading-relaxed text-slate-300">{post.description}</p>
         <p className="mt-5 text-xs text-slate-500">Published {post.publishedAt}</p>
+        {post.coverImage && (
+          <div
+            role="img"
+            aria-label={`Cover image for ${post.title}`}
+            className="mt-8 aspect-video w-full rounded-2xl border border-(--color-border) bg-(--color-surface) bg-cover bg-center shadow-xl"
+            style={{ backgroundImage: `url(${JSON.stringify(post.coverImage)})` }}
+          />
+        )}
         <div className="mt-8 border-t border-(--color-border) pt-8"><ArticleContent body={post.body} slug={post.slug} /></div>
       </article>
     </main>

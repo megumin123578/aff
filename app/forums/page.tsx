@@ -40,9 +40,6 @@ export default async function ForumsPage() {
             <Link key={article.slug} href={`/forums/${article.slug}`} className="group block rounded-2xl">
               <Card className="p-5 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:border-(--color-brand-border) group-hover:bg-[#121722] sm:p-6">
                 <div className="flex items-start gap-4">
-                  <div className="grid size-11 shrink-0 place-items-center rounded-xl border border-(--color-brand-border) bg-(--color-brand-soft) text-sm font-extrabold text-(--color-brand-light)">
-                    {(article.authorName || "N").slice(0, 1).toUpperCase()}
-                  </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500">
                       <span className="font-semibold text-(--color-brand-light)">{article.category}</span>
