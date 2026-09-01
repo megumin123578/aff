@@ -27,11 +27,6 @@ export default async function AdminArticlesPage({
   return (
     <div className="space-y-6">
 
-      {query.saved && (
-        <p className="rounded-xl border border-(--color-success-border) bg-(--color-success-soft) p-4 text-sm text-(--color-success-text) animate-in fade-in">
-          ✔ Post saved successfully.
-        </p>
-      )}
 
       {query.approved && (
         <p className="rounded-xl border border-(--color-success-border) bg-(--color-success-soft) p-4 text-sm text-(--color-success-text) animate-in fade-in">

@@ -88,13 +88,23 @@ export function ArticleForm({ article }: { article?: Article }) {
           <div className="@min-[640px]:col-span-2">
             <span className={labelClass}>Cover image</span>
             <input type="hidden" name="coverImage" value={coverImage} />
-            <div className="mt-2 flex flex-col gap-3 rounded-xl border border-dashed border-(--color-border-strong) bg-(--color-bg) p-4 @min-[640px]:flex-row @min-[640px]:items-center">
-              <label className="inline-flex cursor-pointer items-center justify-center rounded-lg bg-(--color-action) px-4 py-2.5 text-sm font-bold text-white transition hover:bg-(--color-action-hover)">
-                {uploading ? "Uploading…" : coverImage ? "Replace image" : "Upload from computer"}
-                <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" disabled={uploading} onChange={uploadCoverImage} className="sr-only" />
-              </label>
-              <p className="text-xs text-slate-500">JPEG, PNG, WebP or GIF · maximum 8 MB</p>
-              {coverImage && <button type="button" onClick={() => setCoverImage("")} className="text-xs font-semibold text-rose-400 hover:text-rose-300 @min-[640px]:ml-auto">Remove</button>}
+            <div className="mt-2 max-w-2xl rounded-xl border border-dashed border-(--color-border-strong) bg-(--color-bg) p-4">
+              {coverImage && (
+                <div
+                  role="img"
+                  aria-label="Selected cover image"
+                  className="mb-4 aspect-video w-full rounded-lg border border-(--color-border) bg-(--color-surface) bg-cover bg-center shadow-sm"
+                  style={{ backgroundImage: `url(${JSON.stringify(coverImage)})` }}
+                />
+              )}
+              <div className="flex flex-col gap-3 @min-[640px]:flex-row @min-[640px]:items-center">
+                <label className="inline-flex cursor-pointer items-center justify-center rounded-lg bg-(--color-action) px-4 py-2.5 text-sm font-bold text-white transition hover:bg-(--color-action-hover)">
+                  {uploading ? "Uploading…" : coverImage ? "Replace image" : "Upload from computer"}
+                  <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" disabled={uploading} onChange={uploadCoverImage} className="sr-only" />
+                </label>
+
+                {coverImage && <button type="button" onClick={() => setCoverImage("")} className="text-xs font-semibold text-rose-400 hover:text-rose-300 @min-[640px]:ml-auto">Remove</button>}
+              </div>
             </div>
             {uploadError && <p className="mt-2 text-xs font-semibold text-rose-400">{uploadError}</p>}
           </div>
@@ -141,8 +151,9 @@ export function ArticleForm({ article }: { article?: Article }) {
       {article?.affiliateIds.map((id) => <input key={id} type="hidden" name="affiliateIds" value={id} />)}
 
       <div className="sticky bottom-4 z-30 flex justify-end">
-        <button disabled={uploading} className="rounded-lg border border-(--color-brand-border) bg-(--color-brand) px-4 py-2.5 text-xs font-bold text-white shadow-xl hover:bg-(--color-brand-hover) disabled:cursor-wait disabled:opacity-60">Save post</button>
+        <button disabled={uploading} className="rounded-lg border border-(--color-brand-border) bg-(--color-brand) px-4 py-2.5 text-xs font-bold text-white shadow-xl hover:bg-(--color-brand-hover) disabled:cursor-wait disabled:opacity-60">Save</button>
       </div>
+
     </form>
   );
 }

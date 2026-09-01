@@ -231,6 +231,14 @@ export async function approveArticle(slug: string) {
   );
 }
 
+export async function isCoverImageUsedByAnotherArticle(coverImage: string, articleSlug: string) {
+  const result = await query<{ exists: boolean }>(
+    "SELECT EXISTS(SELECT 1 FROM articles WHERE cover_image = $1 AND slug <> $2) AS exists",
+    [coverImage, articleSlug],
+  );
+  return result.rows[0]?.exists ?? false;
+}
+
 export async function deleteArticle(slug: string) {
   await query("DELETE FROM articles WHERE slug = $1", [slug]);
 }

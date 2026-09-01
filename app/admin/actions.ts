@@ -1,11 +1,15 @@
 "use server";
 
+import { rm } from "node:fs/promises";
+import path from "node:path";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { clearAdminSession, getAdminSession, requireAdminSession } from "@/lib/admin-auth";
 import {
   approveArticle,
   deleteArticle,
+  getArticle,
+  isCoverImageUsedByAnotherArticle,
   updateArticleOutboundLink,
   updateArticleStatus,
   upsertAffiliateLink,
@@ -29,9 +33,21 @@ function assertHttpUrl(value: string, field: string, allowEmpty = false) {
   if (!new Set(["http:", "https:"]).has(url.protocol)) throw new Error(`${field} must use HTTP or HTTPS`);
 }
 
+const localCoverImagePattern = /^\/uploads\/([a-f0-9-]+\.(?:jpg|png|webp|gif))$/;
+
 function assertCoverImage(value: string) {
-  if (value.startsWith("/uploads/") && /^\/uploads\/[a-f0-9-]+\.(?:jpg|png|webp|gif)$/.test(value)) return;
+  if (localCoverImagePattern.test(value)) return;
   assertHttpUrl(value, "Cover image");
+}
+
+async function deleteReplacedLocalCoverImage(previousCoverImage: string, article: Article) {
+  if (!previousCoverImage || previousCoverImage === article.coverImage) return;
+
+  const filename = localCoverImagePattern.exec(previousCoverImage)?.[1];
+  if (!filename) return;
+  if (await isCoverImageUsedByAnotherArticle(previousCoverImage, article.slug)) return;
+
+  await rm(path.join(process.cwd(), "public", "uploads", filename), { force: true });
 }
 
 export async function saveArticleAction(formData: FormData) {
@@ -64,7 +80,9 @@ export async function saveArticleAction(formData: FormData) {
   if (!article.body) throw new Error("Article body is required");
   if (article.coverImage) assertCoverImage(article.coverImage);
 
+  const previousArticle = await getArticle(slug, true);
   await upsertArticle(article);
+  await deleteReplacedLocalCoverImage(previousArticle?.coverImage ?? "", article);
   revalidatePath("/");
   revalidatePath("/forums");
   revalidatePath(`/forums/${slug}`);
