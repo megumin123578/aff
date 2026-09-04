@@ -12,7 +12,6 @@ import { siteUrl } from "@/lib/seo";
 const primaryNavigation = [
   { href: "/forums", label: "Forums" },
   { href: "/store", label: "Store" },
-  { href: "/podcasts", label: "Podcasts" },
   { href: "/iphone", label: "iPhone" },
   { href: "/mac", label: "Mac" },
   { href: "/ipad", label: "iPad" },

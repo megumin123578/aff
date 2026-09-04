@@ -1,5 +1,8 @@
 "use server";
 
+import { redirect } from "next/navigation";
+import { createAdminSession } from "@/lib/admin-auth";
+
 export type RegisterState = {
   error?: string;
   success?: string;
@@ -28,11 +31,12 @@ export async function registerAdminAction(
     return { error: "Passwords do not match.", username, email };
   }
 
-  await new Promise((resolve) => setTimeout(resolve, 600));
+  const avatar = `https://api.dicebear.com/10.x/bottts-neutral/svg?seed=${encodeURIComponent(username)}`;
+  await createAdminSession(username, {
+    email: email || undefined,
+    avatar,
+    role: "admin",
+  });
 
-  return {
-    success: "Registration request submitted. Please contact your administrator to activate access.",
-    username: "",
-    email: "",
-  };
+  redirect("/admin");
 }
